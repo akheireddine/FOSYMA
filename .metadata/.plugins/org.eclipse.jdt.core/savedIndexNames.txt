@@ -1,0 +1,18 @@
+INDEX VERSION 1.127+/users/nfs/Etu9/3502069/M1/M1-S2/FOSYMA/.metadata/.plugins/org.eclipse.jdt.core
+3536116219.index
+67512526.index
+1342510862.index
+1409462631.index
+3760037686.index
+527863659.index
+4192520563.index
+3134283655.index
+321817386.index
+242365523.index
+2000516523.index
+3784508184.index
+669733427.index
+3704056196.index
+4292075963.index
+1553328661.index
+997984674.index

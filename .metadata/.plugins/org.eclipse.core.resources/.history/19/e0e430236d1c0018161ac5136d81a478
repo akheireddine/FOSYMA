@@ -1,0 +1,157 @@
+package mas.behaviours;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+
+import org.jgrapht.UndirectedGraph;
+import org.jgrapht.graph.DefaultEdge;
+
+import test.Graphe;
+import env.Attribute;
+import env.Couple;
+import jade.core.behaviours.TickerBehaviour;
+import jade.util.leap.HashSet;
+
+public class WalkBehaviourCPT extends TickerBehaviour {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -1441296002023862551L;
+	private HashSet fermes,ouverts;
+	List<String> goal = new ArrayList<String>();
+	private UndirectedGraph G;
+	
+	
+	public WalkBehaviourCPT (final mas.abstractAgent myagent) {
+		super(myagent, 1000);
+		fermes = new HashSet();
+		ouverts = new HashSet();
+		G = new UndirectedGraph<>(DefaultEdge.class);
+	}
+
+
+	public void onTick() {
+		//Example to retrieve the current position
+		String myPosition=((mas.abstractAgent)this.myAgent).getCurrentPosition();
+
+		
+		if (myPosition!=""){
+			//List of observable from the agent's current position
+			List<Couple<String,List<Attribute>>> lobs=((mas.abstractAgent)this.myAgent).observe();//myPosition
+			System.out.println(this.myAgent.getLocalName()+" -- list of observables: "+lobs);
+
+//			//Little pause to allow you to follow what is going on
+			try {
+				System.out.println("Press Enter in the console to allow the agent "+this.myAgent.getLocalName() +" to execute its next move");
+				System.in.read();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+
+
+			//list of attribute associated to the currentPosition
+//			List<Attribute> lattribute= lobs.get(0).getRight();
+
+			
+			//example related to the use of the backpack for the treasure hunt
+//			Boolean b=false;
+			
+//			for(Attribute a:lattribute){
+//				switch (a) {
+//				case TREASURE:
+//					System.out.println("My type is : "+((mas.abstractAgent)this.myAgent).getMyTreasureType());
+//					System.out.println("My current backpack capacity is:"+ ((mas.abstractAgent)this.myAgent).getBackPackFreeSpace());
+//					System.out.println("Value of the treasure on the current position: "+a.getValue());
+//					System.out.println("The agent grabbed :"+((mas.abstractAgent)this.myAgent).pick());
+//					System.out.println("the remaining backpack capacity is: "+ ((mas.abstractAgent)this.myAgent).getBackPackFreeSpace());
+//					System.out.println("The value of treasure on the current position: (unchanged before a new call to observe()): "+a.getValue());
+//					b=true;
+//					//Little pause to allow you to follow what is going on
+//					try {
+//						System.out.println("Press Enter in the console to allow the agent "+this.myAgent.getLocalName() +" to execute its next move");
+//						System.in.read();
+//					} catch (IOException e) {
+//						e.printStackTrace();
+//					}
+//					break;
+//			case DIAMONDS:
+//				System.out.println("My type is : "+((mas.abstractAgent)this.myAgent).getMyTreasureType());
+//				System.out.println("My current backpack capacity is:"+ ((mas.abstractAgent)this.myAgent).getBackPackFreeSpace());
+//				System.out.println("Value of the diamonds on the current position: "+a.getValue());
+//				System.out.println("The agent grabbed :"+((mas.abstractAgent)this.myAgent).pick());
+//				System.out.println("the remaining backpack capacity is: "+ ((mas.abstractAgent)this.myAgent).getBackPackFreeSpace());
+//				System.out.println("The value of treasure on the current position: (unchanged before a new call to observe()): "+a.getValue());
+//				b=true;
+//				//Little pause to allow you to follow what is going on
+//				try {
+//					System.out.println("Press Enter in the console to allow the agent "+this.myAgent.getLocalName() +" to execute its next move");
+//					System.in.read();
+//				} catch (IOException e) {
+//					e.printStackTrace();
+//				}
+//				default:
+//					break;
+//				}
+//			}
+			Boolean repeat = false;
+			Couple<String,List<Attribute>> curr_pos = lobs.remove(0);
+			String name_curr_node = curr_pos.getLeft();
+			String next_pos = name_curr_node;
+			
+			
+			while(repeat || goal.isEmpty()){
+				Boolean d = false, c = false;
+				List<String> open_adj = new ArrayList<String>();
+				List<String> open_candidats = new ArrayList<String>();
+				repeat = false;
+				
+				name_curr_node = curr_pos.getLeft();
+				next_pos = name_curr_node;
+				
+				if(!G.containsVertex(name_curr_node)){
+					G.addVertex(name_curr_node);
+				}
+				
+				for(Couple<String,List<Attribute>> adj : lobs){
+					String name_adj = adj.getLeft();
+					if(!G.containsVertex(name_adj)){
+						G.addVertex(name_adj);
+						G.addEdge(name_curr_node,name_adj);
+					}
+					if( !fermes.contains(name_adj)){
+						if(!ouverts.contains(name_adj)){
+							ouverts.add(name_adj);
+							d = true;
+							open_adj.add(name_adj);
+						}
+						else{
+							open_candidats.add(name_adj);
+							c = true;
+						}
+					}
+				}
+				
+				if(d){
+					Random r = new Random();
+					next_pos = open_adj.get(r.nextInt(open_adj.size()));
+				}
+				else if (c){
+					Random r = new Random();
+					goal = G.shortestPath(name_curr_node,open_candidats.get(r.nextInt(open_candidats.size())));
+					next_pos = goal.remove(0);
+				}else if (!d && !c){
+					fermes.clear();
+					repeat = true;
+				}
+			}
+			((mas.abstractAgent)this.myAgent).moveTo(next_pos);
+			
+			
+		}
+
+	}
+
+}

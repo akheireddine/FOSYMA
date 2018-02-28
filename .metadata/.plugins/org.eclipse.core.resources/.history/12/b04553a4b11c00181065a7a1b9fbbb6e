@@ -1,0 +1,29 @@
+package mas.behaviours;
+
+import jade.core.behaviours.SimpleBehaviour;
+
+public class CommunicationBehaviour extends SimpleBehaviour {
+
+	
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -8701757571366016884L;
+
+	public CommunicationBehaviour(final mas.abstractAgent myagent) {
+		super(myagent);
+	}
+	
+	
+	
+	public void action() {
+		
+	}
+
+	public boolean done() {
+		return false;
+	}
+
+
+}

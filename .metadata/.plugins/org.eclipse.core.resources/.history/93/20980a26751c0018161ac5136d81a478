@@ -1,0 +1,13 @@
+package mas.behaviours;
+
+import jade.core.behaviours.TickerBehaviour;
+
+public class WalkBehaviour extends TickerBehaviour {
+
+	@Override
+	protected void onTick() {
+		// TODO Auto-generated method stub
+
+	}
+
+}

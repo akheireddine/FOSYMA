@@ -1,0 +1,38 @@
+!SESSION 2018-02-21 09:08:20.291 -----------------------------------------------
+eclipse.buildId=4.4.2.M20150204-1700
+java.version=1.8.0_45
+java.vendor=Oracle Corporation
+BootLoader constants: OS=linux, ARCH=x86_64, WS=gtk, NL=fr_FR
+Framework arguments:  -product org.eclipse.epp.package.java.product
+Command-line arguments:  -os linux -ws gtk -arch x86_64 -product org.eclipse.epp.package.java.product
+
+!ENTRY org.eclipse.core.net 1 0 2018-02-21 09:08:41.398
+!MESSAGE System property http.proxyHost is set to proxy.ufr-info-p6.jussieu.fr but should not be set.
+
+!ENTRY org.eclipse.core.net 1 0 2018-02-21 09:08:41.401
+!MESSAGE System property http.proxyPort is set to 3128 but should not be set.
+
+!ENTRY org.eclipse.core.net 1 0 2018-02-21 09:08:41.408
+!MESSAGE System property http.proxyHost is set to proxy.ufr-info-p6.jussieu.fr but should not be set.
+
+!ENTRY org.eclipse.core.net 1 0 2018-02-21 09:08:41.409
+!MESSAGE System property http.proxyPort is set to 3128 but should not be set.
+!SESSION 2018-02-26 17:50:20.531 -----------------------------------------------
+eclipse.buildId=4.4.2.M20150204-1700
+java.version=1.8.0_45
+java.vendor=Oracle Corporation
+BootLoader constants: OS=linux, ARCH=x86_64, WS=gtk, NL=fr_FR
+Framework arguments:  -product org.eclipse.epp.package.java.product
+Command-line arguments:  -os linux -ws gtk -arch x86_64 -product org.eclipse.epp.package.java.product
+
+!ENTRY org.eclipse.core.net 1 0 2018-02-26 17:50:34.498
+!MESSAGE System property http.proxyHost is set to proxy.ufr-info-p6.jussieu.fr but should not be set.
+
+!ENTRY org.eclipse.core.net 1 0 2018-02-26 17:50:34.501
+!MESSAGE System property http.proxyPort is set to 3128 but should not be set.
+
+!ENTRY org.eclipse.core.net 1 0 2018-02-26 17:50:34.514
+!MESSAGE System property http.proxyHost is set to proxy.ufr-info-p6.jussieu.fr but should not be set.
+
+!ENTRY org.eclipse.core.net 1 0 2018-02-26 17:50:34.514
+!MESSAGE System property http.proxyPort is set to 3128 but should not be set.

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<qualifiedTypeNameHistroy>
+<fullyQualifiedTypeName name="org.jgrapht.Graph"/>
+<fullyQualifiedTypeName name="org.graphstream.graph.implementations.AbstractGraph"/>
+<fullyQualifiedTypeName name="org.jgrapht.graph.AsUndirectedGraph"/>
+<fullyQualifiedTypeName name="org.jgrapht.graph.AbstractGraph"/>
+<fullyQualifiedTypeName name="test.Graphe"/>
+<fullyQualifiedTypeName name="org.jgrapht.graph.SimpleDirectedGraph"/>
+<fullyQualifiedTypeName name="java.lang.Override"/>
+<fullyQualifiedTypeName name="env.Couple"/>
+<fullyQualifiedTypeName name="org.jgrapht.graph.GraphDelegator"/>
+</qualifiedTypeNameHistroy>

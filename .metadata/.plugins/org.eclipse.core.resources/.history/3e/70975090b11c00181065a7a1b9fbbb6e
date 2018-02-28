@@ -1,0 +1,25 @@
+package mas.behaviours;
+
+import jade.core.behaviours.SimpleBehaviour;
+
+public class CommunicationBehaviour extends SimpleBehaviour {
+
+	
+
+	public CommunicationBehaviour(final mas.abstractAgent myagent) {
+		super(myagent);
+	}
+	@Override
+	public void action() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public boolean done() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+
+}
