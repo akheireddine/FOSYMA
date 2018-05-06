@@ -7,9 +7,7 @@ import org.graphstream.algorithm.generator.Generator;
 import org.graphstream.algorithm.generator.GridGenerator;
 import org.graphstream.graph.Graph;
 import org.graphstream.graph.Node;
-import org.graphstream.graph.implementations.MultiGraph;
 import org.graphstream.graph.implementations.SingleGraph;
-import org.graphstream.ui.spriteManager.Sprite;
 import org.graphstream.ui.spriteManager.SpriteManager;
 
 import org.graphstream.ui.view.Viewer;
@@ -34,7 +32,7 @@ public class TestCreateGraphGS {
 		String nodeStyle=defaultNodeStyle+nodeStyle_wumpus+nodeStyle_agent+nodeStyle_treasure+nodeStyle_EntryExit;
 		System.setProperty("org.graphstream.ui.renderer", "org.graphstream.ui.j2dviewer.J2DGraphRenderer");
 
-		Graph graph = new SingleGraph("Illustrative example");//generateGraph(true, 30);
+		Graph graph =generateGraph(true, 30);// new SingleGraph("Illustrative example");//generateGraph(true, 30);
 		
 		Iterator<Node> iter=graph.getNodeIterator();
 		
@@ -87,7 +85,7 @@ public class TestCreateGraphGS {
 //		s.addAttribute("Wind", true);
 //	
 //		
-
+		
 
 	}
 	

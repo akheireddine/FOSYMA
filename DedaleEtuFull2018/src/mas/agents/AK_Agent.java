@@ -1,64 +1,88 @@
 package mas.agents;
 
-import jade.domain.DFService;
-import jade.domain.FIPAException;
-import jade.domain.FIPAAgentManagement.DFAgentDescription;
-import jade.domain.FIPAAgentManagement.ServiceDescription;
-import env.Environment;
+
+import java.util.HashSet;
+import java.util.Set;
+
+import Tools.GraphAK;
+import jade.lang.acl.ACLMessage;
 import mas.abstractAgent;
-import mas.behaviours.WalkBehaviour;
 
-public class AK_Agent extends abstractAgent {
+public abstract class AK_Agent extends abstractAgent {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -5475387134737498221L;
+	private static final long serialVersionUID = -383346975870383010L;
+	private GraphAK G = new GraphAK();
+	private ACLMessage toread = null; /** If there's something to read **/
+	private int nombreDeCollision = 0;
+	private boolean doneExploration = false;
+	private int cpt_exploration = 0;
+	private String recent_collision_node="";
+	private Set<String> removedVerticesName=new HashSet<String>();
+	static int nb_ak_agent = 0;
+
+	public GraphAK getGraph(){
+		return G;
+	}
 	
+	public void CptPlus(){
+		this.cpt_exploration ++;
+	}
+	public void RAZCpt(){
+		this.cpt_exploration = 0;
+	}
+	public int getCpt(){
+		return this.cpt_exploration;
+	}
 	
+	public String getRecentCollisionNode() {
+		return this.recent_collision_node;
+	}
 	
+	public boolean getDoneExploration(){
+		return this.doneExploration;
+	}
 	
-	protected void setup(){
-
-		super.setup();
-
-		DFAgentDescription dfd = new DFAgentDescription();
-		dfd.setName(getAID());
-		ServiceDescription sd = new ServiceDescription();
-		sd.setType("explorer");
-		sd.setName(getLocalName());
-		dfd.addServices(sd);
-		try{
-			DFService.register(this,dfd);
-		}catch(FIPAException fe){
-			fe.printStackTrace();
-		}
-		
-		//get the parameters given into the object[]. In the current case, the environment where the agent will evolve
-		final Object[] args = getArguments();
-		if(args[0]!=null){
-
-			deployAgent((Environment) args[0]);
-
-		}else{
-			System.err.println("Malfunction during parameter's loading of agent"+ this.getClass().getName());
-			System.exit(-1);
-		}
-		
-		
-		//Add the behaviours
-		addBehaviour(new WalkBehaviour(this));
-//		addBehaviour(new SayHello(this));                                                        
-
-		System.out.println("the agent "+this.getLocalName()+ " is started");
-
+	public void exploration_is_done(){
+		this.doneExploration  = true;
 	}
 
-	/**
-	 * This method is automatically called after doDelete()
-	 */
-	protected void takeDown(){
+	public void setCollisionNode(String next_pos) {
+		this.recent_collision_node = next_pos;
+	}
+	
+	public void setToread(ACLMessage msg){
+		this.toread = msg;
+	}
+	
+	public ACLMessage getMessage(){
+		return toread;
+	}
+	
+	public int getNombreDeCollision() {
+		return nombreDeCollision;
+	}
 
+	public void setNombreDeCollision(int nombreDeCollision) {
+		this.nombreDeCollision = nombreDeCollision;
+	}
+
+
+
+	public void removeVertexCollision(String next_pos) {
+		this.removedVerticesName.add(next_pos);
+		this.G.removeVertex(next_pos);
+	}
+
+	public void resetVerticesToGraph() {
+		this.G.resetVertices(this.removedVerticesName);
+//		if(!this.removedVerticesName.isEmpty()) {
+//			for(String i:this.removedVerticesName){
+//				this.G.resetVertex(i);
+//			}
+////			this.G.getOuverts().add(this.removedVertexName);
+////			this.G.getFermes().remove(this.removedVertexName);
+//		}
+		this.removedVerticesName.clear();;
 	}
 
 }
