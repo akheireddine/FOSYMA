@@ -64,9 +64,9 @@ public class WalkBehaviourHeuristic extends SimpleBehaviour {
 	
 	public String choisirLeProchainNodeOuvert(List<String> successors){
 		String next_node = successors.get(0);
-		int max = G.getNbOuvertsNode(next_node);
+		int max = G.getNbOpenNeighborVertex(next_node);
 		for(String succ : successors) {
-			int value_tmp_node = G.getNbOuvertsNode(succ);
+			int value_tmp_node = G.getNbOpenNeighborVertex(succ);
 			if(value_tmp_node > max) {
 				max = value_tmp_node;
 				next_node = succ;

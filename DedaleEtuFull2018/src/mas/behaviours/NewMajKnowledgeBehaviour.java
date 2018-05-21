@@ -34,7 +34,7 @@ public class NewMajKnowledgeBehaviour extends OneShotBehaviour {
 			this.curr_graph = ((AK_Agent)myAgent).getGraph();
 			
 			//Si je n'ai pas fini mon exploration complete de l'environement
-			if(!((AK_Agent)myAgent).getDoneExploration()){
+			if(!((AK_Agent)myAgent).isExplorationDone()){
 				System.out.println(myAgent.getLocalName()+" : MàJ topo env");
 				HashMap<String,Set<String>> adjacenes_received = new_information._2();
 				

@@ -19,7 +19,7 @@ public class NewFSMBehaviourDSCM extends FSMBehaviour {
 	public NewFSMBehaviourDSCM(AK_Agent a,boolean i){
 		super(a);
 //		if (i)
-			registerFirstState(new CopyOfWalkBehaviourHeuristic((abstractAgent) a,a.getGraph()),"D");
+			registerFirstState(new CopyOfWalkBehaviourHeuristicGolem((abstractAgent) a,a.getGraph()),"D");
 //		else
 //			registerFirstState(new CopyOfWalkBehaviourRandomize((abstractAgent) a,a.getGraph()),"D");
 		registerState(new SendInformationAfterCollisionBehaviour(), "S");

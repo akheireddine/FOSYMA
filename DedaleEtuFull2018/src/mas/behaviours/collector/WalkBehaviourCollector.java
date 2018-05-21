@@ -39,7 +39,7 @@ public class WalkBehaviourCollector extends SimpleBehaviour {
 	public List<String> m_a_j_graphe(String src, List<Couple<String, List<Attribute>>> adjacents){
 		List<String> ladj_node = new ArrayList<String>();
 
-		if(!((AK_Agent)myAgent).getDoneExploration()) {
+		if(!((AK_Agent)myAgent).isExplorationDone()) {
 			G.addVertex(src);
 			for(Couple<String, List<Attribute>> adjacent: adjacents){
 				String adj_name = adjacent.getLeft();
@@ -49,7 +49,7 @@ public class WalkBehaviourCollector extends SimpleBehaviour {
 			}
 		}else {
 			for(Couple<String, List<Attribute>> adjacent: adjacents){
-				G.m_a_j_node_info(adjacent.getLeft(), adjacent.getRight());
+				G.updateNode(adjacent.getLeft(), adjacent.getRight());
 				ladj_node.add(adjacent.getLeft());
 			}
 		}
@@ -101,9 +101,9 @@ public class WalkBehaviourCollector extends SimpleBehaviour {
 	public String choisirLeProchainNodeOuvert(List<String> successors){
 		String next_node;
 		next_node = successors.get(0);
-		int max = G.getNbOuvertsNode(next_node);
+		int max = G.getNbOpenNeighborVertex(next_node);
 		for(String succ : successors) {
-			int value_tmp_node = G.getNbOuvertsNode(succ);
+			int value_tmp_node = G.getNbOpenNeighborVertex(succ);
 			if(value_tmp_node > max) {
 				max = value_tmp_node;
 				next_node = succ;
@@ -177,7 +177,7 @@ public class WalkBehaviourCollector extends SimpleBehaviour {
 			
 			List<Couple<String, List<Attribute>>> adjacents = lobs;
 			Couple<String, List<Attribute>> curr_observation = adjacents.remove(0);
-			G.m_a_j_node_info(myPosition, curr_observation.getRight());                      //MaJ des informations sur les noeuds
+			G.updateNode(myPosition, curr_observation.getRight());                      //MaJ des informations sur les noeuds
 			List<String> adj_names = m_a_j_graphe(myPosition, adjacents);
 			Set<String> detect_golem = G.isGolemAround(myPosition);						     //ensemble de noeuds ou le Golem a ete detecte
 		

@@ -31,7 +31,7 @@ public class RequestKnowledge extends SimpleBehaviour {
 		final ACLMessage msg = new ACLMessage(ACLMessage.REQUEST);
 		msg.setSender(this.myAgent.getAID());
 		try {
-			msg.setContentObject(((AK_Agent)myAgent).getDoneExploration());
+			msg.setContentObject(((AK_Agent)myAgent).isExplorationDone());
 		}catch (IOException e1) {
 			e1.printStackTrace();
 		}

@@ -14,7 +14,7 @@ import env.Attribute;
 import env.Couple;
 import jade.core.behaviours.SimpleBehaviour;
 
-public class CopyOfWalkBehaviourHeuristic extends SimpleBehaviour {
+public class CopyOfWalkBehaviourHeuristicGolem extends SimpleBehaviour {
 
 	private static final long serialVersionUID = -5308185370371990470L;
 	private Set<String> fermes,ouverts;
@@ -23,7 +23,7 @@ public class CopyOfWalkBehaviourHeuristic extends SimpleBehaviour {
 	private boolean finished = false;
 	private int nb_no_pb_collision = 0;
 	
-	public CopyOfWalkBehaviourHeuristic(final mas.abstractAgent myagent, GraphAK g) {
+	public CopyOfWalkBehaviourHeuristicGolem(final mas.abstractAgent myagent, GraphAK g) {
 		super(myagent);
 		G = g;
 		this.fermes = G.getFermes();
@@ -201,15 +201,39 @@ public class CopyOfWalkBehaviourHeuristic extends SimpleBehaviour {
 			Set<String> removedVertices = ((AK_Agent)myAgent).getSetRemovedVertices();
 
 			//Si tout a ete explore
-			if(this.ouverts.isEmpty() && removedVertices.isEmpty()){
-				((AK_Agent)myAgent).exploration_is_done();									 //Utilise pour les MaJ des informations (True il connait completement la topo de l'env)
-				((AK_Agent)myAgent).resetVerticesToGraph();
-				G.clearFermes();    					 									 //Repeter l'operation d'exploration
-				((AK_Agent)myAgent).setNombreDeCollision(0);
-				G.addAllOuverts(myPosition);
-				System.out.println(myAgent.getLocalName()+" : Exploration DONE ("+((AK_Agent)myAgent).getCpt()+"). Restart !");
-				((AK_Agent)myAgent).RAZCpt();
-				voisins_ouverts = get_open_neighbors(adj_names);
+			if(this.ouverts.isEmpty()){
+				if(removedVertices.isEmpty()){
+					((AK_Agent)myAgent).exploration_is_done();									 //Utilise pour les MaJ des informations (True il connait completement la topo de l'env)
+					((AK_Agent)myAgent).resetVerticesToGraph();
+					G.clearFermes();    					 									 //Repeter l'operation d'exploration
+					((AK_Agent)myAgent).setNombreDeCollision(0);
+					G.addAllOuverts(myPosition);
+					System.out.println(myAgent.getLocalName()+" : Exploration DONE ("+((AK_Agent)myAgent).getCpt()+"). Restart !");
+					((AK_Agent)myAgent).RAZCpt();
+					voisins_ouverts = get_open_neighbors(adj_names);
+				}
+				else {
+					((AK_Agent)myAgent).resetVerticesToGraph();
+					for(String n : removedVertices) {
+						this.ouverts.add(n);
+						this.fermes.add(n);
+					}
+					System.out.println(myAgent.getLocalName()+" : Only removed vertices to explore");
+				}
+			}
+			
+			else {
+				
+				if(!removedVertices.isEmpty()) {
+					int nb_collision = ((AK_Agent)myAgent).getNombreDeCollision();
+					if(nb_collision>1) {
+						((AK_Agent)myAgent).resetVerticesToGraph();
+						G.clearFermes();
+						G.addAllOuverts(myPosition);
+						System.out.println(myAgent.getLocalName()+" : cant move restart exploring ("+nb_collision+" collision)");
+						((AK_Agent)myAgent).setNombreDeCollision(0);
+					}
+				}
 			}
 			
 			removedVertices = ((AK_Agent)myAgent).getSetRemovedVertices();
@@ -217,6 +241,7 @@ public class CopyOfWalkBehaviourHeuristic extends SimpleBehaviour {
 			
 			//Selection du prochain deplacement
 			String next_pos = getNextPosition(voisins_ouverts);
+			System.out.println(myAgent.getLocalName()+" : next pos "+next_pos);
 			//aucune issue, il faut que je passe par un noeud qui a ete supprime du graphe
 //			if(next_pos.equals("") && removedVertices.size()==1) {
 //				G.clearFermes();
@@ -224,19 +249,19 @@ public class CopyOfWalkBehaviourHeuristic extends SimpleBehaviour {
 //				System.out.println(myAgent.getLocalName()+" : No choice but to reset closed&removed1 vertices after "+((AK_Agent)myAgent).getNombreDeCollision()+" collisions.");
 //				next_pos = getNextPosition(voisins_ouverts);
 //			}
-			if(next_pos.equals("") && !removedVertices.isEmpty()) {
+//			if(next_pos.equals("") && !removedVertices.isEmpty()) {
+////				G.clearFermes();
+//				((AK_Agent)myAgent).resetVerticesToGraph();
+//				System.out.println(myAgent.getLocalName()+" : No choice but to reset removed vertices after "+((AK_Agent)myAgent).getNombreDeCollision()+" collisions.");
+//				next_pos = getNextPosition(voisins_ouverts);
+//			}
+//			else if(next_pos.equals("") ) {
 //				G.clearFermes();
-				((AK_Agent)myAgent).resetVerticesToGraph();
-				System.out.println(myAgent.getLocalName()+" : No choice but to reset removed vertices after "+((AK_Agent)myAgent).getNombreDeCollision()+" collisions.");
-				next_pos = getNextPosition(voisins_ouverts);
-			}
-			else if(next_pos.equals("") ) {
-				G.clearFermes();
-				((AK_Agent)myAgent).resetVerticesToGraph();
-				System.out.println(myAgent.getLocalName()+" : No choice but to reset closed&removed vertices after "+((AK_Agent)myAgent).getNombreDeCollision()+" collisions.");
-				next_pos = getNextPosition(voisins_ouverts);
-			}
-			
+//				((AK_Agent)myAgent).resetVerticesToGraph();
+//				System.out.println(myAgent.getLocalName()+" : No choice but to reset closed&removed vertices after "+((AK_Agent)myAgent).getNombreDeCollision()+" collisions.");
+//				next_pos = getNextPosition(voisins_ouverts);
+//			}
+//			
 			
 			
 			//Test si le deplacement s'est bien acoompli
@@ -261,8 +286,10 @@ public class CopyOfWalkBehaviourHeuristic extends SimpleBehaviour {
 				
 				System.out.println("= = = = = = = = = = >BLOCUS : "+next_pos);
 				//Dans le cas ou on echange les Ouverts, Fermes
-				ouverts.remove(next_pos);
-				fermes.add(next_pos);
+				if(!next_pos.equals("")) {
+					ouverts.remove(next_pos);
+					fermes.add(next_pos);
+				}
 			
 				/***
 				 * 				COLLISION AVEC AGENT

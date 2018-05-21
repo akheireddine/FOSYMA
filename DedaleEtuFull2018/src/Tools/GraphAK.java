@@ -63,9 +63,9 @@ public class GraphAK extends SimpleGraph<String,DefaultEdge> {
 	
 	
 	
-	public int getNbOuvertsNode(String node_name){
+	public int getNbOpenNeighborVertex(String node_name){
 		int i = 0;
-		if(super.containsVertex(node_name)) {
+		if(super.containsVertex(node_name) ) {
 			for(DefaultEdge e: super.edgesOf(node_name)){
 				String src = this.getEdgeSource(e);
 				String trg = this.getEdgeTarget(e);
@@ -91,7 +91,7 @@ public class GraphAK extends SimpleGraph<String,DefaultEdge> {
 		return super.addVertex(name);
 	}
 	
-	public void m_a_j_node_info(String node,List<Attribute> obs) {
+	public void updateNode(String node,List<Attribute> obs) {
 		this.nodes.replace(node, obs);
 	}
 
@@ -191,10 +191,13 @@ public class GraphAK extends SimpleGraph<String,DefaultEdge> {
 				this.addVertex(node, new ArrayList<Attribute>());
 			else
 				super.addVertex(node);
+		}
+		for(String node : removedVerticesName) {
 			for(String adj: this.dictAdjacences.get(node)){
 				this.addEdge(node, adj);
 			}
 		}
+
 	}
 		
 	

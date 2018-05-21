@@ -39,10 +39,9 @@ public class Principal {
 
 		System.out.println("Hello !");
 		//0) Create the real environment and the observed one
-//		env= new Environment(ENVtype.GRID_T,5,null);
-//		env = new Environment("ressources/mapInterblocage","ressources/mapInterblocage-config");
-//		env= new Environment(ENVtype.DOROGOVTSEV_T,50,null);
-		env = new Environment("ressources/mapAK","ressources/mapAK-config");
+//		env= new Environment(ENVtype.GRID_T,7,null);
+		env = new Environment("ressources/mapInterblocage","ressources/mapInterblocage-config");
+//		env= new Environment(ENVtype.DOROGOVTSEV,50,null);
 //		env=new Environment("ressources/map2017-2","ressources/map2017-config");
 
 		//1), create the platform (Main container (DF+AMS) + containers + monitoring agents : RMA and SNIFFER)
@@ -192,16 +191,16 @@ public class Principal {
 		 */
 
 		//	wumpus on container0
-//		c = containerList.get("container0");
-//		agentName="Golem";
-//		try {
-//			Object[] objtab=new Object[]{env};//used to give informations to the agent
-//			AgentController	ag=c.createNewAgent(agentName,DummyWumpusShift.class.getName(),objtab);
-//			agentList.add(ag);
-//			System.out.println(agentName+" launched");
-//		} catch (StaleProxyException e) {
-//			e.printStackTrace();
-//		}
+		c = containerList.get("container0");
+		agentName="Golem";
+		try {
+			Object[] objtab=new Object[]{env};//used to give informations to the agent
+			AgentController	ag=c.createNewAgent(agentName,DummyWumpusShift.class.getName(),objtab);
+			agentList.add(ag);
+			System.out.println(agentName+" launched");
+		} catch (StaleProxyException e) {
+			e.printStackTrace();
+		}
 
 		//	Explorer (no backpack)
 		c = containerList.get("container0");
@@ -217,17 +216,17 @@ public class Principal {
 		}
 //
 //		//Explorer (no backpack)
-		c = containerList.get("container0");
-		agentName="E2";
-		try {
-
-			Object[] objtab=new Object[]{env,EntityType.AGENT_EXPLORER};//used to give informations to the agent
-			AgentController	ag=c.createNewAgent(agentName,AK_Explorer.class.getName(),objtab);
-			agentList.add(ag);
-			System.out.println(agentName+" launched");
-		} catch (StaleProxyException e) {
-			e.printStackTrace();
-		}
+//		c = containerList.get("container0");
+//		agentName="E2";
+//		try {
+//
+//			Object[] objtab=new Object[]{env,EntityType.AGENT_EXPLORER};//used to give informations to the agent
+//			AgentController	ag=c.createNewAgent(agentName,AK_Explorer.class.getName(),objtab);
+//			agentList.add(ag);
+//			System.out.println(agentName+" launched");
+//		} catch (StaleProxyException e) {
+//			e.printStackTrace();
+//		}
 //		
 //		
 //		c = containerList.get("container0");

@@ -48,7 +48,7 @@ public class MajKnowledgeBehaviour extends OneShotBehaviour {
 		final ACLMessage received_graph = ((AK_Agent)myAgent).getMessage();
 		try {
 			//recuperer le graphe contenu dans le message
-			if(!((AK_Agent)myAgent).getDoneExploration()){
+			if(!((AK_Agent)myAgent).isExplorationDone()){
 				this.curr_graph = ((AK_Agent)myAgent).getGraph();
 				GraphAK partial_graph = (GraphAK) received_graph.getContentObject();
 				Set<DefaultEdge> edges = partial_graph.edgeSet(); 

@@ -13,11 +13,13 @@ public abstract class AK_Agent extends abstractAgent {
 	private static final long serialVersionUID = -383346975870383010L;
 	private GraphAK G = new GraphAK();
 	private ACLMessage toread = null; /** If there's something to read **/
-	private int nombreDeCollision = 0;
-	private boolean doneExploration = false;
+	private boolean exploDone = false;
 	private int cpt_exploration = 0;
+	
+	private int nombreDeCollision = 0;
 	private String recent_collision_node="";
 	private Set<String> removedVerticesName=new HashSet<String>();
+	
 	static int nb_ak_agent = 0;
 
 	public GraphAK getGraph(){
@@ -38,12 +40,16 @@ public abstract class AK_Agent extends abstractAgent {
 		return this.recent_collision_node;
 	}
 	
-	public boolean getDoneExploration(){
-		return this.doneExploration;
+	public Set<String> getSetRemovedVertices(){
+		return this.removedVerticesName;
+	}
+	
+	public boolean isExplorationDone(){
+		return this.exploDone;
 	}
 	
 	public void exploration_is_done(){
-		this.doneExploration  = true;
+		this.exploDone  = true;
 	}
 
 	public void setCollisionNode(String next_pos) {
