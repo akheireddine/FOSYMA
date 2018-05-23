@@ -23,6 +23,8 @@ public class GraphAK extends SimpleGraph<String,DefaultEdge> {
 	private String Silo_position="";
 	private Set<String> ens_position_silo= new HashSet<String>();
 
+	private Set<String> fermesAgent= new HashSet<String>();
+
 	
 	
 	public GraphAK() {
@@ -50,6 +52,20 @@ public class GraphAK extends SimpleGraph<String,DefaultEdge> {
 	
 	public void clearFermes(){
 		this.fermes.clear();
+	}
+	
+	public void addFermesAgent(Set<String> f){
+		this.fermesAgent = f;
+	}
+	
+	public void clearMesFermesSeulement(){
+		for(String i : this.fermes){
+			if(!this.fermesAgent.contains(i)){
+				this.fermes.remove(i);
+				this.ouverts.add(i);
+			}
+		}
+		this.fermesAgent.clear();
 	}
 	
 
@@ -129,6 +145,7 @@ public class GraphAK extends SimpleGraph<String,DefaultEdge> {
 	}
 
 	public void addToFermes(Set<String> closeSet) {
+		this.fermesAgent = closeSet;
 		this.fermes = new HashSet<String>();
 		for(String i : closeSet) {
 			this.ouverts.remove(i);

@@ -2,7 +2,6 @@ package mas.behaviours.explorer;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 import java.util.Set;
 
 import mas.agents.AK_Agent;
@@ -22,12 +21,14 @@ public class WalkDontKnowBehaviour extends SimpleBehaviour {
 		private GraphAK G;
 		private int onEndValue=0;
 		private boolean finished = false;
+		private String last_move="";
 		
 		public WalkDontKnowBehaviour(final mas.abstractAgent myagent, GraphAK g) {
 			super(myagent);
 			G = g;
 			this.fermes = G.getFermes();
 			this.ouverts = G.getOuverts();
+
 		}
 
 
@@ -39,19 +40,19 @@ public class WalkDontKnowBehaviour extends SimpleBehaviour {
 		public List<String> m_a_j_graphe(String src, List<Couple<String, List<Attribute>>> adjacents){
 			List<String> ladj_node = new ArrayList<String>();
 
-			if(!((AK_Agent)myAgent).isExplorationDone()) {
+//			if(!((AK_Agent)myAgent).isExplorationDone()) {
 				G.addVertex(src);
 				for(Couple<String, List<Attribute>> adjacent: adjacents){
 					String adj_name = adjacent.getLeft();
 					ladj_node.add(adjacent.getLeft());
 					G.addVertex(adj_name,adjacent.getRight());
 					G.addEdge(src,adj_name);
-				}
-			}else {
-				for(Couple<String, List<Attribute>> adjacent: adjacents){
-					G.updateNode(adjacent.getLeft(), adjacent.getRight());
-					ladj_node.add(adjacent.getLeft());
-				}
+//				}
+//			}else {
+//				for(Couple<String, List<Attribute>> adjacent: adjacents){
+//					G.updateNode(adjacent.getLeft(), adjacent.getRight());
+//					ladj_node.add(adjacent.getLeft());
+//				}
 			}
 			return ladj_node;
 		}
@@ -80,13 +81,17 @@ public class WalkDontKnowBehaviour extends SimpleBehaviour {
 		public String getNextPositionNearestOpenVertex(String src){
 			DijkstraShortestPath<String, DefaultEdge> dijkstraShortestPath = new DijkstraShortestPath<String, DefaultEdge>(G);
 			int dist_min = G.vertexSet().size();
-			String next_node = "";
-			String coll_node = ((AK_Agent)myAgent).getRecentCollisionNode();
+			String next_node = src;
+//			String coll_node = ((AK_Agent)myAgent).getRecentCollisionNode();
 			for(String dst: ouverts){
-				List<String> shortestPath = dijkstraShortestPath.getPath(src,dst).getVertexList();
-				if(shortestPath.size() < dist_min  && !coll_node.equals(shortestPath.get(1))){
-					dist_min = shortestPath.size();
-					next_node = shortestPath.get(1);
+				try{
+					List<String> shortestPath = dijkstraShortestPath.getPath(src,dst).getVertexList();
+					if(shortestPath.size() < dist_min ){// && !coll_node.equals(shortestPath.get(1))){
+						dist_min = shortestPath.size();
+						next_node = shortestPath.get(1);
+					}
+				}catch(Exception e){
+					System.out.println(myAgent.getLocalName()+": error in "+dst);
 				}
 			}
 			return next_node;
@@ -96,11 +101,9 @@ public class WalkDontKnowBehaviour extends SimpleBehaviour {
 		
 		public String choisirLeProchainNodeOuvert(List<String> successors){
 			String next_node;
-			Float r = new Random().nextFloat();
 			
-			if(true){//r <= 2./3. || !((AK_Agent)myAgent).getDoneExploration()){
-				next_node = successors.get(0);
-				int max = G.getNbOpenNeighborVertex(next_node);
+			next_node = successors.get(0);
+			int max = G.getNbOpenNeighborVertex(next_node);
 				for(String succ : successors) {
 					int value_tmp_node = G.getNbOpenNeighborVertex(succ);
 					if(value_tmp_node > max) {
@@ -108,20 +111,6 @@ public class WalkDontKnowBehaviour extends SimpleBehaviour {
 						next_node = succ;
 					}
 				}
-//			}else if(1./3. < r && r <= 2./3. ){
-//				next_node = successors.get(0);
-//				int max = G.getDegreeOfNode(next_node);
-//				for(String succ : successors) {
-//					int	value_tmp_node = G.getDegreeOfNode(succ);
-//					if(value_tmp_node > max) {
-//						max = value_tmp_node;
-//						next_node = succ;
-//					}
-				}
-//			}else{
-//				next_node = successors.get(new Random().nextInt(successors.size()));
-//			}
-			//		System.out.println(" PROCHAIN NOEUD "+next_node+"("+max+")");
 			return next_node;
 		}
 		
@@ -134,7 +123,7 @@ public class WalkDontKnowBehaviour extends SimpleBehaviour {
 		 * @return prochain deplacement
 		 */
 		public String getNextPosition(List<String> successeurs_non_visites ){
-			String next_pos;
+			String next_pos=((mas.abstractAgent)myAgent).getCurrentPosition();
 			if(!successeurs_non_visites.isEmpty()){
 				next_pos =  choisirLeProchainNodeOuvert(successeurs_non_visites);
 			}else{
@@ -199,66 +188,94 @@ public class WalkDontKnowBehaviour extends SimpleBehaviour {
 					G.clearFermes();       //Repeter l'operation d'exploration
 					G.addAllOuverts(myPosition);
 //					this.finished = true;
+					((AK_Agent)myAgent).setNombreDeCollision(0);
+
 					System.out.println(myAgent.getLocalName()+" : Exploration DONE ("+((AK_Agent)myAgent).getCpt()+"). Restart !");
 					((AK_Agent)myAgent).RAZCpt();
 					voisins_ouverts = get_open_neighbors(adj_names);
 				}
-				
+
 				String next_pos = getNextPosition(voisins_ouverts);
-				if(next_pos.equals("")) {
+				if(next_pos.equals(myPosition) ){//|| (next_pos.equals(last_move) && (((AK_Agent)myAgent).getNombreDeCollision() > 2)) ) {
 					G.clearFermes();
+					((AK_Agent)myAgent).setNombreDeCollision(0);
+
 					G.addAllOuverts(myPosition);
-					System.out.println(myAgent.getLocalName()+" : I passed in the wosrt case cuz "+next_pos);
+					System.out.println(myAgent.getLocalName()+" : I passed in the wosrt case cuz "+((AK_Agent)myAgent).getCpt());
 					next_pos = getNextPosition(voisins_ouverts);
 				}
 				
 				boolean has_moved = ((mas.abstractAgent)this.myAgent).moveTo(next_pos);
-				
+//				System.out.println(myAgent.getLocalName()+" : moved to "+next_pos+" "+has_moved+" ("+((AK_Agent)myAgent).getNombreDeCollision());
+
 				if (has_moved){
 					this.finished=false;
-					((AK_Agent)myAgent).setCollisionNode("toto");
+//					((AK_Agent)myAgent).setCollisionNode("toto");
 					((AK_Agent)myAgent).setNombreDeCollision(0);
 					((AK_Agent)myAgent).CptPlus();
 //					System.out.println(myAgent.getLocalName()+" : Deplace vers "+next_pos);
 				}
 				else{
+
+					int nb_collision = ((AK_Agent)myAgent).getNombreDeCollision()+1;
+					((AK_Agent)myAgent).setNombreDeCollision(nb_collision);
 					
-					int nb_collision = ((AK_Agent)myAgent).getNombreDeCollision();
-					((AK_Agent)myAgent).setNombreDeCollision(nb_collision+1);
 					
-					
-					boolean golem = false;
-					for(Attribute a : curr_observation.getRight()) {
-						switch(a) {
-						case STENCH:
-							this.fermes.add(next_pos);
-							this.ouverts.remove(next_pos);
-							golem = true;
-							System.out.println(myAgent.getLocalName()+ " : Collision avec le golem !");
-							break;
-						default:
-							break;
-						}
-					}
+					Set<String> golem = G.isGolemAround(myPosition);;
+
 				
 					//Dans le cas ou on echange les Ouverts, fermes
-					ouverts.remove(next_pos);
-					fermes.add(next_pos);
+//					ouverts.remove(next_pos);
+//					fermes.add(next_pos);
 				
 					//Si premiere collision, envoie un message d'information
-					if(nb_collision==1 && !golem) {
+					if(nb_collision==1 && golem.isEmpty()) {
+						this.onEndValue = 0;
 						this.finished=true;
-						((AK_Agent)myAgent).setCollisionNode(next_pos);
-					}
-//					else if (nb_collision ==2 && !golem)
+						ouverts.remove(next_pos);
+						fermes.add(next_pos);
 //						((AK_Agent)myAgent).setCollisionNode(next_pos);
+					}
 
-					else if (nb_collision == 2 && !golem){//check s'il a bien lu le msg recu par l'agent collision
+					else if (nb_collision == 2 && golem.isEmpty()){//check s'il a bien lu le msg recu par l'agent collision
 						this.finished=true;
 						this.onEndValue = 1;    
 					}
-
 					
+//					else if(nb_collision>2 && !golem.isEmpty()){
+//						ouverts.remove(next_pos);
+//						fermes.add(next_pos);
+//					}
+					
+//					else if(nb_collision>2 || next_pos.equals(last_move)){
+//						if(golem.isEmpty()){
+//							G.clearMesFermesSeulement();
+//							ouverts.remove(next_pos);
+//							fermes.add(next_pos);
+//						}else{
+//							G.clearFermes();
+//							G.addAllOuverts(myPosition);
+//							ouverts.remove(next_pos);
+//							fermes.add(next_pos);
+//						}
+////						((AK_Agent)myAgent).setNombreDeCollision(0);
+//						System.out.println(myAgent.getLocalName()+" : I passed  "+nb_collision+"collisions"
+//								+ "");
+//					}
+					
+					else if(nb_collision>2 || next_pos.equals(last_move)){
+						G.clearFermes();
+						ouverts.remove(next_pos);
+						fermes.add(next_pos);
+//						((AK_Agent)myAgent).setNombreDeCollision(0);
+						G.addAllOuverts(myPosition);
+						System.out.println(myAgent.getLocalName()+" : I passed ___ "+nb_collision+" collisins");
+					}
+					
+			
+
+					last_move=next_pos;
+
 
 //					Random r = new Random();
 //					if (r.nextFloat() < nb_collision/10.){

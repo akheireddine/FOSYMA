@@ -1,4 +1,4 @@
-package mas.behaviours;
+package mas.behaviours.explorer;
 
 import mas.agents.AK_Agent;
 import jade.core.Agent;
@@ -19,15 +19,15 @@ public class CheckInBoxBehaviour extends OneShotBehaviour {
 
 	public void action() {
 		try {
-			Thread.sleep(50);
+			Thread.sleep(300);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
 		ACLMessage msg = this.myAgent.receive(MessageTemplate.MatchPerformative(ACLMessage.INFORM));
-		
 		//Priorite 1 aux messages INFORM (MaJ de mes connaissances)
 		if(msg!=null)
 			this.onEndValue = 1;
+		
 		else{
 			//Priorite 2 aux messages REQUEST (un agent demande des informations)
 			msg = this.myAgent.receive(MessageTemplate.MatchPerformative(ACLMessage.REQUEST));            //Recu une demande d'information 
@@ -40,10 +40,9 @@ public class CheckInBoxBehaviour extends OneShotBehaviour {
 		
 		if(msg != null){
 			((AK_Agent)myAgent).setToread(msg);
-//			System.out.println(myAgent.getLocalName()+" : Receive MSG "+this.onEndValue);
+			System.out.println(myAgent.getLocalName()+" : Receive MSG "+this.onEndValue);
 		}else {
-//			System.out.println(myAgent.getLocalName()+" : No MSG. ");
-			this.onEndValue = -1;
+			System.out.println(myAgent.getLocalName()+" : No MSG. ");
 		}
 	}
 

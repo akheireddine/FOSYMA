@@ -2,8 +2,12 @@ package mas.behaviours.collector;
 
 import mas.abstractAgent;
 import mas.agents.AK_Collector;
-import mas.behaviours.NewMajKnowledgeBehaviour;
-import mas.behaviours.SendInformationAfterCollisionBehaviour;
+import mas.behaviours.GNewMajKnowledgeBehaviour;
+import mas.behaviours.GSendInformationAfterCollisionBehaviour;
+import mas.behaviours.explorer.CheckInBoxBehaviour;
+import mas.behaviours.explorer.NewMajKnowledgeBehaviour;
+import mas.behaviours.explorer.SendInformationAfterCollisionBehaviour;
+import mas.behaviours.explorer.WalkDontKnowBehaviour;
 import jade.core.behaviours.FSMBehaviour;
 
 public class FSMBehaviourDSCMP extends FSMBehaviour {
@@ -13,39 +17,59 @@ public class FSMBehaviourDSCMP extends FSMBehaviour {
 
 
 	public FSMBehaviourDSCMP(AK_Collector a){
+//		super(a);
+//		
+//		registerFirstState(new WalkBehaviourCollector((abstractAgent) a,a.getGraph()),"D");
+//		registerState(new GSendInformationAfterCollisionBehaviour(), "S");
+//		registerState(new CheckInBoxCollectorBehaviour(a),"C");
+//		registerState(new GNewMajKnowledgeBehaviour(), "M"); // update of graph env
+////		registerState(new PickTreasur(), "P");
+////		registerState(new SearchSilo((abstractAgent)a, a.getGraph()), "SS");
+////		registerState(new ThrowBackPack(), "T");
+//		
+//
+////		registerTransition("D", "SS", 1);
+//		registerDefaultTransition("D", "S");
+//		registerTransition("D", "C", 1);
+//		
+//		
+////		registerDefaultTransition("P", "D");
+////		registerTransition("P", "SS", 1);
+//		
+////		registerTransition("SS", "D", 1);
+////		registerTransition("SS", "P", 2);
+////		registerTransition("SS", "S", 3);
+////		registerTransition("SS", "C", 4);
+//		
+//		
+//		registerDefaultTransition("S", "D");
+////		registerTransition("S", "SS", 2);
+//		
+//		registerDefaultTransition("C", "D");
+//		registerTransition("C", "M", 1);
+//		
+//		registerDefaultTransition("M", "D");
+		
+		
 		super(a);
-		
 		registerFirstState(new WalkBehaviourCollector((abstractAgent) a,a.getGraph()),"D");
-		registerState(new SendInformationAfterCollisionBehaviour(), "S");
+		registerState(new GSendInformationAfterCollisionBehaviour(), "S");
 		registerState(new CheckInBoxCollectorBehaviour(a),"C");
-		registerState(new NewMajKnowledgeBehaviour(), "M"); // update of graph env
-		registerState(new PickTreasur(), "P");
-		registerState(new SearchSilo((abstractAgent)a, a.getGraph()), "SS");
-		registerState(new ThrowBackPack(), "T");
-		
-
-		registerTransition("D", "P", 1);
-		registerTransition("D", "S", 2);
-		registerTransition("D", "C", 3);
+		registerState(new GNewMajKnowledgeBehaviour(), "M"); // update of graph env
 		
 		
-		registerDefaultTransition("P", "D");
-		registerTransition("P", "SS", 1);
+		//definition des transaction
+		registerDefaultTransition("D","S");
+		registerDefaultTransition("S","C");
+		registerDefaultTransition("C","D");
+		registerDefaultTransition("M", "D");
 		
-		registerTransition("SS", "D", 1);
-		registerTransition("SS", "P", 2);
-		registerTransition("SS", "S", 3);
-		registerTransition("SS", "C", 4);
-		
-		
-		registerDefaultTransition("S", "D");
-		registerTransition("S", "SS", 2);
-		
-		registerDefaultTransition("C", "D");
-		registerTransition("C", "SS", 1);
-		
+		registerTransition("C","M",1);              // Quand l'agent recoit un message apres une collision, MaJ de ses connaissances
+		registerTransition("D","C",1);
 
 	}
+		
+
 	
 	
 	

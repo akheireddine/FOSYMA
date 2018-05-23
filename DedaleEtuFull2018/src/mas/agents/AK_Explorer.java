@@ -29,21 +29,14 @@ public class AK_Explorer extends AK_Agent {
 			System.exit(-1);
 		}
 		
-		boolean b = false;
-		if (nb_ak_agent==0)
-			b = true;
-		nb_ak_agent ++;
 		
-		addBehaviour(new NewFSMBehaviourDSCM(this,b));
+		addBehaviour(new NewFSMBehaviourDSCM(this));
 
-		System.out.println("the agent "+this.getLocalName()+ " is started with method "+b);
+		System.out.println("the agent "+this.getLocalName()+ " is started ");
 
 	}
 
 
-	/**
-	 * This method is automatically called after doDelete()
-	 */
 	protected void takeDown(){
 		try{
 			DFService.deregister(this);

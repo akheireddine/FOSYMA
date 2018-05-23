@@ -20,7 +20,7 @@ public class SearchSilo extends SimpleBehaviour {
 	private static final long serialVersionUID = -7810370726603702064L;
 	private Set<String> fermes,ouverts;
 	private GraphAK G;
-	private int onEndValue=0;
+	private int onEndValue=-1;
 	private boolean finished = false;
 	
 	public SearchSilo(final mas.abstractAgent myagent, GraphAK g) {
@@ -59,19 +59,21 @@ public class SearchSilo extends SimpleBehaviour {
 	
 	@Override
 	public void action() {
-		
+		System.out.println(myAgent.getLocalName()+" : Je cherche silo.");
 		String myPosition = ((mas.abstractAgent)myAgent).getCurrentPosition();
 		List<Couple<String,List<Attribute>>> lobs=((mas.abstractAgent)this.myAgent).observe();//myPosition
 		Couple<String, List<Attribute>> curr_observation = lobs.remove(0);
-		if(G.containsTreasur(myPosition,((mas.abstractAgent)myAgent).getMyTreasureType())) {
-			this.finished = true;
-			this.onEndValue = 2; //voir si on peut picker le tresor sur notre chemin
-			return;
-		}
+//		if(G.containsTreasur(myPosition,((mas.abstractAgent)myAgent).getMyTreasureType())) {
+//			this.finished = true;
+//			this.onEndValue = 2; //voir si on peut picker le tresor sur notre chemin
+//			return;
+//		}
 		
 		
 		if (!((AK_Agent)myAgent).getGraph().isSiloPositionKnown()) { // Si je connais pas sa position je me remet en mode explorer
-
+				this.finished=true;
+				this.onEndValue = 1;
+				System.out.println("\tJe ne connais pas son emplacement");
 		}else {
 			String next_pos = getNextPositionNearestOpenVertex(myPosition,G.getSiloPosition());
 			boolean has_moved = ((mas.abstractAgent)this.myAgent).moveTo(next_pos);

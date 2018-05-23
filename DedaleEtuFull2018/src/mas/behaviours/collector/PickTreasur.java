@@ -39,6 +39,8 @@ public class PickTreasur extends OneShotBehaviour{
 			
 			if(pickedTreasur) {//chercher le silo
 				this.onEndValue = 1;
+				System.out.println(myAgent.getLocalName()+" : I pick treasure");
+
 			}
 				
 		}

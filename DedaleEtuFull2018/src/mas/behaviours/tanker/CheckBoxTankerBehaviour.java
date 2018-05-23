@@ -14,6 +14,7 @@ import Tools.GraphAK;
 import mas.agents.AK_Agent;
 import env.Attribute;
 import jade.core.AID;
+import jade.core.Agent;
 import jade.core.behaviours.TickerBehaviour;
 
 public class CheckBoxTankerBehaviour extends TickerBehaviour{
@@ -21,14 +22,16 @@ public class CheckBoxTankerBehaviour extends TickerBehaviour{
 	private static final long serialVersionUID = 2937310586048856461L;
 //	private int onEndValue;
 	
-	public CheckBoxTankerBehaviour (final mas.abstractAgent myagent) {
+	public CheckBoxTankerBehaviour (final Agent myagent) {
 		super(myagent,200);
 	}
 	
 	@Override
 	public void onTick() {
 		
-			((AK_Agent)myAgent) .getGraph().addPossiblePositionSilo(((mas.abstractAgent)myAgent).getCurrentPosition());
+			GraphAK G = ((AK_Agent)myAgent).getGraph();
+		
+			G.addPossiblePositionSilo(((mas.abstractAgent)myAgent).getCurrentPosition());
 
 			ACLMessage msg = this.myAgent.receive(MessageTemplate.MatchPerformative(ACLMessage.INFORM));
 			
@@ -40,18 +43,19 @@ public class CheckBoxTankerBehaviour extends TickerBehaviour{
 				//chercher les AID des agents que je j'envoie le message d'information
 				AID[] sellerAgents = DFDServices.getAgentsByService("explorer",myAgent);
 				//m'enlever de la liste des receivers
-				for(AID agt : sellerAgents){
-						send_msg.addReceiver(agt);
+				if(sellerAgents != null){
+					for(AID agt : sellerAgents)
+							send_msg.addReceiver(agt);
 				}
 				
 				sellerAgents = DFDServices.getAgentsByService("collector",myAgent);
 				//m'enlever de la liste des receivers
-				for(AID agt : sellerAgents){
-						send_msg.addReceiver(agt);
+				if(sellerAgents != null){
+					for(AID agt : sellerAgents)
+							send_msg.addReceiver(agt);
 				}
 				
 				try {
-					GraphAK G = ((AK_Agent)myAgent).getGraph();
 					//Envoi un tuple contenant (informations sur les noeuds, dictionnaire d'adjacence, sommets ouverts, sommets fermes )
 					send_msg.setContentObject(new Tuple3<HashMap<String, List<Attribute>>, HashMap<String,Set<String>>,Set<String>>(G.getHashNode(),G.getDictAdjacences(),G.siloPosition()));
 				} catch (IOException e) {

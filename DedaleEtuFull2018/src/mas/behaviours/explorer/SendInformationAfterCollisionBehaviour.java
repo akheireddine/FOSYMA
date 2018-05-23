@@ -1,4 +1,4 @@
-package mas.behaviours;
+package mas.behaviours.explorer;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -16,9 +16,9 @@ import jade.lang.acl.ACLMessage;
 
 public class SendInformationAfterCollisionBehaviour extends OneShotBehaviour {
 
-	private static final long serialVersionUID = -9046941372445881173L;
 		
-		
+	private static final long serialVersionUID = -5537592747419206404L;
+
 	public void action() {
 		
 			final ACLMessage msg = new ACLMessage(ACLMessage.INFORM);
@@ -27,21 +27,23 @@ public class SendInformationAfterCollisionBehaviour extends OneShotBehaviour {
 			//chercher les AID des agents que je j'envoie le message d'information
 			AID[] sellerAgents = DFDServices.getAgentsByService("explorer",myAgent);
 			//m'enlever de la liste des receivers
-			for(AID agt : sellerAgents){
-				msg.addReceiver(agt);
+			if(sellerAgents != null){
+				for(AID agt : sellerAgents)
+					msg.addReceiver(agt);
 			}
 			
 			sellerAgents = DFDServices.getAgentsByService("collector",myAgent);
 			//m'enlever de la liste des receivers
-			for(AID agt : sellerAgents){
-				if (!agt.getLocalName().equals(myAgent.getLocalName()))
-					msg.addReceiver(agt);
+			if(sellerAgents != null){
+				for(AID agt : sellerAgents)
+					if (!agt.getLocalName().equals(myAgent.getLocalName()))
+						msg.addReceiver(agt);
 			}
 			
 			sellerAgents = DFDServices.getAgentsByService("silo",myAgent);
-			//m'enlever de la liste des receivers
-			for(AID agt : sellerAgents){
-				msg.addReceiver(agt);
+			if(sellerAgents != null){
+				for(AID agt : sellerAgents)
+					msg.addReceiver(agt);
 			}
 			
 			try {
@@ -53,7 +55,7 @@ public class SendInformationAfterCollisionBehaviour extends OneShotBehaviour {
 			}
 			
 			((mas.abstractAgent)this.myAgent).sendMessage(msg);
-//			System.out.println(myAgent.getLocalName()+" : INFORM AGENT ");
+			System.out.println(myAgent.getLocalName()+" : INFORM AGENT ");
 	}
 
 }

@@ -21,7 +21,6 @@ public abstract class AK_Agent extends abstractAgent {
 	private Set<String> removedVerticesName=new HashSet<String>();
 	private boolean noCollisionSince= true;
 	
-	static int nb_ak_agent = 0;
 
 	public GraphAK getGraph(){
 		return G;
