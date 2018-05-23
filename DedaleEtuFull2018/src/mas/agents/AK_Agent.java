@@ -19,6 +19,7 @@ public abstract class AK_Agent extends abstractAgent {
 	private int nombreDeCollision = 0;
 	private String recent_collision_node="";
 	private Set<String> removedVerticesName=new HashSet<String>();
+	private boolean noCollisionSince= true;
 	
 	static int nb_ak_agent = 0;
 
@@ -48,11 +49,17 @@ public abstract class AK_Agent extends abstractAgent {
 		return this.exploDone;
 	}
 	
+	public boolean getNoCollisionSince() {
+		return this.noCollisionSince;
+	}
 	public void exploration_is_done(){
+		this.noCollisionSince = true;
 		this.exploDone  = true;
 	}
 
 	public void setCollisionNode(String next_pos) {
+		if(!next_pos.equals(""))
+			this.noCollisionSince= false;
 		this.recent_collision_node = next_pos;
 	}
 	

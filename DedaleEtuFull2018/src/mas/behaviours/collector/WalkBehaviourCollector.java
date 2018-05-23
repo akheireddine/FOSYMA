@@ -2,7 +2,6 @@ package mas.behaviours.collector;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 import java.util.Set;
 
 import mas.agents.AK_Agent;
@@ -25,7 +24,6 @@ public class WalkBehaviourCollector extends SimpleBehaviour {
 		
 		public WalkBehaviourCollector(final mas.abstractAgent myagent, GraphAK g) {
 			super(myagent);
-
 			G = g;
 			this.fermes = G.getFermes();
 			this.ouverts = G.getOuverts();
@@ -58,25 +56,6 @@ public class WalkBehaviourCollector extends SimpleBehaviour {
 		}
 		
 		
-		/***
-		 * @param src position courante 
-		 * @return le prochain deplacement vers le noeud ouvert non exploré le plus proche(DIJKSTRA)
-		 */
-//		public String getNextPositionNearestOpenVertex(String src){
-//			DijkstraShortestPath<String, DefaultEdge> dijkstraShortestPath = new DijkstraShortestPath<String, DefaultEdge>(G);
-//			int dist_min = G.vertexSet().size();
-//			String next_node = src;
-//			
-//			for(String dst: ouverts){
-//				List<String> shortestPath = dijkstraShortestPath.getPath(src,dst).getVertexList();
-//				if(shortestPath.size() < dist_min){
-//					dist_min = shortestPath.size();
-//					next_node = shortestPath.get(1);
-//				}
-//			}
-//			return next_node;
-//		}
-		
 		
 		public String getNextPositionNearestOpenVertex(String src){
 			DijkstraShortestPath<String, DefaultEdge> dijkstraShortestPath = new DijkstraShortestPath<String, DefaultEdge>(G);
@@ -97,32 +76,16 @@ public class WalkBehaviourCollector extends SimpleBehaviour {
 		
 		public String choisirLeProchainNodeOuvert(List<String> successors){
 			String next_node = "";
-//			Float r = new Random().nextFloat();
 			
-			if(true){//r <= 2./3. || !((AK_Agent)myAgent).getDoneExploration()){
-				next_node = successors.get(0);
-				int max = G.getNbOpenNeighborVertex(next_node);
-				for(String succ : successors) {
-					int value_tmp_node = G.getNbOpenNeighborVertex(succ);
-					if(value_tmp_node > max) {
-						max = value_tmp_node;
-						next_node = succ;
-					}
+			next_node = successors.get(0);
+			int max = G.getNbOpenNeighborVertex(next_node);
+			for(String succ : successors) {
+				int value_tmp_node = G.getNbOpenNeighborVertex(succ);
+				if(value_tmp_node > max) {
+					max = value_tmp_node;
+					next_node = succ;
 				}
-//			}else if(1./3. < r && r <= 2./3. ){
-//				next_node = successors.get(0);
-//				int max = G.getDegreeOfNode(next_node);
-//				for(String succ : successors) {
-//					int	value_tmp_node = G.getDegreeOfNode(succ);
-//					if(value_tmp_node > max) {
-//						max = value_tmp_node;
-//						next_node = succ;
-//					}
-				}
-//			}else{
-//				next_node = successors.get(new Random().nextInt(successors.size()));
-//			}
-			//		System.out.println(" PROCHAIN NOEUD "+next_node+"("+max+")");
+			}
 			return next_node;
 		}
 		
@@ -135,7 +98,7 @@ public class WalkBehaviourCollector extends SimpleBehaviour {
 		 * @return prochain deplacement
 		 */
 		public String getNextPosition(List<String> successeurs_non_visites ){
-			String next_pos;
+			String next_pos="";
 			if(!successeurs_non_visites.isEmpty()){
 				next_pos =  choisirLeProchainNodeOuvert(successeurs_non_visites);
 			}else{
@@ -195,20 +158,27 @@ public class WalkBehaviourCollector extends SimpleBehaviour {
 				Couple<String, List<Attribute>> curr_observation = adjacents.remove(0);
 				G.updateNode(myPosition, curr_observation.getRight());                      //MaJ des informations sur les noeuds
 
-				if(G.containsTreasur(myPosition)) {
+				//############################## SI J'OBSERVE UN TRESOR ############################
+				if(G.containsTreasur(myPosition,((mas.abstractAgent)myAgent).getMyTreasureType())){
 					this.finished = true;
 					this.onEndValue = 1;
 					return;
 				}
+				
+				
 				List<String> adj_names = m_a_j_graphe(myPosition, adjacents);
 				List<String> voisins_ouverts = get_open_neighbors(adj_names);
 				
-				if(this.ouverts.isEmpty()){
-					((AK_Agent)myAgent).exploration_is_done(); //Avertir quil a fini l'exploration, elle sera connu des autres agents
+				if(this.ouverts.isEmpty()) {
+					String d = "";
+					if(((AK_Agent)myAgent).getNoCollisionSince()) {
+						((AK_Agent)myAgent).exploration_is_done(); //Avertir quil a fini l'exploration, elle sera connu des autres agents
+						d = "DONE";
+					}
 					G.clearFermes();       //Repeter l'operation d'exploration
 					G.addAllOuverts(myPosition);
-//					this.finished = true;
-					System.out.println(myAgent.getLocalName()+" : Exploration DONE ("+((AK_Agent)myAgent).getCpt()+"). Restart !");
+
+					System.out.println(myAgent.getLocalName()+" : Exploration "+d+" ("+((AK_Agent)myAgent).getCpt()+"). Restart !");
 					((AK_Agent)myAgent).RAZCpt();
 					voisins_ouverts = get_open_neighbors(adj_names);
 				}
@@ -225,7 +195,7 @@ public class WalkBehaviourCollector extends SimpleBehaviour {
 				
 				if (has_moved){
 					this.finished=false;
-					((AK_Agent)myAgent).setCollisionNode("toto");
+					((AK_Agent)myAgent).setCollisionNode("");
 					((AK_Agent)myAgent).setNombreDeCollision(0);
 					((AK_Agent)myAgent).CptPlus();
 //					System.out.println(myAgent.getLocalName()+" : Deplace vers "+next_pos);
@@ -236,53 +206,45 @@ public class WalkBehaviourCollector extends SimpleBehaviour {
 					((AK_Agent)myAgent).setNombreDeCollision(nb_collision+1);
 					
 					
-					boolean golem = false;
-					for(Attribute a : curr_observation.getRight()) {
-						switch(a) {
-						case STENCH:
-							this.fermes.add(next_pos);
-							this.ouverts.remove(next_pos);
-							golem = true;
-							System.out.println(myAgent.getLocalName()+ " : Collision avec le golem !");
-							break;
-						default:
-							break;
-						}
-					}
+					Set<String> golem = G.isGolemAround(myPosition);;
+
+//					for(Attribute a : curr_observation.getRight()) {
+//						switch(a) {
+//						case STENCH:
+//							this.fermes.add(next_pos);
+//							this.ouverts.remove(next_pos);
+//							golem = true;
+//							System.out.println(myAgent.getLocalName()+ " : Collision avec le golem !");
+//							break;
+//						default:
+//							break;
+//						}
+//					}
 				
 					//Dans le cas ou on echange les Ouverts, fermes
 					ouverts.remove(next_pos);
 					fermes.add(next_pos);
 				
-					//Si premiere collision, envoie un message d'information
-					if(nb_collision==1 && !golem) {
+					//################ Si premiere collision, envoie un message d'information ################
+					if(nb_collision==1 && golem.isEmpty()) {
 						this.finished=true;
 						this.onEndValue = 2;
-						((AK_Agent)myAgent).setCollisionNode(next_pos);
+//						((AK_Agent)myAgent).setCollisionNode(next_pos);
 					}
 //					else if (nb_collision ==2 && !golem)
 //						((AK_Agent)myAgent).setCollisionNode(next_pos);
-
-					else if (nb_collision == 2 && !golem){//check s'il a bien lu le msg recu par l'agent collision
+					//################ REVOIR SA BOITE AU LETTRE ################
+					else if (nb_collision == 2 && golem.isEmpty()){//check s'il a bien lu le msg recu par l'agent collision
 						this.finished=true;
 						this.onEndValue = 3;    
+					}
+					
+					else if (nb_collision>2 && !golem.isEmpty()) {
+						((AK_Agent)myAgent).setCollisionNode(next_pos);
 					}
 
 					
 
-//					Random r = new Random();
-//					if (r.nextFloat() < nb_collision/10.){
-//						G.clearFermes();
-//						System.out.println(myAgent.getLocalName()+" Je vide tout apres "+nb_collision+" collisions");
-//						((AK_Agent)myAgent).setNombreDeCollision(0);
-	//
-//					}
-//					if(r.nextFloat() < nb_collision/3.){
-//						this.fermes.add(next_pos);
-//						this.ouverts.remove(next_pos);
-//						System.out.println(myAgent.getLocalName()+" Je retire un noeud  apres "+nb_collision+" collisions");
-//						((AK_Agent)myAgent).setNombreDeCollision(0);
-//					}
 				}
 				
 

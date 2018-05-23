@@ -1,5 +1,7 @@
 package mas.behaviours.collector;
 
+import Tools.DFDServices;
+import jade.core.AID;
 import jade.core.behaviours.OneShotBehaviour;
 
 public class ThrowBackPack extends OneShotBehaviour {
@@ -11,8 +13,13 @@ public class ThrowBackPack extends OneShotBehaviour {
 
 	@Override
 	public void action() {
-		// TODO Auto-generated method stub
-
+		
+		AID[] sellerAgents = DFDServices.getAgentsByService("silo",myAgent);
+		for(AID agt : sellerAgents) {
+			if(((mas.abstractAgent)myAgent).emptyMyBackPack(agt.getLocalName())) {
+				
+			}
+		}
 	}
 
 }

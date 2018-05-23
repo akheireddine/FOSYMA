@@ -6,9 +6,11 @@ import java.util.Set;
 import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
 import org.jgrapht.graph.DefaultEdge;
 
+import Tools.DFDServices;
 import Tools.GraphAK;
 import env.Attribute;
 import env.Couple;
+import jade.core.AID;
 import jade.core.behaviours.SimpleBehaviour;
 import mas.agents.AK_Agent;
 
@@ -46,8 +48,13 @@ public class SearchSilo extends SimpleBehaviour {
 	}
 	
 	
-	
-	
+	public boolean throwMyTreasur() {
+		AID[] sellerAgents = DFDServices.getAgentsByService("silo",myAgent);
+		for(AID agt : sellerAgents) {
+			return ((mas.abstractAgent)myAgent).emptyMyBackPack(agt.getLocalName());
+		}
+		return false;
+	}
 	
 	
 	@Override
@@ -56,13 +63,12 @@ public class SearchSilo extends SimpleBehaviour {
 		String myPosition = ((mas.abstractAgent)myAgent).getCurrentPosition();
 		List<Couple<String,List<Attribute>>> lobs=((mas.abstractAgent)this.myAgent).observe();//myPosition
 		Couple<String, List<Attribute>> curr_observation = lobs.remove(0);
-		if(G.containsTreasur(myPosition)) {
+		if(G.containsTreasur(myPosition,((mas.abstractAgent)myAgent).getMyTreasureType())) {
 			this.finished = true;
 			this.onEndValue = 2; //voir si on peut picker le tresor sur notre chemin
 			return;
 		}
 		
-
 		
 		if (!((AK_Agent)myAgent).getGraph().isSiloPositionKnown()) { // Si je connais pas sa position je me remet en mode explorer
 
@@ -70,10 +76,14 @@ public class SearchSilo extends SimpleBehaviour {
 			String next_pos = getNextPositionNearestOpenVertex(myPosition,G.getSiloPosition());
 			boolean has_moved = ((mas.abstractAgent)this.myAgent).moveTo(next_pos);
 			
-			if(next_pos.equals(G.getSiloPosition()) && has_moved) {
+//			if(next_pos.equals(G.getSiloPosition()) && has_moved) {
+//				this.finished = true;
+//				this.onEndValue = 1; // On a trouve le silo on peut quitter le comportement de recherche
+//				return;
+//			}
+			if(throwMyTreasur()) {
+				this.onEndValue = 1;
 				this.finished = true;
-				this.onEndValue = 1; // On a trouve le silo on peut quitter le comportement de recherche
-				return;
 			}
 			
 			if (has_moved){//continue de bouger jusqu'a arriver vers le silo

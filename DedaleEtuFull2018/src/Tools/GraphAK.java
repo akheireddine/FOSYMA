@@ -21,6 +21,8 @@ public class GraphAK extends SimpleGraph<String,DefaultEdge> {
 	private Set<String> ouverts;
 	private Set<String> fermes;
 	private String Silo_position="";
+	private Set<String> ens_position_silo= new HashSet<String>();
+
 	
 	
 	public GraphAK() {
@@ -173,7 +175,7 @@ public class GraphAK extends SimpleGraph<String,DefaultEdge> {
 	}
 	
 	public boolean isSiloPositionKnown() {
-		return !this.Silo_position.equals("");
+		return !this.ens_position_silo.isEmpty();
 	}
 	
 	public String getSiloPosition() {
@@ -181,17 +183,33 @@ public class GraphAK extends SimpleGraph<String,DefaultEdge> {
 	}
 	
 	
-	public boolean containsTreasur(String position) {
+	public boolean containsTreasur(String position,String type) {
 		List<Attribute> obs = this.nodes.get(position);
 		for(Attribute a : obs) {
 			switch(a) {
 			case TREASURE: case DIAMONDS:
-				return true;
+				if (a.getName().equals(type)) 
+					return true;
+				break;
 			default:
-				return false;					
+				break;					
 			}
 		}
 		return false;
+	}
+	
+	public Set<String> siloPosition(){
+		return this.ens_position_silo;
+	}
+	
+	public void addPossiblePositionSilo(String p) {
+		this.ens_position_silo.add(p);
+	}
+	
+	public void addAllPositionSilo(Set<String> p) {
+		for(String a: p) {
+			this.addPossiblePositionSilo(a);
+		}
 	}
 	
 	

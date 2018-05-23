@@ -5,7 +5,6 @@ import java.util.List;
 import env.Attribute;
 import env.Couple;
 import jade.core.behaviours.OneShotBehaviour;
-import mas.agents.AK_Agent;
 
 public class PickTreasur extends OneShotBehaviour{
 
@@ -19,16 +18,13 @@ public class PickTreasur extends OneShotBehaviour{
 			List<Couple<String,List<Attribute>>> lobs=((mas.abstractAgent)this.myAgent).observe();//myPosition
 			List<Attribute> lattribute= lobs.get(0).getRight();
 			Boolean pickedTreasur=false;
-			final String myType = ((mas.abstractAgent)this.myAgent).getMyTreasureType();
 			final int capacityBag = ((mas.abstractAgent)this.myAgent).getBackPackFreeSpace();
 			for(Attribute a:lattribute){
 				switch(a) {
 				case TREASURE: case DIAMONDS :
-					if (a.getName().equals(myType)) {
-						if(capacityBag > (int)a.getValue()) {
-							((mas.abstractAgent)this.myAgent).pick();
-							pickedTreasur=true;
-						}
+					if(capacityBag > (int)a.getValue()) {
+						((mas.abstractAgent)this.myAgent).pick();
+						pickedTreasur=true;
 					}
 //					System.out.println("Value of the treasure on the current position: "+a.getName() +": "+ a.getValue());
 //					System.out.println("The agent grabbed :"+((mas.abstractAgent)this.myAgent).pick());
@@ -49,11 +45,9 @@ public class PickTreasur extends OneShotBehaviour{
 	}
 
 
-
     public int onEnd() {
 	      return this.onEndValue ;
 	    } 
-	
 	
 
 }

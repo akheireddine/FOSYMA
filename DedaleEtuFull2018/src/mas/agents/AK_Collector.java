@@ -10,8 +10,18 @@ import mas.behaviours.collector.FSMBehaviourDSCMP;
 
 public class AK_Collector extends AK_Agent{
 
-	private static final long serialVersionUID = -1784844593772918359L;
-
+	private static final long serialVersionUID = -957939931191274774L;
+	private boolean picked = false;//if i picked something that ive to empty
+	
+	
+	public void setPicked(boolean p) {
+		this.picked=p;
+	}
+	public boolean iPicked() {
+		return this.picked;
+	}
+	
+	
 	protected void setup(){
 
 		super.setup();
@@ -25,7 +35,6 @@ public class AK_Collector extends AK_Agent{
 			System.err.println("Malfunction during parameter's loading of agent"+ this.getClass().getName());
 			System.exit(-1);
 		}
-		
 
 		//Add the behaviours
 		addBehaviour(new FSMBehaviourDSCMP(this));
@@ -34,9 +43,6 @@ public class AK_Collector extends AK_Agent{
 	}
 	
 
-	/**
-	 * This method is automatically called after doDelete()
-	 */
 	protected void takeDown(){
 		try{
 			DFService.deregister(this);

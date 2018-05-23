@@ -28,8 +28,20 @@ public class SendInformationAfterCollisionBehaviour extends OneShotBehaviour {
 			AID[] sellerAgents = DFDServices.getAgentsByService("explorer",myAgent);
 			//m'enlever de la liste des receivers
 			for(AID agt : sellerAgents){
+				msg.addReceiver(agt);
+			}
+			
+			sellerAgents = DFDServices.getAgentsByService("collector",myAgent);
+			//m'enlever de la liste des receivers
+			for(AID agt : sellerAgents){
 				if (!agt.getLocalName().equals(myAgent.getLocalName()))
 					msg.addReceiver(agt);
+			}
+			
+			sellerAgents = DFDServices.getAgentsByService("silo",myAgent);
+			//m'enlever de la liste des receivers
+			for(AID agt : sellerAgents){
+				msg.addReceiver(agt);
 			}
 			
 			try {
