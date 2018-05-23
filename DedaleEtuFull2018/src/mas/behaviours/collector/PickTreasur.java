@@ -5,7 +5,6 @@ import java.util.List;
 import env.Attribute;
 import env.Couple;
 import jade.core.behaviours.OneShotBehaviour;
-import jade.core.behaviours.SimpleBehaviour;
 import mas.agents.AK_Agent;
 
 public class PickTreasur extends OneShotBehaviour{
@@ -43,10 +42,7 @@ public class PickTreasur extends OneShotBehaviour{
 			}
 			
 			if(pickedTreasur) {//chercher le silo
-				if (((AK_Agent)myAgent).getGraph().isSiloPositionKnown()) {
-				
-				}
-				
+				this.onEndValue = 1;
 			}
 				
 		}

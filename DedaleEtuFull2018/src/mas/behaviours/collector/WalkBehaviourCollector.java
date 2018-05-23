@@ -96,8 +96,8 @@ public class WalkBehaviourCollector extends SimpleBehaviour {
 		
 		
 		public String choisirLeProchainNodeOuvert(List<String> successors){
-			String next_node;
-			Float r = new Random().nextFloat();
+			String next_node = "";
+//			Float r = new Random().nextFloat();
 			
 			if(true){//r <= 2./3. || !((AK_Agent)myAgent).getDoneExploration()){
 				next_node = successors.get(0);
@@ -197,6 +197,7 @@ public class WalkBehaviourCollector extends SimpleBehaviour {
 
 				if(G.containsTreasur(myPosition)) {
 					this.finished = true;
+					this.onEndValue = 1;
 					return;
 				}
 				List<String> adj_names = m_a_j_graphe(myPosition, adjacents);
@@ -256,15 +257,16 @@ public class WalkBehaviourCollector extends SimpleBehaviour {
 					//Si premiere collision, envoie un message d'information
 					if(nb_collision==1 && !golem) {
 						this.finished=true;
+						this.onEndValue = 2;
 						((AK_Agent)myAgent).setCollisionNode(next_pos);
 					}
-					else if (nb_collision ==2 && !golem)
-						((AK_Agent)myAgent).setCollisionNode(next_pos);
+//					else if (nb_collision ==2 && !golem)
+//						((AK_Agent)myAgent).setCollisionNode(next_pos);
 
-//					else if (nb_collision == 2 && !golem){//check s'il a bien lu le msg recu par l'agent collision
-//						this.finished=true;
-//						this.onEndValue = 1;    
-//					}
+					else if (nb_collision == 2 && !golem){//check s'il a bien lu le msg recu par l'agent collision
+						this.finished=true;
+						this.onEndValue = 3;    
+					}
 
 					
 

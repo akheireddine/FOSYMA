@@ -38,12 +38,20 @@ public class WalkDontKnowBehaviour extends SimpleBehaviour {
 		 */
 		public List<String> m_a_j_graphe(String src, List<Couple<String, List<Attribute>>> adjacents){
 			List<String> ladj_node = new ArrayList<String>();
-			G.addVertex(src);
-			for(Couple<String, List<Attribute>> adjacent: adjacents){
-				String adj_name = adjacent.getLeft();
-				ladj_node.add(adjacent.getLeft());
-				G.addVertex(adj_name,adjacent.getRight());
-				G.addEdge(src,adj_name);
+
+			if(!((AK_Agent)myAgent).isExplorationDone()) {
+				G.addVertex(src);
+				for(Couple<String, List<Attribute>> adjacent: adjacents){
+					String adj_name = adjacent.getLeft();
+					ladj_node.add(adjacent.getLeft());
+					G.addVertex(adj_name,adjacent.getRight());
+					G.addEdge(src,adj_name);
+				}
+			}else {
+				for(Couple<String, List<Attribute>> adjacent: adjacents){
+					G.updateNode(adjacent.getLeft(), adjacent.getRight());
+					ladj_node.add(adjacent.getLeft());
+				}
 			}
 			return ladj_node;
 		}
@@ -182,6 +190,7 @@ public class WalkDontKnowBehaviour extends SimpleBehaviour {
 				
 				List<Couple<String, List<Attribute>>> adjacents = lobs;
 				Couple<String, List<Attribute>> curr_observation = adjacents.remove(0);
+				G.updateNode(myPosition, curr_observation.getRight());                      //MaJ des informations sur les noeuds
 				List<String> adj_names = m_a_j_graphe(myPosition, adjacents);
 				List<String> voisins_ouverts = get_open_neighbors(adj_names);
 				
@@ -241,13 +250,13 @@ public class WalkDontKnowBehaviour extends SimpleBehaviour {
 						this.finished=true;
 						((AK_Agent)myAgent).setCollisionNode(next_pos);
 					}
-					else if (nb_collision ==2 && !golem)
-						((AK_Agent)myAgent).setCollisionNode(next_pos);
+//					else if (nb_collision ==2 && !golem)
+//						((AK_Agent)myAgent).setCollisionNode(next_pos);
 
-//					else if (nb_collision == 2 && !golem){//check s'il a bien lu le msg recu par l'agent collision
-//						this.finished=true;
-//						this.onEndValue = 1;    
-//					}
+					else if (nb_collision == 2 && !golem){//check s'il a bien lu le msg recu par l'agent collision
+						this.finished=true;
+						this.onEndValue = 1;    
+					}
 
 					
 
