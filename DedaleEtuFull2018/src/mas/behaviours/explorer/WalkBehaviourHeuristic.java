@@ -73,7 +73,7 @@ public class WalkBehaviourHeuristic extends SimpleBehaviour {
 			}
 			
 		}
-		System.out.println(" PROCHAIN NOEUD "+next_node+"("+max+")");
+//		System.out.println(" PROCHAIN NOEUD "+next_node+"("+max+")");
 		return next_node;
 	}
 	

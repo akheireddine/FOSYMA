@@ -5,6 +5,7 @@ import mas.agents.AK_Agent;
 import mas.behaviours.CheckInBoxBehaviour;
 import mas.behaviours.NewMajKnowledgeBehaviour;
 import mas.behaviours.SendInformationAfterCollisionBehaviour;
+import mas.originalClasses.WalkBehaviour;
 import jade.core.behaviours.FSMBehaviour;
 
 public class NewFSMBehaviourDSCM extends FSMBehaviour {
@@ -19,7 +20,7 @@ public class NewFSMBehaviourDSCM extends FSMBehaviour {
 	public NewFSMBehaviourDSCM(AK_Agent a,boolean i){
 		super(a);
 //		if (i)
-			registerFirstState(new CopyOfWalkBehaviourHeuristicGolem((abstractAgent) a,a.getGraph()),"D");
+			registerFirstState(new WalkDontKnowBehaviour((abstractAgent) a,a.getGraph()),"D");
 //		else
 //			registerFirstState(new CopyOfWalkBehaviourRandomize((abstractAgent) a,a.getGraph()),"D");
 		registerState(new SendInformationAfterCollisionBehaviour(), "S");

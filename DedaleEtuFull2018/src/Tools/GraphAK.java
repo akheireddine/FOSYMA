@@ -166,6 +166,8 @@ public class GraphAK extends SimpleGraph<String,DefaultEdge> {
 	}
 	
 	
+	
+	
 	public void setSiloPosition(String node) {
 		this.Silo_position = node;
 	}
@@ -173,6 +175,29 @@ public class GraphAK extends SimpleGraph<String,DefaultEdge> {
 	public boolean isSiloPositionKnown() {
 		return !this.Silo_position.equals("");
 	}
+	
+	public String getSiloPosition() {
+		return this.Silo_position;
+	}
+	
+	
+	public boolean containsTreasur(String position) {
+		List<Attribute> obs = this.nodes.get(position);
+		for(Attribute a : obs) {
+			switch(a) {
+			case TREASURE: case DIAMONDS:
+				return true;
+			default:
+				return false;					
+			}
+		}
+		return false;
+	}
+	
+	
+	
+	
+	
 
 	//	public void resetVertex(String removedVertexName) {
 //		this.addVertex(removedVertexName, this.nodes.get(removedVertexName));

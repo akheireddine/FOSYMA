@@ -1,4 +1,4 @@
-package mas.behaviours.collector;
+package mas.behaviours.explorer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,7 +15,7 @@ import env.Attribute;
 import env.Couple;
 import jade.core.behaviours.SimpleBehaviour;
 
-public class WalkBehaviourCollector extends SimpleBehaviour {
+public class WalkDontKnowBehaviour extends SimpleBehaviour {
 
 		private static final long serialVersionUID = -5308185370371990470L;
 		private Set<String> fermes,ouverts;
@@ -23,9 +23,8 @@ public class WalkBehaviourCollector extends SimpleBehaviour {
 		private int onEndValue=0;
 		private boolean finished = false;
 		
-		public WalkBehaviourCollector(final mas.abstractAgent myagent, GraphAK g) {
+		public WalkDontKnowBehaviour(final mas.abstractAgent myagent, GraphAK g) {
 			super(myagent);
-
 			G = g;
 			this.fermes = G.getFermes();
 			this.ouverts = G.getOuverts();
@@ -35,24 +34,16 @@ public class WalkBehaviourCollector extends SimpleBehaviour {
 		/***
 		 * @param src position courante 
 		 * @param adjacents : liste de couple contenant le nom du noeud et les informations sur ce noeud
-		 * @return List<String> nom des noeuds adjacents
+		 * @return List<String> des noeuds adjacents
 		 */
 		public List<String> m_a_j_graphe(String src, List<Couple<String, List<Attribute>>> adjacents){
 			List<String> ladj_node = new ArrayList<String>();
-
-			if(!((AK_Agent)myAgent).isExplorationDone()) {
-				G.addVertex(src);
-				for(Couple<String, List<Attribute>> adjacent: adjacents){
-					String adj_name = adjacent.getLeft();
-					ladj_node.add(adjacent.getLeft());
-					G.addVertex(adj_name,adjacent.getRight());
-					G.addEdge(src,adj_name);
-				}
-			}else {
-				for(Couple<String, List<Attribute>> adjacent: adjacents){
-					G.updateNode(adjacent.getLeft(), adjacent.getRight());
-					ladj_node.add(adjacent.getLeft());
-				}
+			G.addVertex(src);
+			for(Couple<String, List<Attribute>> adjacent: adjacents){
+				String adj_name = adjacent.getLeft();
+				ladj_node.add(adjacent.getLeft());
+				G.addVertex(adj_name,adjacent.getRight());
+				G.addEdge(src,adj_name);
 			}
 			return ladj_node;
 		}
@@ -189,16 +180,8 @@ public class WalkBehaviourCollector extends SimpleBehaviour {
 				ouverts.remove(myPosition);
 				fermes.add(myPosition);
 				
-				
-				
 				List<Couple<String, List<Attribute>>> adjacents = lobs;
 				Couple<String, List<Attribute>> curr_observation = adjacents.remove(0);
-				G.updateNode(myPosition, curr_observation.getRight());                      //MaJ des informations sur les noeuds
-
-				if(G.containsTreasur(myPosition)) {
-					this.finished = true;
-					return;
-				}
 				List<String> adj_names = m_a_j_graphe(myPosition, adjacents);
 				List<String> voisins_ouverts = get_open_neighbors(adj_names);
 				

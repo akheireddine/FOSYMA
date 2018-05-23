@@ -1,7 +1,5 @@
 package mas.originalClasses;
 
-import Tools.FIPARequestBlocking;
-import Tools.FIPARespondeBlocking;
 import mas.abstractAgent;
 import mas.behaviours.OldInformAgentBehaviour;
 import not.sure.RequestKnowledge;
@@ -24,8 +22,8 @@ public class FSMBehaviourDRC extends FSMBehaviour {
 		registerState(new RequestKnowledge(a),"R");// knowledge about the env
 		registerState(new MajKnowledgeBehaviour(), "M"); // update of graph env
 		registerState(new OldInformAgentBehaviour(), "I"); // send graph to neighbours agent
-		registerState(new FIPARequestBlocking(),"F");
-		registerState(new FIPARespondeBlocking(),"S");
+//		registerState(new FIPARequestBlocking(),"F");
+//		registerState(new FIPARespondeBlocking(),"S");
 		
 		
 		//definition des transaction

@@ -35,7 +35,7 @@ public class NewMajKnowledgeBehaviour extends OneShotBehaviour {
 			
 			//Si je n'ai pas fini mon exploration complete de l'environement
 			if(!((AK_Agent)myAgent).isExplorationDone()){
-				System.out.println(myAgent.getLocalName()+" : MàJ topo env");
+//				System.out.println(myAgent.getLocalName()+" : MàJ topo env");
 				HashMap<String,Set<String>> adjacenes_received = new_information._2();
 				
 				
@@ -57,7 +57,7 @@ public class NewMajKnowledgeBehaviour extends OneShotBehaviour {
 				for(String key:info_nodes.keySet()){ //A quel moment peut on remplacer les infos courrante 
 					curr_nodes.replace(key,info_nodes.get(key));
 				}
-				System.out.println(myAgent.getLocalName()+" : MàJ Attribute Nodes");
+//				System.out.println(myAgent.getLocalName()+" : MàJ Attribute Nodes");
 			}
 			
 			this.curr_graph.addToFermes(new_information._4());

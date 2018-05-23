@@ -41,7 +41,7 @@ public class SendInformationAfterCollisionBehaviour extends OneShotBehaviour {
 			}
 			
 			((mas.abstractAgent)this.myAgent).sendMessage(msg);
-			System.out.println(myAgent.getLocalName()+" : INFORM AGENT ");
+//			System.out.println(myAgent.getLocalName()+" : INFORM AGENT ");
 	}
 
 }

@@ -19,7 +19,7 @@ public class CheckInBoxBehaviour extends OneShotBehaviour {
 
 	public void action() {
 		try {
-			Thread.sleep(2000);
+			Thread.sleep(100);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
@@ -42,7 +42,7 @@ public class CheckInBoxBehaviour extends OneShotBehaviour {
 			((AK_Agent)myAgent).setToread(msg);
 //			System.out.println(myAgent.getLocalName()+" : Receive MSG "+this.onEndValue);
 		}else {
-			System.out.println(myAgent.getLocalName()+" : No MSG. ");
+//			System.out.println(myAgent.getLocalName()+" : No MSG. ");
 			this.onEndValue = -1;
 		}
 	}

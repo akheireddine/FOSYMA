@@ -1,5 +1,6 @@
 package mas.originalClasses;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -130,11 +131,10 @@ public class WalkBehaviour extends SimpleBehaviour {
 				((AK_Agent)myAgent).CptPlus();
 			}
 			
-			if ((((AK_Agent)myAgent).getNombreDeCollision() == 2) && (!ouverts.isEmpty())){
-//				Set<String> ferme = new HashSet<String>();
-//				ferme.add(next_pos);
-//				ferme.add(myPosition);
+			if ((((AK_Agent)myAgent).getNombreDeCollision() == 3) && (!ouverts.isEmpty())){
 				G.clearFermes();
+				fermes.add(next_pos);
+				fermes.add(myPosition);
 //				this.onEndValue=1;
 				System.out.println("COLLISIOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOooN");
 			}

@@ -170,7 +170,7 @@ public class CopyOfWalkBehaviourHeuristic extends SimpleBehaviour {
 
 			try {
 //				System.in.read();
-				Thread.sleep(500);
+				Thread.sleep(10);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
