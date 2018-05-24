@@ -2,27 +2,27 @@ package mas.behaviours.explorer;
 
 import mas.abstractAgent;
 import mas.agents.AK_Agent;
-import mas.behaviours.explorer.CheckInBoxBehaviour;
+import mas.behaviours.explorer.ECheckInBoxBehaviour;
 import mas.behaviours.GNewMajKnowledgeBehaviour;
 import mas.behaviours.GSendInformationAfterCollisionBehaviour;
 import jade.core.behaviours.FSMBehaviour;
 
-public class NewFSMBehaviourDSCM extends FSMBehaviour {
+public class ESMBehaviour extends FSMBehaviour {
 
 	
 	private static final long serialVersionUID = -2099919019475959526L;
 	
-	public NewFSMBehaviourDSCM() {
+	public ESMBehaviour() {
 		super();
 	}
 
-	public NewFSMBehaviourDSCM(AK_Agent a){
+	public ESMBehaviour(AK_Agent a){
 		super(a);
-		registerFirstState(new WalkDontKnowBehaviour((abstractAgent) a,a.getGraph()),"D");
-		registerState(new SendInformationAfterCollisionBehaviour(), "S");
-		registerState(new CheckInBoxBehaviour(a),"C");
+		registerFirstState(new EWalkBehaviour((abstractAgent) a,a.getGraph()),"D");
+		registerState(new ESendInformationAfterCollisionBehaviour(), "S");
+		registerState(new ECheckInBoxBehaviour(a),"C");
 			
-		registerState(new NewMajKnowledgeBehaviour(), "M"); // update of graph env
+		registerState(new EMajKnowledgeBehaviour(), "M"); // update of graph env
 		
 		
 		//definition des transaction

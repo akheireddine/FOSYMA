@@ -2,19 +2,19 @@ package mas.behaviours;
 
 import mas.abstractAgent;
 import mas.agents.AK_Agent;
-import mas.behaviours.explorer.CopyOfWalkBehaviourHeuristic;
+import mas.originalClasses.CopyOfWalkBehaviourHeuristic;
 import jade.core.behaviours.FSMBehaviour;
 
-public class FSMBehaviourDRC extends FSMBehaviour {
+public class GFSMBehaviourDRC extends FSMBehaviour {
 
 	
 	private static final long serialVersionUID = -2099919019475959526L;
 	
-	public FSMBehaviourDRC() {
+	public GFSMBehaviourDRC() {
 		super();
 	}
 
-	public FSMBehaviourDRC(AK_Agent a,boolean i){
+	public GFSMBehaviourDRC(AK_Agent a,boolean i){
 		super(a);
 //		registerFirstState(new CheckInBoxBehaviour(a),"C");
 //		if (i)

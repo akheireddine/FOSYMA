@@ -1,4 +1,4 @@
-package mas.behaviours.explorer;
+package mas.originalClasses;
 
 import java.util.ArrayList;
 import java.util.List;

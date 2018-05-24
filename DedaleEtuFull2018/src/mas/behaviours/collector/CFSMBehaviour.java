@@ -4,19 +4,19 @@ import mas.abstractAgent;
 import mas.agents.AK_Collector;
 import mas.behaviours.GNewMajKnowledgeBehaviour;
 import mas.behaviours.GSendInformationAfterCollisionBehaviour;
-import mas.behaviours.explorer.CheckInBoxBehaviour;
-import mas.behaviours.explorer.NewMajKnowledgeBehaviour;
-import mas.behaviours.explorer.SendInformationAfterCollisionBehaviour;
-import mas.behaviours.explorer.WalkDontKnowBehaviour;
+import mas.behaviours.explorer.ECheckInBoxBehaviour;
+import mas.behaviours.explorer.EMajKnowledgeBehaviour;
+import mas.behaviours.explorer.ESendInformationAfterCollisionBehaviour;
+import mas.behaviours.explorer.EWalkBehaviour;
 import jade.core.behaviours.FSMBehaviour;
 
-public class FSMBehaviourDSCMP extends FSMBehaviour {
+public class CFSMBehaviour extends FSMBehaviour {
 
 	
 	private static final long serialVersionUID = 5095792340973440186L;
 
 
-	public FSMBehaviourDSCMP(AK_Collector a){
+	public CFSMBehaviour(AK_Collector a){
 //		super(a);
 //		
 //		registerFirstState(new WalkBehaviourCollector((abstractAgent) a,a.getGraph()),"D");
@@ -52,9 +52,9 @@ public class FSMBehaviourDSCMP extends FSMBehaviour {
 		
 		
 		super(a);
-		registerFirstState(new WalkBehaviourCollector((abstractAgent) a,a.getGraph()),"D");
+		registerFirstState(new CWalkBehaviour((abstractAgent) a,a.getGraph()),"D");
 		registerState(new GSendInformationAfterCollisionBehaviour(), "S");
-		registerState(new CheckInBoxCollectorBehaviour(a),"C");
+		registerState(new CCheckInBoxBehaviour(a),"C");
 		registerState(new GNewMajKnowledgeBehaviour(), "M"); // update of graph env
 		
 		

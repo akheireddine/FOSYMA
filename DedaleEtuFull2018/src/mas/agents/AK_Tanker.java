@@ -6,8 +6,8 @@ import jade.domain.FIPAException;
 import Tools.DFDServices;
 import env.EntityType;
 import env.Environment;
-import mas.behaviours.collector.FSMBehaviourDSCMP;
-import mas.behaviours.tanker.CheckBoxTankerBehaviour;
+import mas.behaviours.collector.CFSMBehaviour;
+import mas.behaviours.tanker.TCheckSendMessageBehaviour;
 
 
 public class AK_Tanker extends AK_Agent{
@@ -30,7 +30,7 @@ public class AK_Tanker extends AK_Agent{
 		}
 
 		//Add the behaviours
-		addBehaviour(new CheckBoxTankerBehaviour(this));
+		addBehaviour(new TCheckSendMessageBehaviour(this));
 		System.out.println("the agent "+this.getLocalName()+ " is started");
 
 	}

@@ -17,12 +17,12 @@ import jade.core.AID;
 import jade.core.Agent;
 import jade.core.behaviours.TickerBehaviour;
 
-public class CheckBoxTankerBehaviour extends TickerBehaviour{
+public class TCheckSendMessageBehaviour extends TickerBehaviour{
 
 	private static final long serialVersionUID = 2937310586048856461L;
 //	private int onEndValue;
 	
-	public CheckBoxTankerBehaviour (final Agent myagent) {
+	public TCheckSendMessageBehaviour (final Agent myagent) {
 		super(myagent,200);
 	}
 	

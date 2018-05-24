@@ -14,7 +14,7 @@ import jade.core.AID;
 import jade.core.behaviours.OneShotBehaviour;
 import jade.lang.acl.ACLMessage;
 
-public class SendInformationAfterCollisionBehaviour extends OneShotBehaviour {
+public class ESendInformationAfterCollisionBehaviour extends OneShotBehaviour {
 
 		
 	private static final long serialVersionUID = -5537592747419206404L;

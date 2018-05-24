@@ -6,7 +6,7 @@ import jade.domain.FIPAException;
 import Tools.DFDServices;
 import env.EntityType;
 import env.Environment;
-import mas.behaviours.collector.FSMBehaviourDSCMP;
+import mas.behaviours.collector.CFSMBehaviour;
 
 public class AK_Collector extends AK_Agent{
 
@@ -37,7 +37,7 @@ public class AK_Collector extends AK_Agent{
 		}
 
 		//Add the behaviours
-		addBehaviour(new FSMBehaviourDSCMP(this));
+		addBehaviour(new CFSMBehaviour(this));
 		System.out.println("the agent "+this.getLocalName()+ " is started");
 
 	}

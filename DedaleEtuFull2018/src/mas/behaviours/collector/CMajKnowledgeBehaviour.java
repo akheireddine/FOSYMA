@@ -13,7 +13,7 @@ import jade.core.behaviours.OneShotBehaviour;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.UnreadableException;
 
-public class NewMajKnowledgeBehaviour extends OneShotBehaviour {
+public class CMajKnowledgeBehaviour extends OneShotBehaviour {
 
 	private static final long serialVersionUID = -6233943134155011042L;
 

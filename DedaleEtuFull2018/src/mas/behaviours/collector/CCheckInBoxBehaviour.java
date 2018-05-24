@@ -15,14 +15,14 @@ import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 import jade.lang.acl.UnreadableException;
 
-public class CheckInBoxCollectorBehaviour extends OneShotBehaviour {
+public class CCheckInBoxBehaviour extends OneShotBehaviour {
 
 
 	private static final long serialVersionUID = 6848553541314740744L;
 	private int onEndValue=0;
 	
 	
-	public CheckInBoxCollectorBehaviour(final Agent myagent) {
+	public CCheckInBoxBehaviour(final Agent myagent) {
 		super(myagent);
 	}
 	

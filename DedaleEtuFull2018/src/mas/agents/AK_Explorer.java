@@ -7,7 +7,7 @@ import jade.domain.DFService;
 import jade.domain.FIPAException;
 import env.EntityType;
 import env.Environment;
-import mas.behaviours.explorer.NewFSMBehaviourDSCM;
+import mas.behaviours.explorer.ESMBehaviour;
 
 public class AK_Explorer extends AK_Agent {
 
@@ -30,7 +30,7 @@ public class AK_Explorer extends AK_Agent {
 		}
 		
 		
-		addBehaviour(new NewFSMBehaviourDSCM(this));
+		addBehaviour(new ESMBehaviour(this));
 
 		System.out.println("the agent "+this.getLocalName()+ " is started ");
 
