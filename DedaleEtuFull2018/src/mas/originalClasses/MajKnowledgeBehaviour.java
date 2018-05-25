@@ -7,9 +7,9 @@ import org.jgrapht.graph.DefaultEdge;
 
 import env.Attribute;
 import env.Couple;
-import Tools.GraphAK;
-import Tools.Tools;
 import mas.agents.AK_Agent;
+import tools.GraphAK;
+import tools.Tools;
 import jade.core.behaviours.OneShotBehaviour;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.UnreadableException;

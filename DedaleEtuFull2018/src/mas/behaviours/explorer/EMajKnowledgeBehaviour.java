@@ -5,9 +5,9 @@ import java.util.List;
 import java.util.Set;
 
 import env.Attribute;
-import Tools.GraphAK;
 import mas.agents.AK_Agent;
 import scala.Tuple4;
+import tools.GraphAK;
 import jade.core.behaviours.OneShotBehaviour;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.UnreadableException;

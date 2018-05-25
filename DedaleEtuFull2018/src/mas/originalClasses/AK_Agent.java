@@ -1,7 +1,6 @@
 package mas.originalClasses;
 
 
-import Tools.GraphAK;
 import jade.domain.DFService;
 import jade.domain.FIPAException;
 import jade.domain.FIPAAgentManagement.DFAgentDescription;
@@ -10,6 +9,7 @@ import jade.lang.acl.ACLMessage;
 import env.EntityType;
 import env.Environment;
 import mas.abstractAgent;
+import tools.GraphAK;
 
 public class AK_Agent extends abstractAgent {
 

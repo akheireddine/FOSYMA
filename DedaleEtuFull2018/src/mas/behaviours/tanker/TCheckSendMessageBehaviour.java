@@ -9,8 +9,8 @@ import java.util.List;
 import java.util.Set;
 
 import scala.Tuple3;
-import Tools.DFDServices;
-import Tools.GraphAK;
+import tools.DFDServices;
+import tools.GraphAK;
 import mas.agents.AK_Agent;
 import env.Attribute;
 import jade.core.AID;

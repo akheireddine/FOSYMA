@@ -1,8 +1,8 @@
 package mas.behaviours.collector;
 
-import Tools.DFDServices;
 import jade.core.AID;
 import jade.core.behaviours.OneShotBehaviour;
+import tools.DFDServices;
 
 public class ThrowBackPack extends OneShotBehaviour {
 

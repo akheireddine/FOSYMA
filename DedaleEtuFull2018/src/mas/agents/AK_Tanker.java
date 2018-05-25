@@ -3,11 +3,18 @@ package mas.agents;
 
 import jade.domain.DFService;
 import jade.domain.FIPAException;
-import Tools.DFDServices;
+import jade.util.leap.Serializable;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Set;
+
+import env.Attribute;
 import env.EntityType;
 import env.Environment;
-import mas.behaviours.collector.CFSMBehaviour;
 import mas.behaviours.tanker.TCheckSendMessageBehaviour;
+import scala.Tuple4;
+import tools.DFDServices;
 
 
 public class AK_Tanker extends AK_Agent{
@@ -15,6 +22,11 @@ public class AK_Tanker extends AK_Agent{
 
 	private static final long serialVersionUID = -1593633423403750683L;
 
+	public Serializable getObjectToSend() {
+		Tuple4<HashMap<String, List<Attribute>>, HashMap<String,Set<String>>,Set<String>,Set<String>> obj = 
+				new Tuple4<HashMap<String, List<Attribute>>, HashMap<String,Set<String>>,Set<String>,Set<String>>(G.getHashNode(),G.getDictAdjacences(),G.getOuverts(),G.getFermes());
+		return (Serializable) obj;
+	}
 
 	protected void setup(){
 		super.setup();

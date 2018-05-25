@@ -4,14 +4,15 @@ package mas.agents;
 import java.util.HashSet;
 import java.util.Set;
 
-import Tools.GraphAK;
 import jade.lang.acl.ACLMessage;
+import jade.util.leap.Serializable;
 import mas.abstractAgent;
+import tools.GraphAK;
 
 public abstract class AK_Agent extends abstractAgent {
 
 	private static final long serialVersionUID = -383346975870383010L;
-	private GraphAK G = new GraphAK();
+	protected GraphAK G = new GraphAK();
 	private ACLMessage toread = null; /** If there's something to read **/
 	private boolean exploDone = false;
 	private int cpt_exploration = 0;
@@ -84,17 +85,20 @@ public abstract class AK_Agent extends abstractAgent {
 		this.removedVerticesName.add(next_pos);
 		this.G.removeVertex(next_pos);
 	}
+	
+	
+	public abstract Serializable getObjectToSend();
 
-	public void resetVerticesToGraph() {
-		this.G.resetVertices(this.removedVerticesName);
-//		if(!this.removedVerticesName.isEmpty()) {
-//			for(String i:this.removedVerticesName){
-//				this.G.resetVertex(i);
-//			}
-////			this.G.getOuverts().add(this.removedVertexName);
-////			this.G.getFermes().remove(this.removedVertexName);
-//		}
-		this.removedVerticesName.clear();;
-	}
+//	public void resetVerticesToGraph() {
+//		this.G.resetVertices(this.removedVerticesName);
+////		if(!this.removedVerticesName.isEmpty()) {
+////			for(String i:this.removedVerticesName){
+////				this.G.resetVertex(i);
+////			}
+//////			this.G.getOuverts().add(this.removedVertexName);
+//////			this.G.getFermes().remove(this.removedVertexName);
+////		}
+//		this.removedVerticesName.clear();;
+//	}
 
 }

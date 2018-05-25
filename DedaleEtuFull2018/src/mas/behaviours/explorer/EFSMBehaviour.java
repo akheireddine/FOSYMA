@@ -7,16 +7,16 @@ import mas.behaviours.GNewMajKnowledgeBehaviour;
 import mas.behaviours.GSendInformationAfterCollisionBehaviour;
 import jade.core.behaviours.FSMBehaviour;
 
-public class ESMBehaviour extends FSMBehaviour {
+public class EFSMBehaviour extends FSMBehaviour {
 
 	
 	private static final long serialVersionUID = -2099919019475959526L;
 	
-	public ESMBehaviour() {
+	public EFSMBehaviour() {
 		super();
 	}
 
-	public ESMBehaviour(AK_Agent a){
+	public EFSMBehaviour(AK_Agent a){
 		super(a);
 		registerFirstState(new EWalkBehaviour((abstractAgent) a,a.getGraph()),"D");
 		registerState(new ESendInformationAfterCollisionBehaviour(), "S");

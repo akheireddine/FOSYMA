@@ -7,8 +7,8 @@ import java.util.Set;
 
 import mas.agents.AK_Agent;
 import scala.Tuple4;
-import Tools.DFDServices;
-import Tools.GraphAK;
+import tools.DFDServices;
+import tools.GraphAK;
 import env.Attribute;
 import jade.core.AID;
 import jade.core.behaviours.OneShotBehaviour;

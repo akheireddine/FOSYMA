@@ -1,7 +1,6 @@
-package Tools;
+package tools;
 
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -18,6 +17,7 @@ public class GraphAK extends SimpleGraph<String,DefaultEdge> {
 
 	private HashMap<String, List<Attribute>> nodes = new HashMap<String, List<Attribute>>();
 	private HashMap<String,Set<String>> dictAdjacences = new HashMap<String,Set<String>>();
+	private Set<String> treasures = new HashSet<String>();
 	private Set<String> ouverts;
 	private Set<String> fermes;
 	private String Silo_position="";
@@ -25,13 +25,14 @@ public class GraphAK extends SimpleGraph<String,DefaultEdge> {
 
 	private Set<String> fermesAgent= new HashSet<String>();
 
-	
-	
 	public GraphAK() {
 		super(DefaultEdge.class);
 		this.fermes = new HashSet<String>();
 		this.ouverts = new HashSet<String>();
 	}
+	
+	
+	
 	
 	
 	public int getDegreeOfNode(String node_name){
@@ -101,16 +102,21 @@ public class GraphAK extends SimpleGraph<String,DefaultEdge> {
 		return i;
 	}
 	
+	
 	public boolean addVertex(String name,List<Attribute> obs){
 		if(!nodes.containsKey(name)){
 			nodes.put(name, obs);
 			dictAdjacences.put(name, new HashSet<String>());
 		}
+		if(this.containsTreasur(name, ""))
+			this.treasures.add(name);
 		return super.addVertex(name);
 	}
 	
 	public void updateNode(String node,List<Attribute> obs) {
 		this.nodes.replace(node, obs);
+		if(this.containsTreasur(node,""))
+			this.treasures.add(node);
 	}
 
 	public void addAllOuverts(String myPosition) {
@@ -143,6 +149,7 @@ public class GraphAK extends SimpleGraph<String,DefaultEdge> {
 		}
 		return super.addEdge(src, dst);
 	}
+	
 
 	public void addToFermes(Set<String> closeSet) {
 		this.fermesAgent = closeSet;
@@ -161,6 +168,7 @@ public class GraphAK extends SimpleGraph<String,DefaultEdge> {
 		
 	}
 
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	public Set<String> isGolemAround(String src) {
 		Set<String> detected = new HashSet<String>();
@@ -185,7 +193,35 @@ public class GraphAK extends SimpleGraph<String,DefaultEdge> {
 	}
 	
 	
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	
+	public boolean containsTreasur(String position,String type) {
+		List<Attribute> obs = this.nodes.get(position);
+		for(Attribute a : obs) {
+			switch(a) {
+			case TREASURE: case DIAMONDS:
+				if(type.equals(""))
+					return true;
+				else if (a.getName().equals(type)) 
+					return true;
+				break;
+			default:
+				break;					
+			}
+		}
+		return false;
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	public void setSiloPosition(String node) {
 		this.Silo_position = node;
@@ -199,21 +235,6 @@ public class GraphAK extends SimpleGraph<String,DefaultEdge> {
 		return this.Silo_position;
 	}
 	
-	
-	public boolean containsTreasur(String position,String type) {
-		List<Attribute> obs = this.nodes.get(position);
-		for(Attribute a : obs) {
-			switch(a) {
-			case TREASURE: case DIAMONDS:
-				if (a.getName().equals(type)) 
-					return true;
-				break;
-			default:
-				break;					
-			}
-		}
-		return false;
-	}
 	
 	public Set<String> siloPosition(){
 		return this.ens_position_silo;
@@ -245,20 +266,20 @@ public class GraphAK extends SimpleGraph<String,DefaultEdge> {
 //		}
 //	}
 
-	public void resetVertices(Set<String> removedVerticesName) {
-		for(String node:removedVerticesName){
-			if (!this.nodes.containsKey(node))
-				this.addVertex(node, new ArrayList<Attribute>());
-			else
-				super.addVertex(node);
-		}
-		for(String node : removedVerticesName) {
-			for(String adj: this.dictAdjacences.get(node)){
-				this.addEdge(node, adj);
-			}
-		}
-
-	}
+//	public void resetVertices(Set<String> removedVerticesName) {
+//		for(String node:removedVerticesName){
+//			if (!this.nodes.containsKey(node))
+//				this.addVertex(node, new ArrayList<Attribute>());
+//			else
+//				super.addVertex(node);
+//		}
+//		for(String node : removedVerticesName) {
+//			for(String adj: this.dictAdjacences.get(node)){
+//				this.addEdge(node, adj);
+//			}
+//		}
+//
+//	}
 		
 	
 	

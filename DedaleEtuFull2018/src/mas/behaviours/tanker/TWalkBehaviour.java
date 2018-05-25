@@ -5,9 +5,7 @@ import java.util.Set;
 
 import mas.agents.AK_Agent;
 import mas.behaviours.GWalkBehaviour;
-
-
-import Tools.GraphAK;
+import tools.GraphAK;
 import env.Attribute;
 import env.Couple;
 

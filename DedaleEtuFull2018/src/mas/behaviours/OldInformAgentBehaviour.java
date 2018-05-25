@@ -7,8 +7,8 @@ import java.util.Set;
 
 import env.Attribute;
 import env.Couple;
-import Tools.GraphAK;
 import mas.agents.AK_Agent;
+import tools.GraphAK;
 import jade.core.behaviours.OneShotBehaviour;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.UnreadableException;

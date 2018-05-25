@@ -5,9 +5,7 @@ import java.util.Set;
 
 import mas.agents.AK_Agent;
 import mas.behaviours.GWalkBehaviour;
-
-
-import Tools.GraphAK;
+import tools.GraphAK;
 import env.Attribute;
 import env.Couple;
 
@@ -146,7 +144,6 @@ public class EWalkBehaviour extends GWalkBehaviour {
 					System.out.println(myAgent.getLocalName()+" : I passed ___ "+nb_collision+" collisins");
 				}
 				
-		
 
 				last_move=next_pos;
 

@@ -7,10 +7,8 @@ import mas.abstractAgent;
 import mas.agents.AK_Agent;
 import mas.agents.AK_Collector;
 import mas.behaviours.GWalkBehaviour;
-
-
-import Tools.DFDServices;
-import Tools.GraphAK;
+import tools.DFDServices;
+import tools.GraphAK;
 import env.Attribute;
 import env.Couple;
 import jade.core.AID;

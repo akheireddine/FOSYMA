@@ -6,11 +6,11 @@ import java.util.Random;
 import java.util.Set;
 
 import mas.agents.AK_Agent;
+import tools.GraphAK;
 
 import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
 import org.jgrapht.graph.DefaultEdge;
 
-import Tools.GraphAK;
 import env.Attribute;
 import env.Couple;
 import jade.core.behaviours.SimpleBehaviour;

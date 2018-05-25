@@ -7,10 +7,10 @@ import java.util.Set;
 import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
 import org.jgrapht.graph.DefaultEdge;
 
-import Tools.GraphAK;
 import env.Attribute;
 import env.Couple;
 import jade.core.behaviours.SimpleBehaviour;
+import tools.GraphAK;
 
 public abstract class GWalkBehaviour extends SimpleBehaviour {
 
