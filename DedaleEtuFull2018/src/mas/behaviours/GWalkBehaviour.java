@@ -39,15 +39,26 @@ public abstract class GWalkBehaviour extends SimpleBehaviour {
 	 * @param adjacents : liste de couple contenant le nom du noeud et les informations sur ce noeud
 	 * @return List<String> des noeuds adjacents
 	 */
-	public List<String> m_a_j_graphe(String src, List<Couple<String, List<Attribute>>> adjacents){
+	public List<String> m_a_j_graphe(List<Couple<String, List<Attribute>>> adjacents){
 		List<String> ladj_node = new ArrayList<String>();
-
-			G.addVertex(src);
-			for(Couple<String, List<Attribute>> adjacent: adjacents){
-				String adj_name = adjacent.getLeft();
-				ladj_node.add(adjacent.getLeft());
+		Couple<String, List<Attribute>> curr_observation = adjacents.remove(0);
+		String myPosition = curr_observation.getLeft();
+		
+		if(G.containsVertex(myPosition))
+			G.updateNode(myPosition, curr_observation.getRight());
+		else
+			G.addVertex(myPosition,curr_observation.getRight());
+		
+		for(Couple<String, List<Attribute>> adjacent: adjacents){
+			String adj_name = adjacent.getLeft();
+			ladj_node.add(adj_name);
+			
+			if(G.containsVertex(adj_name))
+				G.updateNode(adj_name, adjacent.getRight());
+			else
 				G.addVertex(adj_name,adjacent.getRight());
-				G.addEdge(src,adj_name);
+			
+			G.addEdge(myPosition,adj_name);
 		}
 		return ladj_node;
 	}
@@ -93,18 +104,16 @@ public abstract class GWalkBehaviour extends SimpleBehaviour {
 	
 	
 	
-	public String choisirLeProchainNodeOuvert(List<String> successors){
-		String next_node;
-		
-		next_node = successors.get(0);
+	public String choisirLeProchainVoisinOuvertLePlusGrand(List<String> successors){
+		String next_node = successors.get(0);
 		int max = G.getDegreeOfNode(next_node);
-			for(String succ : successors) {
-				int value_tmp_node = G.getDegreeOfNode(succ);
-				if(value_tmp_node > max) {
-					max = value_tmp_node;
-					next_node = succ;
-				}
+		for(String succ : successors) {
+			int value_tmp_node = G.getDegreeOfNode(succ);
+			if(value_tmp_node > max) {
+				max = value_tmp_node;
+				next_node = succ;
 			}
+		}
 		return next_node;
 	}
 	
@@ -119,7 +128,7 @@ public abstract class GWalkBehaviour extends SimpleBehaviour {
 	public String getNextPosition(List<String> successeurs_non_visites ){
 		String next_pos=((mas.abstractAgent)myAgent).getCurrentPosition();
 		if(!successeurs_non_visites.isEmpty()){
-			next_pos =  choisirLeProchainNodeOuvert(successeurs_non_visites);
+			next_pos =  choisirLeProchainVoisinOuvertLePlusGrand(successeurs_non_visites);
 		}else{
 			String myPosition = ((mas.abstractAgent)this.myAgent).getCurrentPosition();
 			next_pos = getNextPositionNearestOpenVertex(myPosition);

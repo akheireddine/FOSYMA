@@ -60,7 +60,8 @@ public class GraphAK extends SimpleGraph<String,DefaultEdge> {
 	}
 	
 	public void clearMesFermesSeulement(){
-		for(String i : this.fermes){
+		Set<String> f_tmp = this.fermes;
+		for(String i : f_tmp){
 			if(!this.fermesAgent.contains(i)){
 				this.fermes.remove(i);
 				this.ouverts.add(i);
@@ -107,6 +108,9 @@ public class GraphAK extends SimpleGraph<String,DefaultEdge> {
 		if(!nodes.containsKey(name)){
 			nodes.put(name, obs);
 			dictAdjacences.put(name, new HashSet<String>());
+		}
+		else{
+			this.updateNode(name, obs);
 		}
 		if(this.containsTreasur(name, ""))
 			this.treasures.add(name);
@@ -158,11 +162,18 @@ public class GraphAK extends SimpleGraph<String,DefaultEdge> {
 			this.ouverts.remove(i);
 			this.fermes.add(i);
 		}
+//		if (this.ouverts.isEmpty()){
+//			this.addAllOuverts(myPosition);
+//		}
 	}
 
 	
 	public void switchOF(Set<String> opened, Set<String> closed) {
-		
+		if(closed.contains(this.ouverts))
+			System.out.println(" JAI TOUT EXPLORE");
+//		else{
+//			System.out.println(" ouverts : "+ouverts+"\n ses fermes : "+closed);
+//		}
 		this.ouverts = new HashSet<String>(opened);
 		this.fermes = new HashSet<String>(closed);
 		

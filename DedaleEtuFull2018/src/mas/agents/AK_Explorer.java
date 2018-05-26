@@ -25,10 +25,10 @@ public class AK_Explorer extends AK_Agent {
 	
 	
 	
-	public Serializable getObjectToSend() {
+	public Object getObjectToSend() {
 		Tuple4<HashMap<String, List<Attribute>>, HashMap<String,Set<String>>,Set<String>,Set<String>> obj = 
 				new Tuple4<HashMap<String, List<Attribute>>, HashMap<String,Set<String>>,Set<String>,Set<String>>(G.getHashNode(),G.getDictAdjacences(),G.getOuverts(),G.getFermes());
-		return (Serializable) obj;
+		return obj;
 	}
 	
 	

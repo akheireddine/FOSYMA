@@ -43,7 +43,6 @@ public class GNewMajKnowledgeBehaviour extends OneShotBehaviour {
 				for(String node : adjacenes_received.keySet()){
 					if(!curr_graph.containsVertex(node)){
 						curr_graph.addVertex(node,info_nodes.get(node));
-	//						curr_graph.getFermes().add(node);                              // Ce qu'a pu explorer l'agent sender, je ne l'explore plus
 					}
 					if(adjacenes_received.get(node) !=null){
 						for(String adj: adjacenes_received.get(node)){
@@ -52,19 +51,12 @@ public class GNewMajKnowledgeBehaviour extends OneShotBehaviour {
 						}
 					}
 				}
-				//Sinon si j'ai tout explorer, je ne met a jour que les informations sur les noeuds
-	//			}else{
-	//				HashMap<String, List<Attribute>> curr_nodes = this.curr_graph.getHashNode();
-	//				for(String key:info_nodes.keySet()){ //A quel moment peut on remplacer les infos courrante 
-	//					curr_nodes.replace(key,info_nodes.get(key));
-	//				}
-	////				System.out.println(myAgent.getLocalName()+" : MàJ Attribute Nodes");
-	//			}
-				
+//				new_information._4().add(((mas.abstractAgent)myAgent).getCurrentPosition())
 				this.curr_graph.addToFermes(new_information._4());
 							
-	//			this.curr_graph.switchOF(new_information._3(),new_information._4());
-				((AK_Agent)myAgent).setToread(null);
+//				this.curr_graph.switchOF(new_information._3(),new_information._4());
+//				((AK_Agent)myAgent).setToread(null);
+				
 			} catch (UnreadableException e) {
 				e.printStackTrace();
 			}

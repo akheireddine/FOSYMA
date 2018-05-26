@@ -48,9 +48,8 @@ public class TWalkBehaviour extends GWalkBehaviour {
 			fermes.add(myPosition);
 			
 			List<Couple<String, List<Attribute>>> adjacents = lobs;
-			Couple<String, List<Attribute>> curr_observation = adjacents.remove(0);
-			G.updateNode(myPosition, curr_observation.getRight());                      //MaJ des informations sur les noeuds
-			List<String> adj_names = m_a_j_graphe(myPosition, adjacents);
+			Couple<String, List<Attribute>> curr_observation = adjacents.get(0);
+			List<String> adj_names = m_a_j_graphe( adjacents);
 			List<String> voisins_ouverts = get_open_neighbors(adj_names);
 			
 			if(this.ouverts.isEmpty()){

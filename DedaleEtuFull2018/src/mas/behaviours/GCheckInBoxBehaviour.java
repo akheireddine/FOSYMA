@@ -45,6 +45,8 @@ public class GCheckInBoxBehaviour extends OneShotBehaviour {
 			System.out.println(myAgent.getLocalName()+" : No MSG. ");
 			this.onEndValue = -1;
 		}
+		
+//		while(myAgent.receive()!=null); //tout supprimer dans la boite
 	}
 
 	

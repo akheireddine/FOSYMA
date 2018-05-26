@@ -2,9 +2,8 @@ package mas.behaviours.explorer;
 
 import mas.abstractAgent;
 import mas.agents.AK_Agent;
-import mas.behaviours.explorer.ECheckInBoxBehaviour;
 import mas.behaviours.GNewMajKnowledgeBehaviour;
-import mas.behaviours.GSendInformationAfterCollisionBehaviour;
+import mas.behaviours.explorer.ECheckInBoxBehaviour;
 import jade.core.behaviours.FSMBehaviour;
 
 public class EFSMBehaviour extends FSMBehaviour {
@@ -22,17 +21,18 @@ public class EFSMBehaviour extends FSMBehaviour {
 		registerState(new ESendInformationAfterCollisionBehaviour(), "S");
 		registerState(new ECheckInBoxBehaviour(a),"C");
 			
-		registerState(new EMajKnowledgeBehaviour(), "M"); // update of graph env
+		registerState(new GNewMajKnowledgeBehaviour(), "M"); // update of graph env
 		
 		
 		//definition des transaction
-		registerDefaultTransition("D","S");
 		registerDefaultTransition("S","C");
 		registerDefaultTransition("C","D");
 		registerDefaultTransition("M", "D");
 		
 		registerTransition("C","M",1);              // Quand l'agent recoit un message apres une collision, MaJ de ses connaissances
 		registerTransition("D","C",1);
+		registerTransition("D","S",0);
+
 
 	}
 	

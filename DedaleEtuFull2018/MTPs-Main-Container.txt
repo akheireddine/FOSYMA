@@ -1,1 +1,1 @@
-http://Nissa:7778/acc
+http://ppti-14-407-07.ufr-info-p6.jussieu.fr:7778/acc

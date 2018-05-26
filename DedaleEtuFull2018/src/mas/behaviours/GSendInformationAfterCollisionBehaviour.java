@@ -29,7 +29,8 @@ public class GSendInformationAfterCollisionBehaviour extends OneShotBehaviour {
 			//m'enlever de la liste des receivers
 			if(sellerAgents != null){
 				for(AID agt : sellerAgents)
-					msg.addReceiver(agt);
+					if (!agt.getLocalName().equals(myAgent.getLocalName()))
+						msg.addReceiver(agt);
 			}
 			
 			sellerAgents = DFDServices.getAgentsByService("collector",myAgent);
@@ -43,7 +44,8 @@ public class GSendInformationAfterCollisionBehaviour extends OneShotBehaviour {
 			sellerAgents = DFDServices.getAgentsByService("silo",myAgent);
 			if(sellerAgents != null){
 				for(AID agt : sellerAgents)
-					msg.addReceiver(agt);
+					if (!agt.getLocalName().equals(myAgent.getLocalName()))
+						msg.addReceiver(agt);
 			}
 			
 			try {

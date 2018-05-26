@@ -87,7 +87,7 @@ public abstract class AK_Agent extends abstractAgent {
 	}
 	
 	
-	public abstract Serializable getObjectToSend();
+	public abstract Object getObjectToSend();
 
 //	public void resetVerticesToGraph() {
 //		this.G.resetVertices(this.removedVerticesName);

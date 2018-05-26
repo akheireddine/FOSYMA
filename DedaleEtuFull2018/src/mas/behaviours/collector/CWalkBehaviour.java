@@ -18,7 +18,7 @@ public class CWalkBehaviour extends GWalkBehaviour {
 	private static final long serialVersionUID = -5308185370371990470L;
 
 
-	public CWalkBehaviour(GraphAK g, Set<String> f, Set<String> o, abstractAgent myagent) {
+	public CWalkBehaviour(abstractAgent myagent,GraphAK g) {
 		super(g,g.getFermes(),g.getOuverts(),myagent);
 	}
 
@@ -79,8 +79,7 @@ public class CWalkBehaviour extends GWalkBehaviour {
 			
 			
 			List<Couple<String, List<Attribute>>> adjacents = lobs;
-			Couple<String, List<Attribute>> curr_observation = adjacents.remove(0);
-			G.updateNode(myPosition, curr_observation.getRight());                      //MaJ des informations sur les noeuds
+			Couple<String, List<Attribute>> curr_observation = adjacents.get(0);
 			
 			
 			//############################## SI J'OBSERVE UN TRESOR ############################
@@ -100,7 +99,7 @@ public class CWalkBehaviour extends GWalkBehaviour {
 			
 			
 
-			List<String> adj_names = m_a_j_graphe(myPosition, adjacents);
+			List<String> adj_names = m_a_j_graphe(adjacents);
 			List<String> voisins_ouverts = get_open_neighbors(adj_names);
 			
 			if(this.ouverts.isEmpty()){

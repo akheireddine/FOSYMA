@@ -3,6 +3,7 @@ package mas.behaviours.tanker;
 import mas.abstractAgent;
 import mas.agents.AK_Agent;
 import mas.behaviours.explorer.ECheckInBoxBehaviour;
+import mas.behaviours.explorer.EMajKnowledgeBehaviour;
 import mas.behaviours.GNewMajKnowledgeBehaviour;
 import mas.behaviours.GSendInformationAfterCollisionBehaviour;
 import jade.core.behaviours.FSMBehaviour;
@@ -19,7 +20,7 @@ public class TFSMBehaviourDSCM extends FSMBehaviour {
 	public TFSMBehaviourDSCM(AK_Agent a){
 		super(a);
 		registerFirstState(new TWalkBehaviour((abstractAgent) a,a.getGraph()),"D");
-		registerState(new ESendInformationAfterCollisionBehaviour(), "S");
+		registerState(new GSendInformationAfterCollisionBehaviour(), "S");
 		registerState(new TCheckSendMessageBehaviour(a),"C");
 			
 		registerState(new EMajKnowledgeBehaviour(), "M"); // update of graph env
