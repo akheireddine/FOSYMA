@@ -25,12 +25,11 @@ public class EMajKnowledgeBehaviour extends OneShotBehaviour {
 		final ACLMessage received_graph = ((AK_Agent)myAgent).getMessage();
 		if(received_graph!=null){
 		try {
-			//recuperer l'objet recu 
+			@SuppressWarnings("unchecked")
 			Tuple4<HashMap<String, List<Attribute>>, HashMap<String,Set<String>>,Set<String>,Set<String>> new_information = (Tuple4<HashMap<String, List<Attribute>>, HashMap<String,Set<String>>,Set<String>,Set<String>>) received_graph.getContentObject();
 			
 			HashMap<String, List<Attribute>> info_nodes = new_information._1();
 			
-			//recuperer ma connaissance du graphe
 			this.curr_graph = ((AK_Agent)myAgent).getGraph();
 			
 			//Si je n'ai pas fini mon exploration complete de l'environement
@@ -62,7 +61,7 @@ public class EMajKnowledgeBehaviour extends OneShotBehaviour {
 			
 			this.curr_graph.addToFermes(new_information._4());
 //			this.curr_graph.switchOF(new_information._3(),new_information._4());
-			((AK_Agent)myAgent).setToread(null);
+//			((AK_Agent)myAgent).setToread(null);
 		} catch (UnreadableException e) {
 			e.printStackTrace();
 		}

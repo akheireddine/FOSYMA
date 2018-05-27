@@ -1,11 +1,12 @@
 package mas.agents;
 
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import jade.lang.acl.ACLMessage;
-import jade.util.leap.Serializable;
 import mas.abstractAgent;
 import tools.GraphAK;
 
@@ -22,7 +23,15 @@ public abstract class AK_Agent extends abstractAgent {
 	private Set<String> removedVerticesName=new HashSet<String>();
 	private boolean noCollisionSince= true;
 	
+	private static int cpt = 0;
+	public int id = ++cpt;
+	public String myGoal = "";
+	public List<String> pathToGoal = new ArrayList<String>();
 
+	
+	public int getID() {
+		return this.id;
+	}
 	public GraphAK getGraph(){
 		return G;
 	}

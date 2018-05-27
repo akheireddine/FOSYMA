@@ -4,10 +4,6 @@ import mas.abstractAgent;
 import mas.agents.AK_Collector;
 import mas.behaviours.GNewMajKnowledgeBehaviour;
 import mas.behaviours.GSendInformationAfterCollisionBehaviour;
-import mas.behaviours.explorer.ECheckInBoxBehaviour;
-import mas.behaviours.explorer.EMajKnowledgeBehaviour;
-import mas.behaviours.explorer.ESendInformationAfterCollisionBehaviour;
-import mas.behaviours.explorer.EWalkBehaviour;
 import jade.core.behaviours.FSMBehaviour;
 
 public class CFSMBehaviour extends FSMBehaviour {

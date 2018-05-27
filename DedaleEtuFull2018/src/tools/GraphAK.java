@@ -17,7 +17,7 @@ public class GraphAK extends SimpleGraph<String,DefaultEdge> {
 
 	private HashMap<String, List<Attribute>> nodes = new HashMap<String, List<Attribute>>();
 	private HashMap<String,Set<String>> dictAdjacences = new HashMap<String,Set<String>>();
-	private Set<String> treasures = new HashSet<String>();
+	private HashMap<String,Attribute>  treasures = new HashMap<String,Attribute>();
 	private Set<String> ouverts;
 	private Set<String> fermes;
 	private String Silo_position="";
@@ -112,15 +112,17 @@ public class GraphAK extends SimpleGraph<String,DefaultEdge> {
 		else{
 			this.updateNode(name, obs);
 		}
-		if(this.containsTreasur(name, ""))
-			this.treasures.add(name);
+		Attribute a = this.containsTreasur(name, "");
+		if(a!=null)
+			this.treasures.put(name,a);
 		return super.addVertex(name);
 	}
 	
 	public void updateNode(String node,List<Attribute> obs) {
 		this.nodes.replace(node, obs);
-		if(this.containsTreasur(node,""))
-			this.treasures.add(node);
+		Attribute a = this.containsTreasur(node,"");
+		if(a!=null)
+			this.treasures.put(node,a);
 	}
 
 	public void addAllOuverts(String myPosition) {
@@ -206,23 +208,22 @@ public class GraphAK extends SimpleGraph<String,DefaultEdge> {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	public boolean containsTreasur(String position,String type) {
+	public Attribute containsTreasur(String position,String type) {
 		List<Attribute> obs = this.nodes.get(position);
 		for(Attribute a : obs) {
 			switch(a) {
 			case TREASURE: case DIAMONDS:
 				if(type.equals(""))
-					return true;
+					return a;
 				else if (a.getName().equals(type)) 
-					return true;
+					return a;
 				break;
 			default:
 				break;					
 			}
 		}
-		return false;
+		return null;
 	}
-	
 	
 	
 	

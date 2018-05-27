@@ -4,7 +4,6 @@ package mas.agents;
 
 import jade.domain.DFService;
 import jade.domain.FIPAException;
-import jade.util.leap.Serializable;
 
 import java.util.HashMap;
 import java.util.List;
@@ -22,7 +21,7 @@ import tools.DFDServices;
 public class AK_Explorer extends AK_Agent {
 
 	private static final long serialVersionUID = -1742937994368634241L;
-	
+	private static int i;
 	
 	
 	public Object getObjectToSend() {
@@ -48,8 +47,7 @@ public class AK_Explorer extends AK_Agent {
 			System.exit(-1);
 		}
 		
-		
-		addBehaviour(new EFSMBehaviour(this));
+		addBehaviour(new EFSMBehaviour(this,i));
 
 		System.out.println("the agent "+this.getLocalName()+ " is started ");
 

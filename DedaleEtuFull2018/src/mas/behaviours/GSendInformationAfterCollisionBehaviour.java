@@ -1,6 +1,7 @@
 package mas.behaviours;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
@@ -49,9 +50,9 @@ public class GSendInformationAfterCollisionBehaviour extends OneShotBehaviour {
 			}
 			
 			try {
-				GraphAK G = ((AK_Agent)myAgent).getGraph();
+//				GraphAK G = ((AK_Agent)myAgent).getGraph();
 				//Envoi un tuple contenant (informations sur les noeuds, dictionnaire d'adjacence, sommets ouverts, sommets fermes )
-				msg.setContentObject(new Tuple4<HashMap<String, List<Attribute>>, HashMap<String,Set<String>>,Set<String>,Set<String>>(G.getHashNode(),G.getDictAdjacences(),G.getOuverts(),G.getFermes()));
+				msg.setContentObject((Serializable) ((AK_Agent)myAgent).getObjectToSend());
 			} catch (IOException e) {
 				e.printStackTrace();
 			}

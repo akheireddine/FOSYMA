@@ -3,6 +3,7 @@ package mas.behaviours.explorer;
 import mas.abstractAgent;
 import mas.agents.AK_Agent;
 import mas.behaviours.GNewMajKnowledgeBehaviour;
+import mas.behaviours.GSendInformationAfterCollisionBehaviour;
 import mas.behaviours.explorer.ECheckInBoxBehaviour;
 import jade.core.behaviours.FSMBehaviour;
 
@@ -15,10 +16,13 @@ public class EFSMBehaviour extends FSMBehaviour {
 		super();
 	}
 
-	public EFSMBehaviour(AK_Agent a){
+	public EFSMBehaviour(AK_Agent a,int id){
 		super(a);
-		registerFirstState(new EWalkBehaviour((abstractAgent) a,a.getGraph()),"D");
-		registerState(new ESendInformationAfterCollisionBehaviour(), "S");
+//		if(id%2==0)
+			registerFirstState(new EWalkBehaviour((abstractAgent) a,a.getGraph()),"D");
+//		else
+//			registerFirstState(new EWalkBehaviour2((abstractAgent) a,a.getGraph()),"D");
+		registerState(new GSendInformationAfterCollisionBehaviour(), "S");
 		registerState(new ECheckInBoxBehaviour(a),"C");
 			
 		registerState(new GNewMajKnowledgeBehaviour(), "M"); // update of graph env

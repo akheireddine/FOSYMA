@@ -5,42 +5,37 @@ import jade.lang.acl.ACLMessage;
 import java.util.List;
 import java.util.Set;
 
-import mas.agents.AK_Agent;
-import mas.behaviours.GWalkBehaviour;
 import tools.GraphAK;
 import env.Attribute;
 import env.Couple;
+import mas.agents.AK_Agent;
+import mas.behaviours.GWalkBehaviour;
 
-public class EWalkBehaviour extends GWalkBehaviour {
+public class EWalkBehaviour2 extends GWalkBehaviour {
 
-		
-	private static final long serialVersionUID = 2894735972346677011L;
+	private static final long serialVersionUID = 5174875974684725407L;
 
 
-	public EWalkBehaviour(final mas.abstractAgent myagent, GraphAK g) {
+
+
+	public EWalkBehaviour2(final mas.abstractAgent myagent, GraphAK g) {
 		super(g,g.getFermes(),g.getOuverts(),myagent);
 	}
 
-	public String getNextPosition(List<String> successeurs_non_visites ){
-		String next_pos=((mas.abstractAgent)myAgent).getCurrentPosition();
-		if(!successeurs_non_visites.isEmpty()){
-			next_pos =  choisirLeProchainVoisinOuvertLePlusGrand(successeurs_non_visites);
-			if(!((AK_Agent)myAgent).myGoal.equals("")) {
-				((AK_Agent)myAgent).myGoal="";
-				((AK_Agent)myAgent).pathToGoal.clear();
+
+	@Override
+	public String choisirLeProchainVoisinOuvertLePlusGrand(List<String> successors){
+		String next_node = successors.get(0);
+		int max = G.getNbOpenNeighborVertex(next_node);
+		for(String succ : successors) {
+			int value_tmp_node = G.getNbOpenNeighborVertex(succ);
+			if(value_tmp_node > max) {
+				max = value_tmp_node;
+				next_node = succ;
 			}
-				
-		}else{
-			String myPosition = ((mas.abstractAgent)this.myAgent).getCurrentPosition();
-			int id = ((AK_Agent)myAgent).getID();
-			if(id == 1)
-				next_pos = getNextPositionNearestOpenVertexK(myPosition);
-			else
-				next_pos = getNextPositionNearestOpenVertexD(myPosition);
 		}
-		return next_pos;
+		return next_node;
 	}
-		
 		
 	public void action() {
 		//Example to retrieve the current position
@@ -52,7 +47,7 @@ public class EWalkBehaviour extends GWalkBehaviour {
 
 			try {
 //					System.in.read();
-				Thread.sleep(10);
+				Thread.sleep(700);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -94,7 +89,7 @@ public class EWalkBehaviour extends GWalkBehaviour {
 
 			
 			boolean has_moved = ((mas.abstractAgent)this.myAgent).moveTo(next_pos);
-			
+
 
 			if (has_moved){
 				this.finished=false;
@@ -102,16 +97,14 @@ public class EWalkBehaviour extends GWalkBehaviour {
 				((AK_Agent)myAgent).CptPlus();
 			}
 			else{
-				System.out.println(" cant move "+next_pos+" curr pos : "+myPosition);
+
 				int nb_collision = ((AK_Agent)myAgent).getNombreDeCollision()+1;
 				((AK_Agent)myAgent).setNombreDeCollision(nb_collision);
 				
 				Set<String> detect_golem = G.isGolemAround(myPosition);
 				ACLMessage get_msg = ((AK_Agent)myAgent).getMessage();
-				
 				ouverts.remove(next_pos);
 				fermes.add(next_pos);
-				
 				//Si premiere collision, envoie un message d'information
 				boolean golem_is_here = false;
 				if(nb_collision==1 ) {
@@ -150,5 +143,4 @@ public class EWalkBehaviour extends GWalkBehaviour {
 		}
 	}
 
-		
 }

@@ -56,7 +56,7 @@ public class GNewMajKnowledgeBehaviour extends OneShotBehaviour {
 							
 //				this.curr_graph.switchOF(new_information._3(),new_information._4());
 //				((AK_Agent)myAgent).setToread(null);
-				
+//				System.out.println(myAgent.getLocalName()+" : MAJ");
 			} catch (UnreadableException e) {
 				e.printStackTrace();
 			}

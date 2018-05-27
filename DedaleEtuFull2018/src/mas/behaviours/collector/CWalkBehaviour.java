@@ -25,20 +25,14 @@ public class CWalkBehaviour extends GWalkBehaviour {
 
 		
 		
-	public void isThereAnyTreasur(String myPosition,List<Attribute> curr_observation){
-		if(G.containsTreasur(myPosition,((mas.abstractAgent)myAgent).getMyTreasureType())){
+	public void isThereAnyTreasur(String myPosition){
+		String type = ((mas.abstractAgent)myAgent).getMyTreasureType();
+		Attribute a = G.containsTreasur(myPosition, type);
+		if(a != null){
 			final int capacityBag = ((mas.abstractAgent)this.myAgent).getBackPackFreeSpace();
-			for(Attribute a:curr_observation){
-				switch(a) {
-				case TREASURE: case DIAMONDS :
-					if(capacityBag > (int)a.getValue()) {
-						((mas.abstractAgent)this.myAgent).pick();
-						((AK_Collector)myAgent).setPicked(true);
-					}
-					break;
-				default:
-					break;
-				}
+			if(capacityBag > (int)a.getValue()) {
+				((mas.abstractAgent)this.myAgent).pick();
+				((AK_Collector)myAgent).setPicked(true);
 			}
 		}
 	}
@@ -80,14 +74,15 @@ public class CWalkBehaviour extends GWalkBehaviour {
 			
 			List<Couple<String, List<Attribute>>> adjacents = lobs;
 			Couple<String, List<Attribute>> curr_observation = adjacents.get(0);
-			
+			List<String> adj_names = m_a_j_graphe(adjacents);
+
 			
 			//############################## SI J'OBSERVE UN TRESOR ############################
-			this.isThereAnyTreasur(myPosition, curr_observation.getRight());
+			this.isThereAnyTreasur(myPosition);
 
 			
 			if(((AK_Collector)myAgent).iPicked()) {//chercher le silo
-				G.updateNode(myPosition, curr_observation.getRight());                      //MaJ des informations sur les noeuds
+				G.updateNode(myPosition, curr_observation.getRight());                      
 //					this.onEndValue = 1;
 //					this.finished= true;
 				if(throwMyTreasur()){
@@ -97,10 +92,9 @@ public class CWalkBehaviour extends GWalkBehaviour {
 				System.out.println(myAgent.getLocalName()+" : j'ai trouve un tresor, picked it!");
 			}
 			
-			
 
-			List<String> adj_names = m_a_j_graphe(adjacents);
 			List<String> voisins_ouverts = get_open_neighbors(adj_names);
+			
 			
 			if(this.ouverts.isEmpty()){
 				((AK_Agent)myAgent).exploration_is_done(); //Avertir quil a fini l'exploration, elle sera connu des autres agents
@@ -113,23 +107,12 @@ public class CWalkBehaviour extends GWalkBehaviour {
 				((AK_Agent)myAgent).RAZCpt();
 				voisins_ouverts = get_open_neighbors(adj_names);
 			}
-
 			String next_pos = getNextPosition(voisins_ouverts);
-			if(next_pos.equals(myPosition) ){//|| (next_pos.equals(last_move) && (((AK_Agent)myAgent).getNombreDeCollision() > 2)) ) {
-				G.clearFermes();
-				((AK_Agent)myAgent).setNombreDeCollision(0);
-
-				G.addAllOuverts(myPosition);
-				System.out.println(myAgent.getLocalName()+" : I passed in the wosrt case cuz "+((AK_Agent)myAgent).getCpt());
-				next_pos = getNextPosition(voisins_ouverts);
-			}
 			
 			boolean has_moved = ((mas.abstractAgent)this.myAgent).moveTo(next_pos);
-//				System.out.println(myAgent.getLocalName()+" : moved to "+next_pos+" "+has_moved+" ("+((AK_Agent)myAgent).getNombreDeCollision());
 
 			if (has_moved){
 				this.finished=false;
-//					((AK_Agent)myAgent).setCollisionNode("toto");
 				((AK_Agent)myAgent).setNombreDeCollision(0);
 				((AK_Agent)myAgent).CptPlus();
 			}
@@ -178,90 +161,6 @@ public class CWalkBehaviour extends GWalkBehaviour {
 			}
 		}
 	}		
-//		List<String> adj_names = m_a_j_graphe(myPosition, adjacents);
-//		List<String> voisins_ouverts = get_open_neighbors(adj_names);
-//		
-//		if(this.ouverts.isEmpty()) {
-//			String d = "";
-//			if(((AK_Agent)myAgent).getNoCollisionSince()) {
-//				((AK_Agent)myAgent).exploration_is_done(); //Avertir quil a fini l'exploration, elle sera connu des autres agents
-//				d = "DONE";
-//			}
-//			G.clearFermes();       //Repeter l'operation d'exploration
-//			G.addAllOuverts(myPosition);
-//
-//			System.out.println(myAgent.getLocalName()+" : Exploration "+d+" ("+((AK_Agent)myAgent).getCpt()+"). Restart !");
-//			((AK_Agent)myAgent).RAZCpt();
-//			voisins_ouverts = get_open_neighbors(adj_names);
-//		}
-//		
-//		String next_pos = getNextPosition(voisins_ouverts);
-//		if(next_pos.equals("")) {
-//			G.clearFermes();
-//			G.addAllOuverts(myPosition);
-//			System.out.println(myAgent.getLocalName()+" : I passed in the wosrt case cuz "+next_pos);
-//			next_pos = getNextPosition(voisins_ouverts);
-//		}
-//		
-//		boolean has_moved = ((mas.abstractAgent)this.myAgent).moveTo(next_pos);
-//		
-//		if (has_moved){
-//			this.finished=false;
-//			((AK_Agent)myAgent).setCollisionNode("");
-//			((AK_Agent)myAgent).setNombreDeCollision(0);
-//			((AK_Agent)myAgent).CptPlus();
-////			System.out.println(myAgent.getLocalName()+" : Deplace vers "+next_pos);
-//		}
-//		else{
-//			
-//			int nb_collision = ((AK_Agent)myAgent).getNombreDeCollision();
-//			((AK_Agent)myAgent).setNombreDeCollision(nb_collision+1);
-//			
-//			
-//			Set<String> golem = G.isGolemAround(myPosition);;
-//
-//		
-//			//Dans le cas ou on echange les Ouverts, fermes
-//			ouverts.remove(next_pos);
-//			fermes.add(next_pos);
-//		
-//			//################ Si premiere collision, envoie un message d'information ################
-//			if(nb_collision==1 && golem.isEmpty()) {
-//				this.finished=true;
-//				this.onEndValue = 2;
-////				((AK_Agent)myAgent).setCollisionNode(next_pos);
-//			}
-////			else if (nb_collision ==2 && !golem)
-////				((AK_Agent)myAgent).setCollisionNode(next_pos);
-//			//################ REVOIR SA BOITE AU LETTRE ################
-//			else if (nb_collision == 2 && golem.isEmpty()){//check s'il a bien lu le msg recu par l'agent collision
-//				this.finished=true;
-//				this.onEndValue = 3;    
-//			}
-//			
-//			else if (nb_collision>2 && !golem.isEmpty()) {
-//				((AK_Agent)myAgent).setCollisionNode(next_pos);
-//			}
-//
-//
-//		}
-//		
-//
-//		
-//
-//		
-//
-////		if (((AK_Agent)myAgent).getNombreDeCollision() == 5 && (!this.ouverts.isEmpty())){ //N'a qu'un seul noeud ouvert a explorer
-////				G.clearFermes();
-////				this.fermes.add(next_pos);
-////				this.fermes.add(myPosition);
-//////				this.onEndValue=1;
-////				((AK_Agent)myAgent).setNombreDeCollision(0);
-////				System.out.println("COLLISIOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOooN");
-////		}
-//	}
-//}
-
 	
 	
 }

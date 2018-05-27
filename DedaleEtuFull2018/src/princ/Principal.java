@@ -39,9 +39,9 @@ public class Principal {
 		System.out.println("Hello !");
 		//0) Create the real environment and the observed one
 //		env= new Environment(ENVtype.GRID_T,5,null);
-		env = new Environment("ressources/mapInterblocage","ressources/mapInterblocage-config");
+//		env = new Environment("ressources/mapInterblocage","ressources/mapInterblocage-config");
 //		env= new Environment(ENVtype.DOROGOVTSEV,50,null);
-//		env=new Environment("ressources/map2017-2","ressources/map2017-config");
+		env=new Environment("ressources/map2017-2","ressources/map2017-config");
 
 		//1), create the platform (Main container (DF+AMS) + containers + monitoring agents : RMA and SNIFFER)
 		rt=emptyPlatform(containerList);
@@ -200,7 +200,7 @@ public class Principal {
 //		} catch (StaleProxyException e) {
 //			e.printStackTrace();
 //		}
-//
+
 		//	Explorer (no backpack)
 		c = containerList.get("container0");
 		agentName="E1";
@@ -227,7 +227,7 @@ public class Principal {
 			e.printStackTrace();
 		}
 ////		
-//		
+////		
 //		c = containerList.get("container0");
 //		agentName="E3";
 //		try {

@@ -1,15 +1,19 @@
 package mas.behaviours;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.jgrapht.GraphPath;
 import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
+import org.jgrapht.alg.shortestpath.KShortestSimplePaths;
 import org.jgrapht.graph.DefaultEdge;
 
 import env.Attribute;
 import env.Couple;
 import jade.core.behaviours.SimpleBehaviour;
+import mas.agents.AK_Agent;
 import tools.GraphAK;
 
 public abstract class GWalkBehaviour extends SimpleBehaviour {
@@ -20,6 +24,7 @@ public abstract class GWalkBehaviour extends SimpleBehaviour {
 	protected int onEndValue=0;
 	protected boolean finished = false;
 	protected String last_move="";
+
 	
 	
 	
@@ -68,23 +73,8 @@ public abstract class GWalkBehaviour extends SimpleBehaviour {
 	 * @param src position courante 
 	 * @return le prochain deplacement vers le noeud ouvert non exploré le plus proche(DIJKSTRA)
 	 */
-//	public String getNextPositionNearestOpenVertex(String src){
-//		DijkstraShortestPath<String, DefaultEdge> dijkstraShortestPath = new DijkstraShortestPath<String, DefaultEdge>(G);
-//		int dist_min = G.vertexSet().size();
-//		String next_node = src;
-//		
-//		for(String dst: ouverts){
-//			List<String> shortestPath = dijkstraShortestPath.getPath(src,dst).getVertexList();
-//			if(shortestPath.size() < dist_min){
-//				dist_min = shortestPath.size();
-//				next_node = shortestPath.get(1);
-//			}
-//		}
-//		return next_node;
-//	}
 	
-	
-	public String getNextPositionNearestOpenVertex(String src){
+	public String getNextPositionNearestOpenVertexD(String src){
 		DijkstraShortestPath<String, DefaultEdge> dijkstraShortestPath = new DijkstraShortestPath<String, DefaultEdge>(G);
 		int dist_min = G.vertexSet().size();
 		String next_node = src;
@@ -101,6 +91,61 @@ public abstract class GWalkBehaviour extends SimpleBehaviour {
 		}
 		return next_node;
 	}
+	
+
+	
+	public String getNextPositionNearestOpenVertexK(String src){
+		KShortestSimplePaths<String,DefaultEdge> k_paths = new KShortestSimplePaths<String,DefaultEdge>(G);
+		int max = 0;
+		String next_pos = src;
+		if(((AK_Agent)myAgent).pathToGoal.size() == 0 || ((AK_Agent)myAgent).getNombreDeCollision()>1) {
+			((AK_Agent)myAgent).myGoal = "";
+			((AK_Agent)myAgent).pathToGoal.clear();
+		}
+		if(((AK_Agent)myAgent).myGoal != "") {
+			return ((AK_Agent)myAgent).pathToGoal.remove(0);
+		}
+		int i = 0;
+		for(String dst : this.ouverts) {
+			Set<GraphPath<String,DefaultEdge>> paths = new HashSet<GraphPath<String,DefaultEdge>>(k_paths.getPaths(src, dst,1));
+			
+			for(GraphPath<String,DefaultEdge>  l : paths){
+				List<String> p = l.getVertexList();
+				Set<String> sp = new HashSet<String>(p);
+				sp.retainAll(this.ouverts);
+				if(sp.size() > max){
+//					System.out.println("LE chemin vers "+dst+" : "+p);
+					p.remove(0);
+					next_pos = p.remove(0);
+					max = sp.size();
+					((AK_Agent)myAgent).myGoal = dst;
+					((AK_Agent)myAgent).pathToGoal = p;
+//					System.out.println("AFTER LE chemin vers "+dst+" : "+p);
+
+				}
+			}
+			i++;
+			if(i==(int)( 5))
+				break;
+		}
+//		System.out.println(myAgent.getLocalName()+" : my goal "+goal);
+		return next_pos;
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	
 	
@@ -131,7 +176,7 @@ public abstract class GWalkBehaviour extends SimpleBehaviour {
 			next_pos =  choisirLeProchainVoisinOuvertLePlusGrand(successeurs_non_visites);
 		}else{
 			String myPosition = ((mas.abstractAgent)this.myAgent).getCurrentPosition();
-			next_pos = getNextPositionNearestOpenVertex(myPosition);
+			next_pos = getNextPositionNearestOpenVertexD(myPosition);
 		}
 		return next_pos;
 	}
