@@ -1,6 +1,7 @@
 package tools;
 
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -21,7 +22,7 @@ public class GraphAK extends SimpleGraph<String,DefaultEdge> {
 	private Set<String> ouverts;
 	private Set<String> fermes;
 	private String Silo_position="";
-	private Set<String> ens_position_silo= new HashSet<String>();
+	private List<String> ens_position_silo= new ArrayList<String>();
 
 	private Set<String> fermesAgent= new HashSet<String>();
 
@@ -32,7 +33,12 @@ public class GraphAK extends SimpleGraph<String,DefaultEdge> {
 	}
 	
 	
-	
+	public void openVertices(Set<String> f) {
+		for(String n : f) {
+			this.fermes.remove(n);
+			this.ouverts.add(n);
+		}
+	}
 	
 	
 	public int getDegreeOfNode(String node_name){
@@ -235,20 +241,16 @@ public class GraphAK extends SimpleGraph<String,DefaultEdge> {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	public void setSiloPosition(String node) {
-		this.Silo_position = node;
-	}
-	
 	public boolean isSiloPositionKnown() {
 		return !this.ens_position_silo.isEmpty();
 	}
 	
-	public String getSiloPosition() {
-		return this.Silo_position;
+	public String changer_de_noeud_silo(int i ) {
+		return this.ens_position_silo.get(i);
 	}
 	
 	
-	public Set<String> siloPosition(){
+	public List<String> siloPositions(){
 		return this.ens_position_silo;
 	}
 	
@@ -256,7 +258,7 @@ public class GraphAK extends SimpleGraph<String,DefaultEdge> {
 		this.ens_position_silo.add(p);
 	}
 	
-	public void addAllPositionSilo(Set<String> p) {
+	public void addAllPositionSilo(List<String> p) {
 		for(String a: p) {
 			this.addPossiblePositionSilo(a);
 		}

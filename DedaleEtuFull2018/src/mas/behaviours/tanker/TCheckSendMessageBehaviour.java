@@ -55,12 +55,12 @@ public class TCheckSendMessageBehaviour extends TickerBehaviour{
 							send_msg.addReceiver(agt);
 				}
 				
-				try {
-					//Envoi un tuple contenant (informations sur les noeuds, dictionnaire d'adjacence, sommets ouverts, sommets fermes )
-					send_msg.setContentObject(new Tuple3<HashMap<String, List<Attribute>>, HashMap<String,Set<String>>,Set<String>>(G.getHashNode(),G.getDictAdjacences(),G.siloPosition()));
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
+//				try {
+//					//Envoi un tuple contenant (informations sur les noeuds, dictionnaire d'adjacence, sommets ouverts, sommets fermes )
+//					send_msg.setContentObject(new Tuple3<HashMap<String, List<Attribute>>, HashMap<String,Set<String>>,Set<String>>(G.getHashNode(),G.getDictAdjacences(),G.siloPositions()));
+//				} catch (IOException e) {
+//					e.printStackTrace();
+//				}
 				
 				((mas.abstractAgent)this.myAgent).sendMessage(send_msg);
 				System.out.println(myAgent.getLocalName()+" : CONFIRM TO AGENT THAT IM THE SILO ");

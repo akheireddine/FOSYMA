@@ -52,7 +52,7 @@ public class EWalkBehaviour extends GWalkBehaviour {
 
 			try {
 //					System.in.read();
-				Thread.sleep(10);
+				Thread.sleep(700);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -87,6 +87,7 @@ public class EWalkBehaviour extends GWalkBehaviour {
 				((AK_Agent)myAgent).RAZCpt();
 				voisins_ouverts = get_open_neighbors(adj_names);
 			}
+			
 			
 
 

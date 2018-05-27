@@ -39,8 +39,8 @@ public class CCheckInBoxBehaviour extends OneShotBehaviour {
 			if(msg!=null) {
 				try {
 					@SuppressWarnings("unchecked")
-					Tuple3<HashMap<String, List<Attribute>>, HashMap<String, Set<String>>, Set<String>> info = (Tuple3<HashMap<String, List<Attribute>>, 
-							HashMap<String,Set<String>>,Set<String>>) msg.getContentObject();
+					Tuple3<HashMap<String, List<Attribute>>, HashMap<String, Set<String>>, List<String>> info = (Tuple3<HashMap<String, List<Attribute>>, 
+							HashMap<String,Set<String>>,List<String>>) msg.getContentObject();
 					
 					((AK_Agent)myAgent).getGraph().addAllPositionSilo(info._3());
 				} catch (UnreadableException e) {

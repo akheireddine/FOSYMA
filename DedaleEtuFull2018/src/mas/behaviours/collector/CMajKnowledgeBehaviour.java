@@ -30,7 +30,7 @@ public class CMajKnowledgeBehaviour extends OneShotBehaviour {
 			case ACLMessage.CONFIRM:
 				try {
 					@SuppressWarnings("unchecked")
-					Tuple3<HashMap<String, List<Attribute>>, HashMap<String,Set<String>>,Set<String>> r =(Tuple3<HashMap<String, List<Attribute>>, HashMap<String,Set<String>>,Set<String>>) received_graph.getContentObject();
+					Tuple3<HashMap<String, List<Attribute>>, HashMap<String,Set<String>>,List<String>> r =(Tuple3<HashMap<String, List<Attribute>>, HashMap<String,Set<String>>,List<String>>) received_graph.getContentObject();
 					this.curr_graph.addAllPositionSilo(r._3());
 					silo_prior= true;
 				} catch (UnreadableException e1) {

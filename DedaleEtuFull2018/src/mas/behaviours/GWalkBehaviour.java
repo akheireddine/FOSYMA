@@ -37,7 +37,13 @@ public abstract class GWalkBehaviour extends SimpleBehaviour {
 	}
 	
 	
-	
+	public String chemin_vers_goal(String src,String dest) {
+		DijkstraShortestPath<String, DefaultEdge> dijkstraShortestPath = new DijkstraShortestPath<String, DefaultEdge>(G);
+		String next_node = src;
+		List<String> shortestPath = dijkstraShortestPath.getPath(src,dest).getVertexList();
+		next_node = shortestPath.get(1);
+		return next_node;
+	}
 	
 	/***
 	 * @param src position courante 

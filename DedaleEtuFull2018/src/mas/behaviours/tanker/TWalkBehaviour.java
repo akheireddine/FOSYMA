@@ -8,6 +8,7 @@ import mas.behaviours.GWalkBehaviour;
 import tools.GraphAK;
 import env.Attribute;
 import env.Couple;
+import jade.lang.acl.ACLMessage;
 
 public class TWalkBehaviour extends GWalkBehaviour {
 
@@ -48,129 +49,85 @@ public class TWalkBehaviour extends GWalkBehaviour {
 			fermes.add(myPosition);
 			
 			List<Couple<String, List<Attribute>>> adjacents = lobs;
-			Couple<String, List<Attribute>> curr_observation = adjacents.get(0);
-			List<String> adj_names = m_a_j_graphe( adjacents);
+			List<String> adj_names = m_a_j_graphe(adjacents);
 			List<String> voisins_ouverts = get_open_neighbors(adj_names);
-			
-			if(this.ouverts.isEmpty()){
-				((AK_Agent)myAgent).exploration_is_done(); //Avertir quil a fini l'exploration, elle sera connu des autres agents
-				G.clearFermes();       //Repeter l'operation d'exploration
+
+			if(this.ouverts.isEmpty() && ((AK_Agent)myAgent).getCpt()>0){
+				String b = "NOT DONE";
+				if(((AK_Agent)myAgent).getNombreDeCollision()==0 || ((AK_Agent)myAgent).isExplorationDone()){
+					this.finished = true;
+					((AK_Agent)myAgent).exploration_is_done(); //___________________!!! A REVOIR !!!___________________________
+					return;
+				}
+				
+				G.clearFermes();      
 				G.addAllOuverts(myPosition);
 				((AK_Agent)myAgent).setNombreDeCollision(0);
-				System.out.println(myAgent.getLocalName()+" : Exploration DONE ("+((AK_Agent)myAgent).getCpt()+"). Restart !");
+				System.out.println(myAgent.getLocalName()+" : Exploration "+b+" ("+((AK_Agent)myAgent).getCpt()+"). Restart !");
 				((AK_Agent)myAgent).RAZCpt();
 				voisins_ouverts = get_open_neighbors(adj_names);
 			}
+			
+			
+
 
 			String next_pos = getNextPosition(voisins_ouverts);
-			//Si je 
-			if(next_pos.equals(myPosition) || (next_pos.equals(last_move) && (((AK_Agent)myAgent).getNombreDeCollision() > 2)) ) {
-				G.clearFermes();
-				((AK_Agent)myAgent).setNombreDeCollision(0);
 
-				G.addAllOuverts(myPosition);
-				System.out.println(myAgent.getLocalName()+" : I passed in the wosrt case cuz "+((AK_Agent)myAgent).getCpt());
-				next_pos = getNextPosition(voisins_ouverts);
-			}
 			
 			boolean has_moved = ((mas.abstractAgent)this.myAgent).moveTo(next_pos);
-//				System.out.println(myAgent.getLocalName()+" : moved to "+next_pos+" "+has_moved+" ("+((AK_Agent)myAgent).getNombreDeCollision());
+			
 
 			if (has_moved){
 				this.finished=false;
-//					((AK_Agent)myAgent).setCollisionNode("toto");
 				((AK_Agent)myAgent).setNombreDeCollision(0);
 				((AK_Agent)myAgent).CptPlus();
-//					System.out.println(myAgent.getLocalName()+" : Deplace vers "+next_pos);
 			}
 			else{
-
+				System.out.println(" cant move "+next_pos+" curr pos : "+myPosition);
 				int nb_collision = ((AK_Agent)myAgent).getNombreDeCollision()+1;
 				((AK_Agent)myAgent).setNombreDeCollision(nb_collision);
 				
+				Set<String> detect_golem = G.isGolemAround(myPosition);
+				ACLMessage get_msg = ((AK_Agent)myAgent).getMessage();
 				
-				Set<String> golem = G.isGolemAround(myPosition);;
-
-			
-				//Dans le cas ou on echange les Ouverts, fermes
-//					ouverts.remove(next_pos);
-//					fermes.add(next_pos);
-			
+				ouverts.remove(next_pos);
+				fermes.add(next_pos);
+				
 				//Si premiere collision, envoie un message d'information
-				if(nb_collision==1 && golem.isEmpty()) {
+				boolean golem_is_here = false;
+				if(nb_collision==1 ) {
 					this.onEndValue = 0;
 					this.finished=true;
-					ouverts.remove(next_pos);
-					fermes.add(next_pos);
-//						((AK_Agent)myAgent).setCollisionNode(next_pos);
-				}
 
-				else if (nb_collision == 2 && golem.isEmpty()){//check s'il a bien lu le msg recu par l'agent collision
+				}
+				else if(nb_collision == 2 && get_msg==null){
+					this.onEndValue = 1;
 					this.finished=true;
-					this.onEndValue = 1;    
 				}
-				
-//					else if(nb_collision>2 && !golem.isEmpty()){
-//						ouverts.remove(next_pos);
-//						fermes.add(next_pos);
-//					}
-				
-//					else if(nb_collision>2 || next_pos.equals(last_move)){
-//						if(golem.isEmpty()){
-//							G.clearMesFermesSeulement();
-//							ouverts.remove(next_pos);
-//							fermes.add(next_pos);
-//						}else{
-//							G.clearFermes();
-//							G.addAllOuverts(myPosition);
-//							ouverts.remove(next_pos);
-//							fermes.add(next_pos);
-//						}
-////						((AK_Agent)myAgent).setNombreDeCollision(0);
-//						System.out.println(myAgent.getLocalName()+" : I passed  "+nb_collision+"collisions"
-//								+ "");
-//					}
-				
-				else if(nb_collision>2 || next_pos.equals(last_move)){
+				else if(!detect_golem.isEmpty() && get_msg==null)
+					golem_is_here = true;
+
+				else if(nb_collision > 2 && next_pos.equals(last_move)){
 					G.clearFermes();
+					G.addAllOuverts(myPosition);
 					ouverts.remove(next_pos);
 					fermes.add(next_pos);
-//						((AK_Agent)myAgent).setNombreDeCollision(0);
-					G.addAllOuverts(myPosition);
-					System.out.println(myAgent.getLocalName()+" : I passed ___ "+nb_collision+" collisins");
+					System.out.println(myAgent.getLocalName()+" (A): Have to restart my exploration.");
 				}
 				
-		
+				if(golem_is_here){
+					G.clearFermes();
+					G.addAllOuverts(myPosition);
+					ouverts.remove(next_pos);
+					fermes.add(next_pos);
+					System.out.println(myAgent.getLocalName()+" (G): Have to restart my exploration.");
 
+				}
 				last_move=next_pos;
+				((AK_Agent)myAgent).setToread(null);
 
-
-//					Random r = new Random();
-//					if (r.nextFloat() < nb_collision/10.){
-//						G.clearFermes();
-//						System.out.println(myAgent.getLocalName()+" Je vide tout apres "+nb_collision+" collisions");
-//						((AK_Agent)myAgent).setNombreDeCollision(0);
-//
-//					}
-//					if(r.nextFloat() < nb_collision/3.){
-//						this.fermes.add(next_pos);
-//						this.ouverts.remove(next_pos);
-//						System.out.println(myAgent.getLocalName()+" Je retire un noeud  apres "+nb_collision+" collisions");
-//						((AK_Agent)myAgent).setNombreDeCollision(0);
-//					}
 			}
-			
 
-			
-
-//				if (((AK_Agent)myAgent).getNombreDeCollision() == 5 && (!this.ouverts.isEmpty())){ //N'a qu'un seul noeud ouvert a explorer
-//						G.clearFermes();
-//						this.fermes.add(next_pos);
-//						this.fermes.add(myPosition);
-//		//				this.onEndValue=1;
-//						((AK_Agent)myAgent).setNombreDeCollision(0);
-//						System.out.println("COLLISIOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOooN");
-//				}
 		}
 	}
 

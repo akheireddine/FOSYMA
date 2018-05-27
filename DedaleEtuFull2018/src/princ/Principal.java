@@ -38,10 +38,10 @@ public class Principal {
 
 		System.out.println("Hello !");
 		//0) Create the real environment and the observed one
-//		env= new Environment(ENVtype.GRID_T,5,null);
+		env= new Environment(ENVtype.GRID_T,4,null);
 //		env = new Environment("ressources/mapInterblocage","ressources/mapInterblocage-config");
 //		env= new Environment(ENVtype.DOROGOVTSEV,50,null);
-		env=new Environment("ressources/map2017-2","ressources/map2017-config");
+//		env=new Environment("ressources/map2017-2","ressources/map2017-config");
 
 		//1), create the platform (Main container (DF+AMS) + containers + monitoring agents : RMA and SNIFFER)
 		rt=emptyPlatform(containerList);
@@ -213,19 +213,19 @@ public class Principal {
 		} catch (StaleProxyException e) {
 			e.printStackTrace();
 		}
-
+//
 //		//Explorer (no backpack)
-		c = containerList.get("container0");
-		agentName="E2";
-		try {
-
-			Object[] objtab=new Object[]{env,EntityType.AGENT_EXPLORER};//used to give informations to the agent
-			AgentController	ag=c.createNewAgent(agentName,AK_Explorer.class.getName(),objtab);
-			agentList.add(ag);
-			System.out.println(agentName+" launched");
-		} catch (StaleProxyException e) {
-			e.printStackTrace();
-		}
+//		c = containerList.get("container0");
+//		agentName="E2";
+//		try {
+//
+//			Object[] objtab=new Object[]{env,EntityType.AGENT_EXPLORER};//used to give informations to the agent
+//			AgentController	ag=c.createNewAgent(agentName,AK_Explorer.class.getName(),objtab);
+//			agentList.add(ag);
+//			System.out.println(agentName+" launched");
+//		} catch (StaleProxyException e) {
+//			e.printStackTrace();
+//		}
 ////		
 ////		
 //		c = containerList.get("container0");
@@ -267,17 +267,17 @@ public class Principal {
 //		}
 //
 ////		Tanker-Silo (backPack that count for the exam, but not method pick. Can only receive from the collector agents)
-//		c = containerList.get("container0");
-//		agentName="Silo";
-//		try {
-//
-//			Object[] objtab=new Object[]{env,EntityType.AGENT_TANKER};//used to give informations to the agent
-//			AgentController	ag=c.createNewAgent(agentName,AK_Tanker.class.getName(),objtab);
-//			agentList.add(ag);
-//			System.out.println(agentName+" launched");
-//		} catch (StaleProxyException e) {
-//			e.printStackTrace();
-//		}
+		c = containerList.get("container0");
+		agentName="Silo";
+		try {
+
+			Object[] objtab=new Object[]{env,EntityType.AGENT_TANKER};//used to give informations to the agent
+			AgentController	ag=c.createNewAgent(agentName,AK_Tanker.class.getName(),objtab);
+			agentList.add(ag);
+			System.out.println(agentName+" launched");
+		} catch (StaleProxyException e) {
+			e.printStackTrace();
+		}
 
 
 

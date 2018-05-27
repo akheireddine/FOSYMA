@@ -12,7 +12,7 @@ import java.util.Set;
 import env.Attribute;
 import env.EntityType;
 import env.Environment;
-import mas.behaviours.tanker.TCheckSendMessageBehaviour;
+import mas.behaviours.tanker.TFSMBehaviour1;
 import scala.Tuple4;
 import tools.DFDServices;
 
@@ -21,12 +21,22 @@ public class AK_Tanker extends AK_Agent{
 
 
 	private static final long serialVersionUID = -1593633423403750683L;
-
+	public String goal = "";
+	public int mv = 0;
+	
+	public void noeud_suivant() {
+		mv++;
+		goal = G.changer_de_noeud_silo(mv%G.siloPositions().size());
+	}
+	
+	
 	public Serializable getObjectToSend() {
 		Tuple4<HashMap<String, List<Attribute>>, HashMap<String,Set<String>>,Set<String>,Set<String>> obj = 
 				new Tuple4<HashMap<String, List<Attribute>>, HashMap<String,Set<String>>,Set<String>,Set<String>>(G.getHashNode(),G.getDictAdjacences(),G.getOuverts(),G.getFermes());
 		return (Serializable) obj;
 	}
+	
+	
 
 	protected void setup(){
 		super.setup();
@@ -42,7 +52,7 @@ public class AK_Tanker extends AK_Agent{
 		}
 
 		//Add the behaviours
-		addBehaviour(new TCheckSendMessageBehaviour(this));
+		addBehaviour(new TFSMBehaviour1(this));
 		System.out.println("the agent "+this.getLocalName()+ " is started");
 
 	}
