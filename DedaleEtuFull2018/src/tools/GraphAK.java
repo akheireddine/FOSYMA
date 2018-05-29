@@ -7,6 +7,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.jgrapht.alg.util.Pair;
 import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.graph.SimpleGraph;
 
@@ -18,7 +19,7 @@ public class GraphAK extends SimpleGraph<String,DefaultEdge> {
 
 	private HashMap<String, List<Attribute>> nodes = new HashMap<String, List<Attribute>>();
 	private HashMap<String,Set<String>> dictAdjacences = new HashMap<String,Set<String>>();
-	private HashMap<String,Attribute>  treasures = new HashMap<String,Attribute>();
+	private HashMap<String,Pair<Attribute,Long>>  treasures = new HashMap<String,Pair<Attribute,Long>>();
 	private Set<String> ouverts;
 	private Set<String> fermes;
 	private String Silo_position="";
@@ -76,6 +77,18 @@ public class GraphAK extends SimpleGraph<String,DefaultEdge> {
 		this.fermesAgent.clear();
 	}
 	
+	public void updateOF(Set<String> o, Set<String> f){
+		this.fermes.addAll(f);
+		for(String n : o){
+			if(!this.fermes.contains(n))
+				this.ouverts.add(n);
+		}
+		this.ouverts.removeAll(this.fermes);
+	}
+	
+	
+	
+	
 
 	public List<Attribute> getAttrOfNode(String myPosition) {
 		if( nodes.containsKey(myPosition))
@@ -110,6 +123,7 @@ public class GraphAK extends SimpleGraph<String,DefaultEdge> {
 	}
 	
 	
+	
 	public boolean addVertex(String name,List<Attribute> obs){
 		if(!nodes.containsKey(name)){
 			nodes.put(name, obs);
@@ -119,16 +133,20 @@ public class GraphAK extends SimpleGraph<String,DefaultEdge> {
 			this.updateNode(name, obs);
 		}
 		Attribute a = this.containsTreasur(name, "");
-		if(a!=null)
-			this.treasures.put(name,a);
+		if(a!=null){
+			Pair<Attribute,Long> v = new Pair<Attribute,Long>(a,System.currentTimeMillis());
+			this.treasures.put(name,v);
+		}
 		return super.addVertex(name);
 	}
 	
 	public void updateNode(String node,List<Attribute> obs) {
 		this.nodes.replace(node, obs);
 		Attribute a = this.containsTreasur(node,"");
-		if(a!=null)
-			this.treasures.put(node,a);
+		if(a!=null){
+			Pair<Attribute,Long> v = new Pair<Attribute,Long>(a,System.currentTimeMillis());
+			this.treasures.put(node,v);
+		}
 	}
 
 	public void addAllOuverts(String myPosition) {
@@ -233,7 +251,19 @@ public class GraphAK extends SimpleGraph<String,DefaultEdge> {
 	
 	
 	
-	
+	public void MAJAttributeNode(String n , List<Attribute> obs){
+//		if(this.containsTreasur(n, "") != null){
+//			for(Attribute a : obs) {
+//				switch(a) {
+//				case TREASURE: case DIAMONDS:
+//					a.getValue()
+//					break;
+//				default:
+//					break;					
+//				}
+//			}
+//		}
+	}
 	
 	
 	

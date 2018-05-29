@@ -12,6 +12,7 @@ public class ClosenessVertices extends OneShotBehaviour {
 
 	private static final long serialVersionUID = 7339937027576841690L;
 	private GraphAK G;
+	private int n = 1;
 	public ClosenessVertices(final mas.abstractAgent myagent, GraphAK g) {
 		super(myagent);
 		this.G = g;
@@ -43,7 +44,7 @@ public class ClosenessVertices extends OneShotBehaviour {
 		for(String v : nodes) {
 			int nb_degree = G.degreeOf(v);
 			boolean adj = false;
-			if(noeuds_centrales.size() == 3) {
+			if(noeuds_centrales.size() == n) {
 				int min = nb_degree;
 				String to_remove = v;
 				for(String u : noeuds_centrales) {
@@ -64,7 +65,7 @@ public class ClosenessVertices extends OneShotBehaviour {
 					noeuds_centrales.add(v);
 				}
 			}
-			else if(noeuds_centrales.size() < 4) {
+			else if(noeuds_centrales.size() < n+1) {
 				for(String n : noeuds_centrales) {
 					if(G.getDictAdjacences().get(n).contains(v))
 						continue;

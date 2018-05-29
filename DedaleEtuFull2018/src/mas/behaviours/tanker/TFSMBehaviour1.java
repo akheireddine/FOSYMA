@@ -18,7 +18,7 @@ public class TFSMBehaviour1 extends FSMBehaviour {
 		registerFirstState(new TWalkBehaviour((abstractAgent) a,a.getGraph()),"D");
 		registerState(new ClosenessVertices((abstractAgent) a,a.getGraph()),"V");
 		registerLastState(new MoveToNode((abstractAgent) a,a.getGraph()),"G");
-		a.addBehaviour(new TFSMBehaviour2(a));
+//		a.addBehaviour(new TFSMBehaviour2(a));
 		
 //		registerState(new GSendInformationAfterCollisionBehaviour(), "S");
 //		registerState(new TCheckSendMessageBehaviour(a),"C");

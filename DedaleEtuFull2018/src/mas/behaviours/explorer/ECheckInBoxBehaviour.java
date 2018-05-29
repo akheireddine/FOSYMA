@@ -18,11 +18,11 @@ public class ECheckInBoxBehaviour extends OneShotBehaviour {
 	
 
 	public void action() {
-		try {
-			Thread.sleep(200);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
+//		try {
+//			Thread.sleep(200);
+//		} catch (InterruptedException e) {
+//			e.printStackTrace();
+//		}
 		ACLMessage msg = this.myAgent.receive(MessageTemplate.MatchPerformative(ACLMessage.INFORM));
 		//Priorite 1 aux messages INFORM (MaJ de mes connaissances)
 		if(msg!=null)

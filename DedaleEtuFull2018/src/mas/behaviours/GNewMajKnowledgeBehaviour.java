@@ -52,8 +52,9 @@ public class GNewMajKnowledgeBehaviour extends OneShotBehaviour {
 					}
 				}
 //				new_information._4().add(((mas.abstractAgent)myAgent).getCurrentPosition())
-				this.curr_graph.addToFermes(new_information._4());
-							
+//				this.curr_graph.addToFermes(new_information._4());
+				this.curr_graph.updateOF(new_information._3(),new_information._4());
+				System.out.println(myAgent.getLocalName()+ " : maj done");
 //				this.curr_graph.switchOF(new_information._3(),new_information._4());
 //				((AK_Agent)myAgent).setToread(null);
 //				System.out.println(myAgent.getLocalName()+" : MAJ");

@@ -38,10 +38,12 @@ public abstract class GWalkBehaviour extends SimpleBehaviour {
 	
 	
 	public String chemin_vers_goal(String src,String dest) {
-		DijkstraShortestPath<String, DefaultEdge> dijkstraShortestPath = new DijkstraShortestPath<String, DefaultEdge>(G);
 		String next_node = src;
-		List<String> shortestPath = dijkstraShortestPath.getPath(src,dest).getVertexList();
-		next_node = shortestPath.get(1);
+		if(!src.equals(dest)){
+			DijkstraShortestPath<String, DefaultEdge> dijkstraShortestPath = new DijkstraShortestPath<String, DefaultEdge>(G);
+			List<String> shortestPath = dijkstraShortestPath.getPath(src,dest).getVertexList();
+			next_node = shortestPath.get(1);
+		}
 		return next_node;
 	}
 	
@@ -113,7 +115,7 @@ public abstract class GWalkBehaviour extends SimpleBehaviour {
 		}
 		int i = 0;
 		for(String dst : this.ouverts) {
-			Set<GraphPath<String,DefaultEdge>> paths = new HashSet<GraphPath<String,DefaultEdge>>(k_paths.getPaths(src, dst,1));
+			Set<GraphPath<String,DefaultEdge>> paths = new HashSet<GraphPath<String,DefaultEdge>>(k_paths.getPaths(src, dst,2));
 			
 			for(GraphPath<String,DefaultEdge>  l : paths){
 				List<String> p = l.getVertexList();
@@ -130,10 +132,12 @@ public abstract class GWalkBehaviour extends SimpleBehaviour {
 
 				}
 			}
-			i++;
-			if(i==(int)( 5))
-				break;
+//			i++;
+//			if(i==(int)( 5))
+//				break;
 		}
+		
+		System.out.println(myAgent.getLocalName()+" : goal "+((AK_Agent)myAgent).myGoal+" ("+max+")\n\t"+((AK_Agent)myAgent).pathToGoal);
 //		System.out.println(myAgent.getLocalName()+" : my goal "+goal);
 		return next_pos;
 	}
