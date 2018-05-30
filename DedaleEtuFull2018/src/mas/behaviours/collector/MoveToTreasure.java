@@ -1,22 +1,23 @@
-package mas.behaviours.tanker;
-
+package mas.behaviours.collector;
 
 import java.util.List;
 import java.util.Set;
 
-import env.Attribute;
-import env.Couple;
-import jade.lang.acl.ACLMessage;
 import mas.agents.AK_Agent;
 import mas.agents.AK_Tanker;
 import mas.behaviours.GWalkBehaviour;
 import tools.GraphAK;
+import env.Attribute;
+import env.Couple;
+import jade.lang.acl.ACLMessage;
 
-public class MoveToNode extends GWalkBehaviour {
+public class MoveToTreasure extends GWalkBehaviour {
 
-	private static final long serialVersionUID = -2386922834587307954L;
 
-	public MoveToNode(final mas.abstractAgent myagent, GraphAK g) {
+	private static final long serialVersionUID = -8925345780958073775L;
+
+
+	public MoveToTreasure(final mas.abstractAgent myagent, GraphAK g) {
 		super(g,g.getFermes(),g.getOuverts(),myagent);
 
 	}
@@ -63,7 +64,7 @@ public class MoveToNode extends GWalkBehaviour {
 			////////////////////////////////////////////////////////////////////////////////////////////////////////
 			////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		
-			String goal_agent = ((AK_Tanker)myAgent).goal;
+//			String goal_agent = ((AK_A)myAgent).goal;
 		
 			if(myPosition.equals(goal_agent)) {
 				try {

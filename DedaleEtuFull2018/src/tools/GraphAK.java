@@ -7,6 +7,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
 import org.jgrapht.alg.util.Pair;
 import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.graph.SimpleGraph;
@@ -25,7 +26,6 @@ public class GraphAK extends SimpleGraph<String,DefaultEdge> {
 	private String Silo_position="";
 	private List<String> ens_position_silo= new ArrayList<String>();
 
-	private Set<String> fermesAgent= new HashSet<String>();
 
 	public GraphAK() {
 		super(DefaultEdge.class);
@@ -62,20 +62,7 @@ public class GraphAK extends SimpleGraph<String,DefaultEdge> {
 		this.fermes.clear();
 	}
 	
-	public void addFermesAgent(Set<String> f){
-		this.fermesAgent = f;
-	}
 	
-	public void clearMesFermesSeulement(){
-		Set<String> f_tmp = this.fermes;
-		for(String i : f_tmp){
-			if(!this.fermesAgent.contains(i)){
-				this.fermes.remove(i);
-				this.ouverts.add(i);
-			}
-		}
-		this.fermesAgent.clear();
-	}
 	
 	public void updateOF(Set<String> o, Set<String> f){
 		this.fermes.addAll(f);
@@ -145,7 +132,7 @@ public class GraphAK extends SimpleGraph<String,DefaultEdge> {
 		Attribute a = this.containsTreasur(node,"");
 		if(a!=null){
 			Pair<Attribute,Long> v = new Pair<Attribute,Long>(a,System.currentTimeMillis());
-			this.treasures.put(node,v);
+			this.treasures.replace(node,v);
 		}
 	}
 
@@ -181,28 +168,43 @@ public class GraphAK extends SimpleGraph<String,DefaultEdge> {
 	}
 	
 
-	public void addToFermes(Set<String> closeSet) {
-		this.fermesAgent = closeSet;
-		this.fermes = new HashSet<String>();
-		for(String i : closeSet) {
-			this.ouverts.remove(i);
-			this.fermes.add(i);
-		}
-//		if (this.ouverts.isEmpty()){
-//			this.addAllOuverts(myPosition);
+//	public void addToFermes(Set<String> closeSet) {
+//		this.fermesAgent = closeSet;
+//		this.fermes = new HashSet<String>();
+//		for(String i : closeSet) {
+//			this.ouverts.remove(i);
+//			this.fermes.add(i);
 //		}
-	}
+////		if (this.ouverts.isEmpty()){
+////			this.addAllOuverts(myPosition);
+////		}
+//	}
 
 	
-	public void switchOF(Set<String> opened, Set<String> closed) {
-		if(closed.contains(this.ouverts))
-			System.out.println(" JAI TOUT EXPLORE");
-//		else{
-//			System.out.println(" ouverts : "+ouverts+"\n ses fermes : "+closed);
-//		}
-		this.ouverts = new HashSet<String>(opened);
-		this.fermes = new HashSet<String>(closed);
+//	public void switchOF(Set<String> opened, Set<String> closed) {
+//		if(closed.contains(this.ouverts))
+//			System.out.println(" JAI TOUT EXPLORE");
+////		else{
+////			System.out.println(" ouverts : "+ouverts+"\n ses fermes : "+closed);
+////		}
+//		this.ouverts = new HashSet<String>(opened);
+//		this.fermes = new HashSet<String>(closed);
+//		
+//	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	public void removeVertice(String n){
+		this.removeVertex(n);
+		this.nodes.remove(n);
+		this.treasures.remove(n);
+		this.fermes.remove(n);
+		this.ouverts.remove(n);
 		
+		for(String adj : this.dictAdjacences.get(n)){
+			this.dictAdjacences.get(adj).remove(n);
+		}
+		this.dictAdjacences.remove(n);
 	}
 
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -251,22 +253,62 @@ public class GraphAK extends SimpleGraph<String,DefaultEdge> {
 	
 	
 	
-	public void MAJAttributeNode(String n , List<Attribute> obs){
-//		if(this.containsTreasur(n, "") != null){
-//			for(Attribute a : obs) {
-//				switch(a) {
-//				case TREASURE: case DIAMONDS:
-//					a.getValue()
-//					break;
-//				default:
-//					break;					
-//				}
-//			}
-//		}
+	public HashMap<String,Pair<Attribute,Long>> getTreasures(){
+		return this.treasures;
 	}
 	
 	
 	
+	public String isType(Attribute a){
+		switch(a){
+		case TREASURE: case DIAMONDS:
+				return a.getName();
+		default:
+			break;
+		}
+		return null;
+	}
+	
+	
+	
+	
+	public void maj_treasure(String v,Pair<Attribute,Long> t){
+		String type = isType(t.getFirst());
+		
+		if(this.treasures.containsKey(v) && type !=null){
+			Pair<Attribute, Long> tn  = this.treasures.get(v);
+			if(tn.getSecond() < t.getSecond() || !type.equals(tn.getFirst().getName())){
+				this.treasures.replace(v, t);
+				List<Attribute> l = new ArrayList<Attribute>();
+				l.add(t.getFirst());
+				updateNode(v,l);
+			}
+		}
+		
+	}
+	
+	
+	
+	public String chooseTreasureToPick(String position,String type, int cap){
+		String goal = null;
+		int min = this.nodes.size();
+		
+		for(String n_t : this.treasures.keySet()){
+			Pair<Attribute,Long> treasur  = this.treasures.get(n_t);
+			if(isType(treasur.getFirst()).equals(type)){
+				if(cap >= (int)(treasur.getFirst().getValue())){
+					DijkstraShortestPath<String, DefaultEdge> shortestpath = new DijkstraShortestPath<String, DefaultEdge>(this);
+					int dist_path = shortestpath.getPath(position,n_t).getVertexList().size();
+					if(min > dist_path){
+						goal = n_t;
+						min = dist_path;
+					}
+					System.out.println("Je ne peux pas le prendre, trop gros");
+				}
+			}
+		}
+		return goal;
+	}
 	
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -296,41 +338,6 @@ public class GraphAK extends SimpleGraph<String,DefaultEdge> {
 	
 	
 	
-	
-	
-
-	//	public void resetVertex(String removedVertexName) {
-//		this.addVertex(removedVertexName, this.nodes.get(removedVertexName));
-//		if(this.dictAdjacences.get(removedVertexName)==null)
-//			System.out.println("_______________________________smthing is wrong here cuz "+this.dictAdjacences.get(removedVertexName));
-//		for(String adj: this.dictAdjacences.get(removedVertexName)) {
-//			if(!this.containsVertex(adj))
-//				this.addVertex(adj,null);
-//			this.addEdge(removedVertexName, adj);
-//		}
-//	}
-
-//	public void resetVertices(Set<String> removedVerticesName) {
-//		for(String node:removedVerticesName){
-//			if (!this.nodes.containsKey(node))
-//				this.addVertex(node, new ArrayList<Attribute>());
-//			else
-//				super.addVertex(node);
-//		}
-//		for(String node : removedVerticesName) {
-//			for(String adj: this.dictAdjacences.get(node)){
-//				this.addEdge(node, adj);
-//			}
-//		}
-//
-//	}
-		
-	
-	
-
-
-	
-
 
 	
 }

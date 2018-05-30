@@ -4,9 +4,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 
+import org.jgrapht.alg.util.Pair;
+
 import env.Attribute;
 import mas.agents.AK_Agent;
-import scala.Tuple4;
+import scala.Tuple5;
 import tools.GraphAK;
 import jade.core.behaviours.OneShotBehaviour;
 import jade.lang.acl.ACLMessage;
@@ -25,9 +27,8 @@ public class GNewMajKnowledgeBehaviour extends OneShotBehaviour {
 		final ACLMessage received_graph = ((AK_Agent)myAgent).getMessage();
 		if(received_graph!=null){
 			try {
-				//recuperer l'objet recu 
 				@SuppressWarnings("unchecked")
-				Tuple4<HashMap<String, List<Attribute>>, HashMap<String,Set<String>>,Set<String>,Set<String>> new_information = (Tuple4<HashMap<String, List<Attribute>>, HashMap<String,Set<String>>,Set<String>,Set<String>>) received_graph.getContentObject();
+				Tuple5<HashMap<String, List<Attribute>>, HashMap<String,Set<String>>,Set<String>,Set<String>,HashMap<String,Pair<Attribute,Long>>> new_information = (Tuple5<HashMap<String, List<Attribute>>, HashMap<String,Set<String>>,Set<String>,Set<String>,HashMap<String,Pair<Attribute,Long>>>) received_graph.getContentObject();
 				
 				HashMap<String, List<Attribute>> info_nodes = new_information._1();
 				
@@ -38,11 +39,15 @@ public class GNewMajKnowledgeBehaviour extends OneShotBehaviour {
 	//			if(!((AK_Agent)myAgent).isExplorationDone()){
 	//				System.out.println(myAgent.getLocalName()+" : MàJ topo env");
 				HashMap<String,Set<String>> adjacenes_received = new_information._2();
-				
+				HashMap<String,Pair<Attribute,Long>> info_treasures = new_information._5();
 				
 				for(String node : adjacenes_received.keySet()){
 					if(!curr_graph.containsVertex(node)){
 						curr_graph.addVertex(node,info_nodes.get(node));
+					}else{
+						if(info_treasures.containsKey(node)){
+							Pair<Attribute,Long> curr_treasure = curr_graph.getTreasures().get(node);
+						}
 					}
 					if(adjacenes_received.get(node) !=null){
 						for(String adj: adjacenes_received.get(node)){
@@ -51,13 +56,10 @@ public class GNewMajKnowledgeBehaviour extends OneShotBehaviour {
 						}
 					}
 				}
-//				new_information._4().add(((mas.abstractAgent)myAgent).getCurrentPosition())
-//				this.curr_graph.addToFermes(new_information._4());
 				this.curr_graph.updateOF(new_information._3(),new_information._4());
-				System.out.println(myAgent.getLocalName()+ " : maj done");
 //				this.curr_graph.switchOF(new_information._3(),new_information._4());
 //				((AK_Agent)myAgent).setToread(null);
-//				System.out.println(myAgent.getLocalName()+" : MAJ");
+				System.out.println(myAgent.getLocalName()+" : MAJ");
 			} catch (UnreadableException e) {
 				e.printStackTrace();
 			}

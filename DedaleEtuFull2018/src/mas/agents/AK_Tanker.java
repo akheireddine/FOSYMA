@@ -3,17 +3,11 @@ package mas.agents;
 
 import jade.domain.DFService;
 import jade.domain.FIPAException;
-import jade.util.leap.Serializable;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Set;
 
-import env.Attribute;
 import env.EntityType;
 import env.Environment;
 import mas.behaviours.tanker.TFSMBehaviour1;
-import scala.Tuple4;
 import tools.DFDServices;
 
 
@@ -26,15 +20,10 @@ public class AK_Tanker extends AK_Agent{
 	
 	public void noeud_suivant() {
 		mv++;
-		goal = G.changer_de_noeud_silo(mv%G.siloPositions().size());
+		if(G.siloPositions().size()!=0)
+			goal = G.changer_de_noeud_silo(mv%G.siloPositions().size());
 	}
 	
-	
-	public Serializable getObjectToSend() {
-		Tuple4<HashMap<String, List<Attribute>>, HashMap<String,Set<String>>,Set<String>,Set<String>> obj = 
-				new Tuple4<HashMap<String, List<Attribute>>, HashMap<String,Set<String>>,Set<String>,Set<String>>(G.getHashNode(),G.getDictAdjacences(),G.getOuverts(),G.getFermes());
-		return (Serializable) obj;
-	}
 	
 	
 

@@ -20,27 +20,6 @@ public class EWalkBehaviour extends GWalkBehaviour {
 	public EWalkBehaviour(final mas.abstractAgent myagent, GraphAK g) {
 		super(g,g.getFermes(),g.getOuverts(),myagent);
 	}
-
-	@Override
-	public String getNextPosition(List<String> successeurs_non_visites ){
-		String next_pos=((mas.abstractAgent)myAgent).getCurrentPosition();
-		if(!successeurs_non_visites.isEmpty()){
-			next_pos =  choisirLeProchainVoisinOuvertLePlusGrand(successeurs_non_visites);
-			if(!((AK_Agent)myAgent).myGoal.equals("")) {
-				((AK_Agent)myAgent).myGoal="";
-				((AK_Agent)myAgent).pathToGoal.clear();
-			}
-				
-		}else{
-			String myPosition = ((mas.abstractAgent)this.myAgent).getCurrentPosition();
-//			int id = ((AK_Agent)myAgent).getID();
-//			if(id == 1)
-				next_pos = getNextPositionNearestOpenVertexK(myPosition);
-//			else
-//				next_pos = getNextPositionNearestOpenVertexD(myPosition);
-		}
-		return next_pos;
-	}
 		
 		
 	public void action() {
@@ -52,11 +31,11 @@ public class EWalkBehaviour extends GWalkBehaviour {
 			List<Couple<String,List<Attribute>>> lobs=((mas.abstractAgent)this.myAgent).observe();//myPosition
 
 			try {
-					System.in.read();
-//				Thread.sleep(700);
+//					System.in.read();
+				Thread.sleep(100);
 			} catch (Exception e) {
 				e.printStackTrace();
-			}
+			} //159,158,176,158,166.5,196.5,160.5,205.5,183.5,199,189,179,211,207
 			
 			
 			
@@ -74,23 +53,15 @@ public class EWalkBehaviour extends GWalkBehaviour {
 			List<String> adj_names = m_a_j_graphe(adjacents);
 			List<String> voisins_ouverts = get_open_neighbors(adj_names);
 
-			if(this.ouverts.isEmpty() && ((AK_Agent)myAgent).getCpt()>0){
-//				String b = "NOT DONE";
-//				if(((AK_Agent)myAgent).getNombreDeCollision()==0 || ((AK_Agent)myAgent).isExplorationDone()){
+			if(this.ouverts.isEmpty() ){
+				if(((AK_Agent)myAgent).getCpt() > 0)
 					((AK_Agent)myAgent).exploration_is_done(); //___________________!!! A REVOIR !!!___________________________
-//					b = "DONE";
-//					System.out.println("done");
-//				}
-				
+					System.out.println(myAgent.getLocalName()+" : Exploration DONE ("+((AK_Agent)myAgent).getCpt()+"). Restart !");
 				G.clearFermes();      
 				G.addAllOuverts(myPosition);
 				((AK_Agent)myAgent).setNombreDeCollision(0);
-				System.out.println(myAgent.getLocalName()+" : Exploration DONE ("+((AK_Agent)myAgent).getCpt()+"). Restart !");
 				((AK_Agent)myAgent).RAZCpt();
 				voisins_ouverts = get_open_neighbors(adj_names);
-				this.finished = true;
-				return;
-
 			}
 			
 			
@@ -101,48 +72,46 @@ public class EWalkBehaviour extends GWalkBehaviour {
 			ACLMessage get_msg = ((AK_Agent)myAgent).getMessage();
 			int nb_collision = ((AK_Agent)myAgent).getNombreDeCollision();
 			boolean has_moved = ((mas.abstractAgent)this.myAgent).moveTo(next_pos);
-			if(get_msg==null && nb_collision==1){
-				this.onEndValue = 1;
-				this.finished = true;
-			}
+
 
 			if (has_moved){
 				this.finished=false;
 				((AK_Agent)myAgent).setNombreDeCollision(0);
 				((AK_Agent)myAgent).CptPlus();
-				System.out.println(myAgent.getLocalName()+" :\nfermes : "+this.fermes+"\nouverts : "+this.ouverts);
 			}
 			else{
+				
+				
+				ouverts.remove(myPosition);
+				fermes.add(myPosition);
+				
 				System.out.println(myAgent.getLocalName()+" : cant move to "+next_pos+" curr pos : "+myPosition);
 				nb_collision = ((AK_Agent)myAgent).getNombreDeCollision()+1;
 				((AK_Agent)myAgent).setNombreDeCollision(nb_collision);
 				
 				Set<String> detect_golem = G.isGolemAround(myPosition);
 				
-//				ouverts.remove(next_pos);
-//				fermes.add(next_pos);
 //				
 				//Si premiere collision, envoie un message d'information
 				boolean golem_is_here = false;
-				if(nb_collision==1 ) {
-					this.onEndValue = 0;
+//				if(nb_collision==1 ) {
+//					this.onEndValue = 0;
+//					this.finished=true;
+//
+//				}
+				if(nb_collision == 2 && get_msg==null){
+					this.onEndValue = 1;
 					this.finished=true;
-
 				}
-				else if(nb_collision == 2 && get_msg==null){
+				
+				else{
 					this.onEndValue = 0;
-					this.finished=true;
+					this.finished = true;
 				}
-				else if(!detect_golem.isEmpty() && get_msg==null)
+				
+				if(!detect_golem.isEmpty() && get_msg==null)
 					golem_is_here = true;
 
-//				else if(nb_collision > 2 && next_pos.equals(last_move)){
-//					G.clearFermes();
-//					G.addAllOuverts(myPosition);
-//					ouverts.remove(next_pos);
-//					fermes.add(next_pos);
-//					System.out.println(myAgent.getLocalName()+" (A): Have to restart my exploration.");
-//				}
 				
 				if(golem_is_here){
 					G.clearFermes();
@@ -152,10 +121,10 @@ public class EWalkBehaviour extends GWalkBehaviour {
 					System.out.println(myAgent.getLocalName()+" (G): Have to restart my exploration.");
 
 				}
-				last_move=next_pos;
-				((AK_Agent)myAgent).setToread(null);
-
 			}
+			((AK_Agent)myAgent).setLastMove(next_pos);
+			((AK_Agent)myAgent).setToread(null);
+//			System.out.println(myAgent.getLocalName()+" ::::\nfermes : "+this.fermes+"\nouverts : "+this.ouverts);
 
 		}
 	}

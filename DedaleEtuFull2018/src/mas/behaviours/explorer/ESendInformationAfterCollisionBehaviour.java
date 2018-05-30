@@ -52,7 +52,7 @@ public class ESendInformationAfterCollisionBehaviour extends OneShotBehaviour {
 			}
 			
 			((mas.abstractAgent)this.myAgent).sendMessage(msg);
-			System.out.println(myAgent.getLocalName()+" : INFORM AGENT ");
+//			System.out.println(myAgent.getLocalName()+" : INFORM AGENT \nfermes :\t"+((AK_Agent)myAgent).getGraph().getFermes()+"\nouverts:\t"+((AK_Agent)myAgent).getGraph().getOuverts());
 	}
 
 }

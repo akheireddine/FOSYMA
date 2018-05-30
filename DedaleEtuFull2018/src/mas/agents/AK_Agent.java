@@ -2,12 +2,17 @@ package mas.agents;
 
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.jgrapht.alg.util.Pair;
+
+import env.Attribute;
 import jade.lang.acl.ACLMessage;
 import mas.abstractAgent;
+import scala.Tuple5;
 import tools.GraphAK;
 
 public abstract class AK_Agent extends abstractAgent {
@@ -19,7 +24,6 @@ public abstract class AK_Agent extends abstractAgent {
 	private int cpt_exploration = 0;
 	
 	private int nombreDeCollision = 0;
-	private String recent_collision_node="";
 	private Set<String> removedVerticesName=new HashSet<String>();
 	private boolean noCollisionSince= true;
 	
@@ -28,6 +32,16 @@ public abstract class AK_Agent extends abstractAgent {
 	public String myGoal = "";
 	public List<String> pathToGoal = new ArrayList<String>();
 
+	private String last_move="";
+	
+	
+	public void setLastMove(String m){
+		this.last_move = m;
+	}
+
+	public String getLastMove(){
+		return this.last_move;
+	}
 	
 	public int getID() {
 		return this.id;
@@ -46,9 +60,6 @@ public abstract class AK_Agent extends abstractAgent {
 		return this.cpt_exploration;
 	}
 	
-	public String getRecentCollisionNode() {
-		return this.recent_collision_node;
-	}
 	
 	public Set<String> getSetRemovedVertices(){
 		return this.removedVerticesName;
@@ -66,11 +77,6 @@ public abstract class AK_Agent extends abstractAgent {
 		this.exploDone  = true;
 	}
 
-	public void setCollisionNode(String next_pos) {
-		if(!next_pos.equals(""))
-			this.noCollisionSince= false;
-		this.recent_collision_node = next_pos;
-	}
 	
 	public void setToread(ACLMessage msg){
 		this.toread = msg;
@@ -96,18 +102,12 @@ public abstract class AK_Agent extends abstractAgent {
 	}
 	
 	
-	public abstract Object getObjectToSend();
+	public Object getObjectToSend(){
+		Tuple5<HashMap<String,List<Attribute>>, HashMap<String,Set<String>>,Set<String>,Set<String>,HashMap<String,Pair<Attribute,Long>>> obj = 
+				new Tuple5<HashMap<String,List<Attribute>>, HashMap<String,Set<String>>,Set<String>,Set<String>,HashMap<String,Pair<Attribute,Long>>>(G.getHashNode(),G.getDictAdjacences(),G.getOuverts(),G.getFermes(),G.getTreasures());
+		return obj;
+	}
+	
 
-//	public void resetVerticesToGraph() {
-//		this.G.resetVertices(this.removedVerticesName);
-////		if(!this.removedVerticesName.isEmpty()) {
-////			for(String i:this.removedVerticesName){
-////				this.G.resetVertex(i);
-////			}
-//////			this.G.getOuverts().add(this.removedVertexName);
-//////			this.G.getFermes().remove(this.removedVertexName);
-////		}
-//		this.removedVerticesName.clear();;
-//	}
 
 }

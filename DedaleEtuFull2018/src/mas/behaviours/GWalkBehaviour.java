@@ -21,9 +21,8 @@ public abstract class GWalkBehaviour extends SimpleBehaviour {
 	private static final long serialVersionUID = -3874406343681374104L;
 	protected Set<String> fermes,ouverts;
 	protected GraphAK G;
-	protected int onEndValue=0;
+	protected int onEndValue=-1;
 	protected boolean finished = false;
-	protected String last_move="";
 
 	
 	
@@ -84,17 +83,17 @@ public abstract class GWalkBehaviour extends SimpleBehaviour {
 	
 	public String getNextPositionNearestOpenVertexD(String src){
 		DijkstraShortestPath<String, DefaultEdge> dijkstraShortestPath = new DijkstraShortestPath<String, DefaultEdge>(G);
-		int dist_min = G.vertexSet().size();
-		String next_node = src;
+		String next_node = G.getDictAdjacences().get(src).iterator().next();
+		int dist_min =	G.vertexSet().size();
 		for(String dst: ouverts){
 			try{
 				List<String> shortestPath = dijkstraShortestPath.getPath(src,dst).getVertexList();
-				if(shortestPath.size() < dist_min ){
+				if(shortestPath.size() <= dist_min ){
 					dist_min = shortestPath.size();
 					next_node = shortestPath.get(1);
 				}
 			}catch(Exception e){
-				System.out.println(myAgent.getLocalName()+": error in "+dst);
+//				System.out.println(myAgent.getLocalName()+": error______________________________________ "+src+" in "+dst+" \n\t"+G.vertexSet());
 			}
 		}
 		return next_node;
@@ -113,7 +112,6 @@ public abstract class GWalkBehaviour extends SimpleBehaviour {
 		if(((AK_Agent)myAgent).myGoal != "") {
 			return ((AK_Agent)myAgent).pathToGoal.remove(0);
 		}
-		int i = 0;
 		for(String dst : this.ouverts) {
 			Set<GraphPath<String,DefaultEdge>> paths = new HashSet<GraphPath<String,DefaultEdge>>(k_paths.getPaths(src, dst,2));
 			
@@ -132,12 +130,9 @@ public abstract class GWalkBehaviour extends SimpleBehaviour {
 
 				}
 			}
-//			i++;
-//			if(i==(int)( 5))
-//				break;
 		}
 		
-		System.out.println(myAgent.getLocalName()+" : goal "+((AK_Agent)myAgent).myGoal+" ("+max+")\n\t"+((AK_Agent)myAgent).pathToGoal);
+		System.out.println(myAgent.getLocalName()+" : from "+src+" to goal "+((AK_Agent)myAgent).myGoal+" ("+max+")\n\t"+((AK_Agent)myAgent).pathToGoal);
 //		System.out.println(myAgent.getLocalName()+" : my goal "+goal);
 		return next_pos;
 	}
@@ -153,8 +148,19 @@ public abstract class GWalkBehaviour extends SimpleBehaviour {
 	
 	
 	
-	
-	
+	public String choisirLeProchainNodeOuvert(List<String> successors){
+		String next_node = successors.get(0);
+		int max = G.getNbOpenNeighborVertex(next_node);
+		for(String succ : successors) {
+			int value_tmp_node = G.getNbOpenNeighborVertex(succ);
+			if(value_tmp_node > max) {
+				max = value_tmp_node;
+				next_node = succ;
+			}
+			
+		}
+		return next_node;
+	}
 	
 	
 	
@@ -181,9 +187,12 @@ public abstract class GWalkBehaviour extends SimpleBehaviour {
 	 * @return prochain deplacement
 	 */
 	public String getNextPosition(List<String> successeurs_non_visites ){
-		String next_pos=((mas.abstractAgent)myAgent).getCurrentPosition();
+		String next_pos="";//((mas.abstractAgent)myAgent).getCurrentPosition();
 		if(!successeurs_non_visites.isEmpty()){
-			next_pos =  choisirLeProchainVoisinOuvertLePlusGrand(successeurs_non_visites);
+			if(((AK_Agent)myAgent).isExplorationDone())
+				next_pos = choisirLeProchainNodeOuvert(successeurs_non_visites);
+			else
+				next_pos =  choisirLeProchainVoisinOuvertLePlusGrand(successeurs_non_visites);
 		}else{
 			String myPosition = ((mas.abstractAgent)this.myAgent).getCurrentPosition();
 			next_pos = getNextPositionNearestOpenVertexD(myPosition);

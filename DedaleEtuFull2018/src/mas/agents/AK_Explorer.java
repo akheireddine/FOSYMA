@@ -4,32 +4,16 @@ package mas.agents;
 
 import jade.domain.DFService;
 import jade.domain.FIPAException;
-
-import java.util.HashMap;
-import java.util.List;
-import java.util.Set;
-
 import env.EntityType;
 import env.Environment;
-import env.Attribute;
-
 import mas.behaviours.explorer.EFSMBehaviour;
-import scala.Tuple4;
 import tools.DFDServices;
 
 
 public class AK_Explorer extends AK_Agent {
 
 	private static final long serialVersionUID = -1742937994368634241L;
-	private static int i;
-	
-	
-	public Object getObjectToSend() {
-		Tuple4<HashMap<String, List<Attribute>>, HashMap<String,Set<String>>,Set<String>,Set<String>> obj = 
-				new Tuple4<HashMap<String, List<Attribute>>, HashMap<String,Set<String>>,Set<String>,Set<String>>(G.getHashNode(),G.getDictAdjacences(),G.getOuverts(),G.getFermes());
-		return obj;
-	}
-	
+
 	
 	protected void setup(){
 		
@@ -47,7 +31,7 @@ public class AK_Explorer extends AK_Agent {
 			System.exit(-1);
 		}
 		
-		addBehaviour(new EFSMBehaviour(this,i));
+		addBehaviour(new EFSMBehaviour(this));
 
 		System.out.println("the agent "+this.getLocalName()+ " is started ");
 

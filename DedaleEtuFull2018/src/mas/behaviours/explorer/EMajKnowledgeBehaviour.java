@@ -4,9 +4,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 
+import org.jgrapht.alg.util.Pair;
+
 import env.Attribute;
 import mas.agents.AK_Agent;
-import scala.Tuple4;
+import scala.Tuple5;
+import tools.DFDServices;
 import tools.GraphAK;
 import jade.core.behaviours.OneShotBehaviour;
 import jade.lang.acl.ACLMessage;
@@ -16,57 +19,63 @@ public class EMajKnowledgeBehaviour extends OneShotBehaviour {
 
 	private static final long serialVersionUID = -6233943134155011042L;
 
-	private GraphAK curr_graph;
+	private GraphAK G;
 	
 	
 	
 	public void action() {
 		
 		final ACLMessage received_graph = ((AK_Agent)myAgent).getMessage();
+		
 		if(received_graph!=null){
-		try {
-			@SuppressWarnings("unchecked")
-			Tuple4<HashMap<String, List<Attribute>>, HashMap<String,Set<String>>,Set<String>,Set<String>> new_information = (Tuple4<HashMap<String, List<Attribute>>, HashMap<String,Set<String>>,Set<String>,Set<String>>) received_graph.getContentObject();
-			
-			HashMap<String, List<Attribute>> info_nodes = new_information._1();
-			
-			this.curr_graph = ((AK_Agent)myAgent).getGraph();
-			
-			//Si je n'ai pas fini mon exploration complete de l'environement
-//			if(!((AK_Agent)myAgent).isExplorationDone()){
-//				System.out.println(myAgent.getLocalName()+" : MàJ topo env");
-			HashMap<String,Set<String>> adjacenes_received = new_information._2();
-			
-			
-			for(String node : adjacenes_received.keySet()){
-				if(!curr_graph.containsVertex(node)){
-					curr_graph.addVertex(node,info_nodes.get(node));
-//						curr_graph.getFermes().add(node);                              // Ce qu'a pu explorer l'agent sender, je ne l'explore plus
-				}
-				if(adjacenes_received.get(node) !=null){
-					for(String adj: adjacenes_received.get(node)){
-						curr_graph.addVertex(adj,info_nodes.get(adj));
-						curr_graph.addEdge(node, adj);
+			try {
+				@SuppressWarnings("unchecked")
+				Tuple5<HashMap<String, List<Attribute>>, HashMap<String,Set<String>>,Set<String>,Set<String>,HashMap<String,Pair<Attribute,Long>>> new_information = (Tuple5<HashMap<String, List<Attribute>>, HashMap<String,Set<String>>,Set<String>,Set<String>,HashMap<String,Pair<Attribute,Long>>>) received_graph.getContentObject();
+				
+				HashMap<String, List<Attribute>> info_nodes = new_information._1();
+				
+				//recuperer ma connaissance du graphe
+				this.G = ((AK_Agent)myAgent).getGraph();
+				
+				HashMap<String,Set<String>> adjacenes_received = new_information._2();
+				HashMap<String,Pair<Attribute,Long>> info_treasures = new_information._5();
+				
+				for(String node : adjacenes_received.keySet()){
+					
+					if(!G.containsVertex(node)){
+						G.addVertex(node,info_nodes.get(node));
+						if(adjacenes_received.get(node) !=null){
+							for(String adj: adjacenes_received.get(node)){
+								G.addVertex(adj,info_nodes.get(adj));
+								G.addEdge(node, adj);
+							}
+						}
 					}
+					
+					if(info_treasures.containsKey(node))
+						G.maj_treasure(node,info_treasures.get(node));
+					
 				}
-			}
-			//Sinon si j'ai tout explorer, je ne met a jour que les informations sur les noeuds
-//			}else{
-//				HashMap<String, List<Attribute>> curr_nodes = this.curr_graph.getHashNode();
-//				for(String key:info_nodes.keySet()){ //A quel moment peut on remplacer les infos courrante 
-//					curr_nodes.replace(key,info_nodes.get(key));
+				
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+				
+//				if(DFDServices.typeOfserviceAgent(received_graph.getSender(), myAgent, "collector")){
+//					System.out.println("i remove smthin ? ");
+//					G.removeVertex(((AK_Agent)myAgent).getLastMove());
 //				}
-////				System.out.println(myAgent.getLocalName()+" : MàJ Attribute Nodes");
-//			}
-			this.curr_graph.updateOF(new_information._3(),new_information._4());
-			System.out.println(myAgent.getLocalName()+ " : maj done");
-//			this.curr_graph.addToFermes(new_information._4());
-//			this.curr_graph.switchOF(new_information._3(),new_information._4());
-//			((AK_Agent)myAgent).setToread(null);
-		} catch (UnreadableException e) {
-			e.printStackTrace();
+				
+				
+				
+				
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+				
+				this.G.updateOF(new_information._3(),new_information._4());
+//				((AK_Agent)myAgent).setToread(null);
+				System.out.println(myAgent.getLocalName()+" : MAJ");
+			} catch (UnreadableException e) {
+				e.printStackTrace();
+			}
 		}
-	}
 	}
 
 }

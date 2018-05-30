@@ -4,7 +4,8 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
-
+import mas.agents.AK_Agent;
+import jade.core.behaviours.FSMBehaviour;
 import jade.core.behaviours.OneShotBehaviour;
 import tools.GraphAK;
 
@@ -12,10 +13,12 @@ public class ClosenessVertices extends OneShotBehaviour {
 
 	private static final long serialVersionUID = 7339937027576841690L;
 	private GraphAK G;
-	private int n = 1;
-	public ClosenessVertices(final mas.abstractAgent myagent, GraphAK g) {
+	private int n = 3;
+	private FSMBehaviour fsm;
+	public ClosenessVertices(final mas.abstractAgent myagent, GraphAK g,FSMBehaviour fsm) {
 		super(myagent);
 		this.G = g;
+		this.fsm = fsm;
 	}
 	
 	
@@ -77,10 +80,42 @@ public class ClosenessVertices extends OneShotBehaviour {
 	}
 	
 	
+	public Set<String> voisins_profondeur_n(String src, int n){
+		if(n==0)
+			return new HashSet<String>();
+		
+		Set<String> result = new HashSet<String>(G.getDictAdjacences().get(src));
+		for(String adj : G.getDictAdjacences().get(src)){
+			result.addAll(voisins_profondeur_n(adj, n-1));
+		}
+		return result;
+	}
+	
+	public void centering(){
+		Set<String> nodes = G.getHashNode().keySet();
+		String src = nodes.iterator().next();
+		int max = G.degreeOf(src);
+		for(String v : nodes){
+			if(G.degreeOf(v) > max){
+				max = G.degreeOf(v);
+				src = v;
+			}
+			
+		}
+		System.out.println(" CENTER IS "+src);
+		G.addAllPositionSilo(new ArrayList<String>(voisins_profondeur_n(src,2)));
+		
+	}
+	
+	
 	@Override
 	public void action() {
 		carrefour();
+//		centering();
 		System.out.println("I WILL BE MOVING BETWEEN : \n\t"+G.siloPositions());
+		fsm.deregisterDefaultTransition("D");
+		fsm.deregisterState("D");
+		myAgent.addBehaviour(new TFSMBehaviour2(((AK_Agent)myAgent)));
 	}
 
 }

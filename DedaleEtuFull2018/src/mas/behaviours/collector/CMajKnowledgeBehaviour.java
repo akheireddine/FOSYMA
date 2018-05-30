@@ -80,7 +80,6 @@ public class CMajKnowledgeBehaviour extends OneShotBehaviour {
 						System.out.println(myAgent.getLocalName()+" : MàJ Attribute Nodes");
 					}
 					
-					this.curr_graph.addToFermes(new_information._4());
 								
 		//			this.curr_graph.switchOF(new_information._3(),new_information._4());
 					((AK_Agent)myAgent).setToread(null);

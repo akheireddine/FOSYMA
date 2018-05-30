@@ -3,6 +3,9 @@ package mas.behaviours.tanker;
 import jade.core.behaviours.FSMBehaviour;
 import mas.abstractAgent;
 import mas.agents.AK_Agent;
+import mas.behaviours.GCheckInBoxBehaviour;
+import mas.behaviours.GSendInformationAfterCollisionBehaviour;
+import mas.behaviours.explorer.EMajKnowledgeBehaviour;
 
 public class TFSMBehaviour2 extends FSMBehaviour {
 	private static final long serialVersionUID = -6883275941056007511L;
@@ -14,26 +17,21 @@ public class TFSMBehaviour2 extends FSMBehaviour {
 
 	public TFSMBehaviour2(AK_Agent a){
 		super(a);
-		registerFirstState(new TWalkBehaviour((abstractAgent) a,a.getGraph()),"D");
-		registerState(new ClosenessVertices((abstractAgent) a,a.getGraph()),"V");
-		registerLastState(new MoveToNode((abstractAgent) a,a.getGraph()),"G");
-//		a.addBehaviour(new TFSMBehaviour1(a));
+		registerFirstState(new MoveToNode((abstractAgent) a,a.getGraph()),"G");
+		registerState(new GSendInformationAfterCollisionBehaviour(), "S");
+		registerState(new GCheckInBoxBehaviour(a),"C");
+		registerState(new EMajKnowledgeBehaviour(), "M"); 
 		
-//		registerState(new GSendInformationAfterCollisionBehaviour(), "S");
-//		registerState(new TCheckSendMessageBehaviour(a),"C");
-//			
-//		registerState(new EMajKnowledgeBehaviour(), "M"); // update of graph env
+		
 //		
-//		
-//		//definition des transaction
-		registerDefaultTransition("D","V");
-		registerDefaultTransition("V","G");
-//		registerDefaultTransition("C","D");
-//		registerDefaultTransition("M", "D");
-//		
-//		registerTransition("C","M",1);              // Quand l'agent recoit un message apres une collision, MaJ de ses connaissances
-//		registerTransition("D","C",1);
+		registerDefaultTransition("S","C");
 
+		registerDefaultTransition("C","G");
+		registerDefaultTransition("M", "G");
+		
+		registerTransition("C","M",1);              // Quand l'agent recoit un message apres une collision, MaJ de ses connaissances
+		registerTransition("G","C",1);
+		registerTransition("G","S",0);
 	}
 	
 	

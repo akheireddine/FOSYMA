@@ -2,15 +2,9 @@ package mas.behaviours;
 
 import java.io.IOException;
 import java.io.Serializable;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Set;
 
 import mas.agents.AK_Agent;
-import scala.Tuple4;
 import tools.DFDServices;
-import tools.GraphAK;
-import env.Attribute;
 import jade.core.AID;
 import jade.core.behaviours.OneShotBehaviour;
 import jade.lang.acl.ACLMessage;

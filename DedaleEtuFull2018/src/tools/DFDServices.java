@@ -20,7 +20,8 @@ public class DFDServices {
             if (result.length>0){
             	AID[] sellerAgents = new AID[result.length];
             	for(int i = 0; i < result.length; i++){
-    				sellerAgents[i] = result[i].getName();
+					if (agent.getAID() != sellerAgents[i])
+						sellerAgents[i] = result[i].getName();
     			}
             	return sellerAgents;
             }
@@ -30,6 +31,9 @@ public class DFDServices {
         return null;
     }
 	
+	public static boolean typeOfserviceAgent(AID sender,Agent a,String service){
+		return getAgentsByService(service, a) !=null;
+	}
 	
 	
 	public static void registerToService(String service, Agent agent) {
