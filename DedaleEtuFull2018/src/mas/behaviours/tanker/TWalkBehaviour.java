@@ -42,11 +42,11 @@ public class TWalkBehaviour extends GWalkBehaviour {
 			////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		
 			
-			if(!G.containsVertex(myPosition))
-				G.addVertex(myPosition, lobs.get(0).getRight());
+//			((AK_Agent)myAgent).setLastMove(myPosition);      //MIS-LÀ         MANU
 			
 			ouverts.remove(myPosition);
 			fermes.add(myPosition);
+			
 			
 			List<Couple<String, List<Attribute>>> adjacents = lobs;
 			List<String> adj_names = m_a_j_graphe(adjacents);
@@ -60,12 +60,12 @@ public class TWalkBehaviour extends GWalkBehaviour {
 					this.onEndValue = -1;
 					return;
 				}
-				System.out.println("why here");
-				G.clearFermes();      
-				G.addAllOuverts(myPosition);
-				((AK_Agent)myAgent).setNombreDeCollision(0);
-				((AK_Agent)myAgent).RAZCpt();
-				voisins_ouverts = get_open_neighbors(adj_names);
+//				System.out.println("why here");
+//				G.clearFermes();      
+//				G.addAllOuverts(myPosition);
+//				((AK_Agent)myAgent).setNombreDeCollision(0);
+//				((AK_Agent)myAgent).RAZCpt();
+//				voisins_ouverts = get_open_neighbors(adj_names);
 			}
 			
 			
@@ -76,7 +76,7 @@ public class TWalkBehaviour extends GWalkBehaviour {
 			ACLMessage get_msg = ((AK_Agent)myAgent).getMessage();
 			int nb_collision = ((AK_Agent)myAgent).getNombreDeCollision();
 			boolean has_moved = ((mas.abstractAgent)this.myAgent).moveTo(next_pos);
-
+//			System.out.println("TANK "+((AK_Agent)myAgent).getGraph().getHashNode().keySet());
 
 			if (has_moved){
 				this.finished=false;
@@ -89,7 +89,7 @@ public class TWalkBehaviour extends GWalkBehaviour {
 				ouverts.remove(myPosition);
 				fermes.add(myPosition);
 				
-				System.out.println(myAgent.getLocalName()+" : cant move to "+next_pos+" curr pos : "+myPosition);
+//				System.out.println(myAgent.getLocalName()+" : cant move to "+next_pos+" curr pos : "+myPosition); A DECOMM
 				nb_collision = ((AK_Agent)myAgent).getNombreDeCollision()+1;
 				((AK_Agent)myAgent).setNombreDeCollision(nb_collision);
 				
@@ -125,10 +125,11 @@ public class TWalkBehaviour extends GWalkBehaviour {
 					System.out.println(myAgent.getLocalName()+" (G): Have to restart my exploration.");
 
 				}
+				((AK_Agent)myAgent).setLastMove(next_pos);
 			}
-			((AK_Agent)myAgent).setLastMove(next_pos);
+			((AK_Agent)myAgent).setLastMove(next_pos);                 //DEPLACER D'ICI 
 			((AK_Agent)myAgent).setToread(null);
-
+			
 		}
 	}
 

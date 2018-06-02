@@ -35,9 +35,9 @@ public class ECheckInBoxBehaviour extends OneShotBehaviour {
 		
 		if(msg != null){
 			((AK_Agent)myAgent).setToread(msg);
-			System.out.println(myAgent.getLocalName()+" : Receive MSG "+this.onEndValue);
+//			System.out.println(myAgent.getLocalName()+" : Receive MSG "+this.onEndValue);
 		}else {
-			System.out.println(myAgent.getLocalName()+" : No MSG. ");
+//			System.out.println(myAgent.getLocalName()+" : No MSG. ");
 		}
 
 //		while(myAgent.receive()!=null);

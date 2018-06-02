@@ -3,16 +3,9 @@ package mas.behaviours.tanker;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Set;
-
-import scala.Tuple3;
 import tools.DFDServices;
 import tools.GraphAK;
 import mas.agents.AK_Agent;
-import env.Attribute;
 import jade.core.AID;
 import jade.core.Agent;
 import jade.core.behaviours.TickerBehaviour;

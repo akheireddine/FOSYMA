@@ -56,22 +56,30 @@ public abstract class GWalkBehaviour extends SimpleBehaviour {
 		Couple<String, List<Attribute>> curr_observation = adjacents.remove(0);
 		String myPosition = curr_observation.getLeft();
 		
-		if(G.containsVertex(myPosition))
-			G.updateNode(myPosition, curr_observation.getRight());
-		else
-			G.addVertex(myPosition,curr_observation.getRight());
+		G.getHashNode().put(myPosition, curr_observation.getRight());   //MAJ NODE              NE CONTIENT PAS TOUT APRES 21H
+		G.updateTreasure(myPosition);
+		
+		
+		G.addVertex(myPosition);
+//		if(G.containsVertex(myPosition))
+//			G.updateNode(myPosition, );
+//		else
+//			G.addVertex(myPosition,curr_observation.getRight());
 		
 		for(Couple<String, List<Attribute>> adjacent: adjacents){
 			String adj_name = adjacent.getLeft();
+			G.addVertex(adj_name);
+			G.addEdge(myPosition, adj_name);
 			ladj_node.add(adj_name);
 			
-			if(G.containsVertex(adj_name))
-				G.updateNode(adj_name, adjacent.getRight());
-			else
-				G.addVertex(adj_name,adjacent.getRight());
+//			if(G.containsVertex(adj_name))
+//				G.updateNode(adj_name, adjacent.getRight());
+//			else
+//				G.addVertex(adj_name,adjacent.getRight());
 			
-			G.addEdge(myPosition,adj_name);
+			
 		}
+		G.getDictAdjacences().put(myPosition, new HashSet<String>(ladj_node));       //MAJ DICT_ADJ
 		return ladj_node;
 	}
 	
@@ -83,19 +91,28 @@ public abstract class GWalkBehaviour extends SimpleBehaviour {
 	
 	public String getNextPositionNearestOpenVertexD(String src){
 		DijkstraShortestPath<String, DefaultEdge> dijkstraShortestPath = new DijkstraShortestPath<String, DefaultEdge>(G);
-		String next_node = G.getDictAdjacences().get(src).iterator().next();
+		String next_node = "";//G.getDictAdjacences().get(src).iterator().next();
 		int dist_min =	G.vertexSet().size();
+		String goal="";
+		
 		for(String dst: ouverts){
+			
 			try{
 				List<String> shortestPath = dijkstraShortestPath.getPath(src,dst).getVertexList();
 				if(shortestPath.size() <= dist_min ){
 					dist_min = shortestPath.size();
 					next_node = shortestPath.get(1);
+					goal = dst;
 				}
 			}catch(Exception e){
-//				System.out.println(myAgent.getLocalName()+": error______________________________________ "+src+" in "+dst+" \n\t"+G.vertexSet());
+//				e.getStackTrace();
+				System.out.println(myAgent.getLocalName()+": error______________________________________ "+src+" in "+dst+" \n\t"+G.vertexSet());
 			}
 		}
+//		if(myAgent.getLocalName().equals("C1")){
+////			System.out.println("ouverts : __________________" + ouverts);
+//			System.out.println(myAgent.getLocalName()+" : goal _________________________________"+goal);
+//		}
 		return next_node;
 	}
 	

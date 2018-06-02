@@ -1,24 +1,27 @@
-package mas.behaviours.collector;
+package mas.behaviours.tanker;
+
+import jade.core.behaviours.OneShotBehaviour;
+import jade.lang.acl.ACLMessage;
+import jade.lang.acl.UnreadableException;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 
+import mas.agents.AK_Agent;
+
 import org.jgrapht.alg.util.Pair;
 
-import env.Attribute;
-import mas.agents.AK_Agent;
 import scala.Tuple5;
 import tools.DFDServices;
 import tools.GraphAK;
-import jade.core.behaviours.OneShotBehaviour;
-import jade.lang.acl.ACLMessage;
-import jade.lang.acl.UnreadableException;
+import env.Attribute;
 
-public class CMajKnowledgeBehaviour extends OneShotBehaviour {
+public class TMajKnowledgeBehaviour extends OneShotBehaviour {
 
-	private static final long serialVersionUID = -6233943134155011042L;
+	
 
+	private static final long serialVersionUID = -5665881630261730486L;
 	private GraphAK G;
 	
 	
@@ -66,96 +69,36 @@ public class CMajKnowledgeBehaviour extends OneShotBehaviour {
 				}
 				
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-				if(DFDServices.typeOfserviceAgent(received_graph.getSender(), myAgent, "silo")){
-					
+				
+				if(DFDServices.typeOfserviceAgent(received_graph.getSender(), myAgent, "collector")){
 					String myPosition = ((mas.abstractAgent)this.myAgent).getCurrentPosition();
-					System.out.println(myAgent.getLocalName()+" : face d'un SILO "+myPosition);
+					System.out.println(myAgent.getLocalName()+" : face d'un COLLECTOR"+myPosition);
 					Set<String> adjacens = G.getDictAdjacences().get(myPosition);
 					G.getOuverts().addAll(adjacens);
 					String pos_agent = ((AK_Agent)myAgent).getLastMove();
 					G.getOuverts().remove(pos_agent);
 					G.getFermes().removeAll(adjacens);
+					G.getFermes().add(myPosition);
+					G.getOuverts().remove(myPosition);
 					G.getFermes().add(pos_agent);
 				}
 				
-				if(DFDServices.typeOfserviceAgent(received_graph.getSender(), myAgent, "collector")){
-					
-					String myPosition = ((mas.abstractAgent)this.myAgent).getCurrentPosition();
-					System.out.println(myAgent.getLocalName()+" : face d'un SILO "+myPosition);
-					Set<String> adjacens = G.getDictAdjacences().get(myPosition);
-					G.getOuverts().addAll(adjacens);
-					String pos_agent = ((AK_Agent)myAgent).getLastMove();
-					G.getOuverts().remove(pos_agent);
-					G.getFermes().removeAll(adjacens);
-					G.getFermes().add(pos_agent);
-				}
+				
 				
 				
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 				
-//				this.G.updateOF(new_information._3(),new_information._4());
-				this.G.addToFermes(new_information._4());
+				this.G.updateOF(new_information._3(),new_information._4());
+//				this.G.addToFermes(new_information._4());
 //				((AK_Agent)myAgent).setToread(null);
-				System.out.println(myAgent.getLocalName()+" : MAJ");
+//				System.out.println(myAgent.getLocalName()+" : MAJ");
 			} catch (UnreadableException e) {
 				e.printStackTrace();
 			}
 		}
 	}
 
+
+
+
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//void createOrMAJTreasurNode(String s, List<Attribute> lattribute){
-//	if (!this.curr_graph.containsVertex(s)){  //Nouveau noeud
-//		this.curr_graph.addVertex(s,lattribute);
-//	}
-//	
-//	else{
-//		List<Attribute> curr_lattribute = curr_graph.getAttrOfNode(s);
-//		Couple<Float, Integer> couple_curr = Tools.getCoupleTreasurIndex(curr_lattribute);
-//		float curr_value = couple_curr.getLeft();
-//		int indexCurr = couple_curr.getRight();
-//		float value = Tools.getValueTreasurDiamond(lattribute);
-//
-//		if(value < curr_value ){
-//			Attribute tresorValue = curr_lattribute.get(indexCurr);
-//			tresorValue.setValue(value);
-//			curr_lattribute.set(indexCurr, tresorValue);
-//		}
-//	}
-//}
-
-
-
-
-

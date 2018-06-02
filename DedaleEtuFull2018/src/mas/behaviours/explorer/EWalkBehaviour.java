@@ -35,16 +35,14 @@ public class EWalkBehaviour extends GWalkBehaviour {
 				Thread.sleep(100);
 			} catch (Exception e) {
 				e.printStackTrace();
-			} //159,158,176,158,166.5,196.5,160.5,205.5,183.5,199,189,179,211,207
+			} 
 			
 			
 			
 			////////////////////////////////////////////////////////////////////////////////////////////////////////
 			////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		
-			
-			if(!G.containsVertex(myPosition))
-				G.addVertex(myPosition, lobs.get(0).getRight());
+//			((AK_Agent)myAgent).setLastMove(myPosition);      //Mis là Manu
 			
 			ouverts.remove(myPosition);
 			fermes.add(myPosition);
@@ -56,7 +54,7 @@ public class EWalkBehaviour extends GWalkBehaviour {
 			if(this.ouverts.isEmpty() ){
 				if(((AK_Agent)myAgent).getCpt() > 0)
 					((AK_Agent)myAgent).exploration_is_done(); //___________________!!! A REVOIR !!!___________________________
-					System.out.println(myAgent.getLocalName()+" : Exploration DONE ("+((AK_Agent)myAgent).getCpt()+"). Restart !");
+//					System.out.println(myAgent.getLocalName()+" : Exploration DONE ("+((AK_Agent)myAgent).getCpt()+"). Restart !");
 				G.clearFermes();      
 				G.addAllOuverts(myPosition);
 				((AK_Agent)myAgent).setNombreDeCollision(0);
@@ -85,11 +83,11 @@ public class EWalkBehaviour extends GWalkBehaviour {
 				ouverts.remove(myPosition);
 				fermes.add(myPosition);
 				
-				System.out.println(myAgent.getLocalName()+" : cant move to "+next_pos+" curr pos : "+myPosition);
+//				System.out.println(myAgent.getLocalName()+" : cant move to "+next_pos+" curr pos : "+myPosition); A DECOMMENTER
 				nb_collision = ((AK_Agent)myAgent).getNombreDeCollision()+1;
 				((AK_Agent)myAgent).setNombreDeCollision(nb_collision);
 				
-				Set<String> detect_golem = G.isGolemAround(myPosition);
+				Set<String> detect_golem = G.isGolemAround(myPosition);   //A
 				
 //				
 				//Si premiere collision, envoie un message d'information
@@ -110,7 +108,7 @@ public class EWalkBehaviour extends GWalkBehaviour {
 				}
 				
 				if(!detect_golem.isEmpty() && get_msg==null)
-					golem_is_here = true;
+					golem_is_here = true;                   //A
 
 				
 				if(golem_is_here){
@@ -122,9 +120,9 @@ public class EWalkBehaviour extends GWalkBehaviour {
 
 				}
 			}
-			((AK_Agent)myAgent).setLastMove(next_pos);
+			((AK_Agent)myAgent).setLastMove(next_pos);                //DEPLACER D'ICI 
 			((AK_Agent)myAgent).setToread(null);
-//			System.out.println(myAgent.getLocalName()+" ::::\nfermes : "+this.fermes+"\nouverts : "+this.ouverts);
+//			System.out.println(myAgent.getLocalName()+" ("+myPosition+","+next_pos+")::::\nfermes : "+this.fermes+"\nouverts : "+this.ouverts);
 
 		}
 	}

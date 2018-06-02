@@ -111,29 +111,31 @@ public class GraphAK extends SimpleGraph<String,DefaultEdge> {
 	
 	
 	
-	public boolean addVertex(String name,List<Attribute> obs){
-		if(!nodes.containsKey(name)){
-			nodes.put(name, obs);
-			dictAdjacences.put(name, new HashSet<String>());
-		}
-		else{
-			this.updateNode(name, obs);
-		}
-		Attribute a = this.containsTreasur(name, "");
-		if(a!=null){
-			Pair<Attribute,Long> v = new Pair<Attribute,Long>(a,System.currentTimeMillis());
-			this.treasures.put(name,v);
-		}
-		return super.addVertex(name);
-	}
+//	public boolean addVertex(String name,List<Attribute> obs){
+//		if(!nodes.containsKey(name)){
+//			nodes.put(name, obs);
+////			dictAdjacences.put(name, new HashSet<String>());
+//		}
+//		else{
+//			this.updateNode(name, obs);
+//		}
+//		Attribute a = this.containsTreasur(name, "");
+//		if(a!=null){
+//			Pair<Attribute,Long> v = new Pair<Attribute,Long>(a,System.currentTimeMillis());
+//			this.treasures.put(name,v);
+//		}
+//		
+//		return super.addVertex(name);
+//	}
 	
-	public void updateNode(String node,List<Attribute> obs) {
-		this.nodes.replace(node, obs);
+	public void updateTreasure(String node) {
 		Attribute a = this.containsTreasur(node,"");
 		if(a!=null){
 			Pair<Attribute,Long> v = new Pair<Attribute,Long>(a,System.currentTimeMillis());
 			this.treasures.replace(node,v);
 		}
+		else
+			this.treasures.replace(node, new Pair<Attribute,Long>(null,System.currentTimeMillis()));
 	}
 
 	public void addAllOuverts(String myPosition) {
@@ -144,41 +146,36 @@ public class GraphAK extends SimpleGraph<String,DefaultEdge> {
 	}	
 	
 	public DefaultEdge addEdge(String src,String dst){
-		Set<String> l_adj = null;
-		if(dictAdjacences.containsKey(src)){
-			l_adj = this.dictAdjacences.get(src);
-			l_adj.add(dst);
-			this.dictAdjacences.replace(src, l_adj);
-		}else{
-			l_adj = new HashSet<String>();
-			l_adj.add(dst);
-			this.dictAdjacences.replace(src,l_adj);
-		}
-		
-		if(dictAdjacences.containsKey(dst)){
-			l_adj = this.dictAdjacences.get(dst);
-			l_adj.add(src);
-			this.dictAdjacences.replace(dst, l_adj);
-		}else{
-			l_adj = new HashSet<String>();
-			l_adj.add(src);
-			this.dictAdjacences.put(dst,l_adj);
-		}
+//		Set<String> l_adj = null;
+//		if(dictAdjacences.containsKey(src)){
+//			l_adj = this.dictAdjacences.get(src);
+//			l_adj.add(dst);
+//			this.dictAdjacences.replace(src, l_adj);
+//		}else{
+//			l_adj = new HashSet<String>();
+//			l_adj.add(dst);
+//			this.dictAdjacences.replace(src,l_adj);
+//		}
+//		
+//		if(dictAdjacences.containsKey(dst)){
+//			l_adj = this.dictAdjacences.get(dst);
+//			l_adj.add(src);
+//			this.dictAdjacences.replace(dst, l_adj);
+//		}else{
+//			l_adj = new HashSet<String>();
+//			l_adj.add(src);
+//			this.dictAdjacences.put(dst,l_adj);
+//		}
 		return super.addEdge(src, dst);
 	}
 	
 
-//	public void addToFermes(Set<String> closeSet) {
-//		this.fermesAgent = closeSet;
-//		this.fermes = new HashSet<String>();
-//		for(String i : closeSet) {
-//			this.ouverts.remove(i);
-//			this.fermes.add(i);
-//		}
-////		if (this.ouverts.isEmpty()){
-////			this.addAllOuverts(myPosition);
-////		}
-//	}
+	public void addToFermes(Set<String> closeSet) {
+		for(String i : closeSet) {
+			this.ouverts.remove(i);
+			this.fermes.add(i);
+		}
+	}
 
 	
 //	public void switchOF(Set<String> opened, Set<String> closed) {
@@ -212,9 +209,10 @@ public class GraphAK extends SimpleGraph<String,DefaultEdge> {
 	public Set<String> isGolemAround(String src) {
 		Set<String> detected = new HashSet<String>();
 		for(String adj: this.dictAdjacences.get(src)) {
-			if(isGolemIn(adj))
-				detected.add(adj);
-			}
+			if(this.nodes.containsKey(adj))
+				if(isGolemIn(adj))
+					detected.add(adj);
+				}
 		return detected;
 	}
 
@@ -273,24 +271,32 @@ public class GraphAK extends SimpleGraph<String,DefaultEdge> {
 	
 	
 	public void maj_treasure(String v,Pair<Attribute,Long> t){
-		String type = isType(t.getFirst());
-		
-		if(this.treasures.containsKey(v) && type !=null){
-			Pair<Attribute, Long> tn  = this.treasures.get(v);
-			if(tn.getSecond() < t.getSecond() || !type.equals(tn.getFirst().getName())){
-				this.treasures.replace(v, t);
-				List<Attribute> l = new ArrayList<Attribute>();
-				l.add(t.getFirst());
-				updateNode(v,l);
-			}
+		if(this.treasures.containsKey(v)){
+			Pair<Attribute, Long> u = this.treasures.get(v);
+			if(t.getSecond() > u.getSecond())
+				this.treasures.put(v, t);
+			
+			return;
 		}
+		this.treasures.put(v, t);
+//		String type = isType(t.getFirst());
+//		
+//		if(this.treasures.containsKey(v) && type !=null){
+//			Pair<Attribute, Long> tn  = this.treasures.get(v);
+//			if(tn.getSecond() < t.getSecond() || !type.equals(tn.getFirst().getName())){
+//				this.treasures.replace(v, t);
+//				List<Attribute> l = new ArrayList<Attribute>();
+//				l.add(t.getFirst());
+//				updateNode(v,l);
+//			}
+//		}
 		
 	}
 	
 	
 	
 	public String chooseTreasureToPick(String position,String type, int cap){
-		String goal = null;
+		String goal = "";
 		int min = this.nodes.size();
 		
 		for(String n_t : this.treasures.keySet()){
@@ -299,14 +305,34 @@ public class GraphAK extends SimpleGraph<String,DefaultEdge> {
 				if(cap >= (int)(treasur.getFirst().getValue())){
 					DijkstraShortestPath<String, DefaultEdge> shortestpath = new DijkstraShortestPath<String, DefaultEdge>(this);
 					int dist_path = shortestpath.getPath(position,n_t).getVertexList().size();
-					if(min > dist_path){
+					if(min >= dist_path){
 						goal = n_t;
 						min = dist_path;
 					}
-					System.out.println("Je ne peux pas le prendre, trop gros");
 				}
 			}
 		}
+		
+		
+		
+		
+		if(goal.equals("") && this.treasures.size() > 0){
+			int min_taille = (int)(this.treasures.get(this.treasures.keySet().iterator().next()).getFirst().getValue());
+			for(String n_t : this.treasures.keySet()){
+				Pair<Attribute,Long> treasur  = this.treasures.get(n_t);
+				if(isType(treasur.getFirst()).equals(type)){
+					if((int)(treasur.getFirst().getValue()) <  min_taille){
+						DijkstraShortestPath<String, DefaultEdge> shortestpath = new DijkstraShortestPath<String, DefaultEdge>(this);
+						int dist_path = shortestpath.getPath(position,n_t).getVertexList().size();
+						if (min >= dist_path){
+							min_taille = (int)(treasur.getFirst().getValue());
+							goal = n_t;
+						}
+					}
+				}
+			}
+		}
+		
 		return goal;
 	}
 	

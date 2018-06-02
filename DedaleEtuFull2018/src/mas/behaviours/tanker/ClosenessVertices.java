@@ -2,11 +2,13 @@ package mas.behaviours.tanker;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import mas.agents.AK_Agent;
 import jade.core.behaviours.FSMBehaviour;
 import jade.core.behaviours.OneShotBehaviour;
+import jade.util.leap.Map;
 import tools.GraphAK;
 
 public class ClosenessVertices extends OneShotBehaviour {
@@ -80,38 +82,52 @@ public class ClosenessVertices extends OneShotBehaviour {
 	}
 	
 	
-	public Set<String> voisins_profondeur_n(String src, int n){
+	public List<String> voisins_profondeur_n(String src, int n){
 		if(n==0)
-			return new HashSet<String>();
+			return new ArrayList<String>();
 		
-		Set<String> result = new HashSet<String>(G.getDictAdjacences().get(src));
+		List<String> result = new ArrayList<String>();
+		result.add(src);
 		for(String adj : G.getDictAdjacences().get(src)){
-			result.addAll(voisins_profondeur_n(adj, n-1));
+			result.add(adj);
+			result.add(src);
+//			result.addAll(voisins_profondeur_n(adj, n-1));
 		}
 		return result;
 	}
 	
 	public void centering(){
-		Set<String> nodes = G.getHashNode().keySet();
-		String src = nodes.iterator().next();
-		int max = G.degreeOf(src);
+		Set<String> nodes = new HashSet<String>(G.getOuverts());
+		nodes.addAll(G.getFermes());
+//		
+//		for (String node :  G.getDictAdjacences().keySet())
+//			nodes.addAll(G.getDictAdjacences().get(node));
+		
+		String src = "";// nodes.iterator().next();
+		int max = 0; //G.degreeOf(src);
+		int rayon  = 1;
 		for(String v : nodes){
 			if(G.degreeOf(v) > max){
 				max = G.degreeOf(v);
 				src = v;
 			}
-			
+		}
+		
+		for(String v : nodes){
+			if(G.degreeOf(v) == max && src.compareTo(v)<0){
+				src = v;
+			}
 		}
 		System.out.println(" CENTER IS "+src);
-		G.addAllPositionSilo(new ArrayList<String>(voisins_profondeur_n(src,2)));
+		G.addAllPositionSilo(voisins_profondeur_n(src,rayon));
 		
 	}
 	
 	
 	@Override
 	public void action() {
-		carrefour();
-//		centering();
+//		carrefour();
+		centering();
 		System.out.println("I WILL BE MOVING BETWEEN : \n\t"+G.siloPositions());
 		fsm.deregisterDefaultTransition("D");
 		fsm.deregisterState("D");

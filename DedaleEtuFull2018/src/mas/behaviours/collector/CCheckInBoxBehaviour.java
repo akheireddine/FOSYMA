@@ -19,7 +19,7 @@ public class CCheckInBoxBehaviour extends OneShotBehaviour {
 
 
 	private static final long serialVersionUID = 6848553541314740744L;
-	private int onEndValue=0;
+	private int onEndValue=-1;
 	
 	
 	public CCheckInBoxBehaviour(final Agent myagent) {
@@ -66,9 +66,9 @@ public class CCheckInBoxBehaviour extends OneShotBehaviour {
 		
 		if(msg != null){
 			((AK_Agent)myAgent).setToread(msg);
-			System.out.println(myAgent.getLocalName()+" : Receive MSG "+this.onEndValue);
+//			System.out.println(myAgent.getLocalName()+" : Receive MSG "+this.onEndValue);
 		}else {
-			System.out.println(myAgent.getLocalName()+" : No MSG. ");
+//			System.out.println(myAgent.getLocalName()+" : No MSG. ");
 			this.onEndValue = -1;
 		}
 	}

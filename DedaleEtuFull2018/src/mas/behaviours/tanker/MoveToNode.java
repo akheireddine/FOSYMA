@@ -18,7 +18,8 @@ public class MoveToNode extends GWalkBehaviour {
 
 	public MoveToNode(final mas.abstractAgent myagent, GraphAK g) {
 		super(g,g.getFermes(),g.getOuverts(),myagent);
-
+		G.clearFermes();
+		this.fermes.add(myagent.getCurrentPosition());
 	}
 	
 	
@@ -48,16 +49,25 @@ public class MoveToNode extends GWalkBehaviour {
 		String myPosition=((mas.abstractAgent)this.myAgent).getCurrentPosition();
 
 		if (myPosition!=""){
-
 			
 			try {
 //				System.in.read();
-				Thread.sleep(100);
+				Thread.sleep(200);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 			
+			
+			
 			List<Couple<String,List<Attribute>>> lobs=((mas.abstractAgent)this.myAgent).observe();//myPosition
+
+//			if(!G.containsVertex(myPosition))
+//				G.addVertex(myPosition, lobs.get(0).getRight());
+//			
+			ouverts.remove(myPosition);
+			fermes.add(myPosition);
+
+			
 			List<Couple<String, List<Attribute>>> adjacents = lobs;
 			m_a_j_graphe(adjacents);
 			////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -66,12 +76,12 @@ public class MoveToNode extends GWalkBehaviour {
 			String goal_agent = ((AK_Tanker)myAgent).goal;
 		
 			if(myPosition.equals(goal_agent)) {
-				try {
-	//				System.in.read();
-					Thread.sleep(2000);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
+//				try {
+//	//				System.in.read();
+//					Thread.sleep(2000);
+//				} catch (Exception e) {
+//					e.printStackTrace();
+//				}
 				((AK_Tanker)myAgent).goal = "";
 			}
 			ACLMessage get_msg = ((AK_Agent)myAgent).getMessage();
@@ -81,10 +91,15 @@ public class MoveToNode extends GWalkBehaviour {
 			boolean has_moved = ((mas.abstractAgent)this.myAgent).moveTo(next_pos);
 				
 			if (has_moved){
+				this.onEndValue = -1;
+				this.finished=false;
 				((AK_Agent)myAgent).setNombreDeCollision(0);
 			}
 			
 			else{
+				
+				
+				
 				ouverts.remove(myPosition);
 				fermes.add(myPosition);
 				
@@ -92,7 +107,7 @@ public class MoveToNode extends GWalkBehaviour {
 				int nb_collision = ((AK_Agent)myAgent).getNombreDeCollision()+1;
 				((AK_Agent)myAgent).setNombreDeCollision(nb_collision);
 				
-				Set<String> detect_golem = G.isGolemAround(myPosition);
+//				Set<String> detect_golem = G.isGolemAround(myPosition);
 				
 //					
 				//Si premiere collision, envoie un message d'information
@@ -102,6 +117,7 @@ public class MoveToNode extends GWalkBehaviour {
 //						this.finished=true;
 //
 //					}
+				((AK_Tanker)myAgent).goal="";
 				if(nb_collision == 2 && get_msg==null){
 					this.onEndValue = 1;
 					this.finished=true;
@@ -113,8 +129,8 @@ public class MoveToNode extends GWalkBehaviour {
 				}
 				
 			
-				if(!detect_golem.isEmpty() && get_msg==null)
-					golem_is_here = true;
+//				if(!detect_golem.isEmpty() && get_msg==null)
+//					golem_is_here = true;
 
 				
 				if(golem_is_here){
