@@ -2,8 +2,8 @@ package mas.behaviours.tanker;
 
 import mas.abstractAgent;
 import mas.agents.AK_Agent;
-import mas.behaviours.GCheckInBoxBehaviour;
 import mas.behaviours.GSendInformationAfterCollisionBehaviour;
+import mas.behaviours.explorer.ECheckInBoxBehaviour;
 import jade.core.behaviours.FSMBehaviour;
 
 public class TFSMBehaviour1 extends FSMBehaviour {
@@ -19,13 +19,12 @@ public class TFSMBehaviour1 extends FSMBehaviour {
 		super(a);
 		registerFirstState(new TWalkBehaviour((abstractAgent) a,a.getGraph()),"D");
 		registerState(new GSendInformationAfterCollisionBehaviour(), "S");
-		registerState(new GCheckInBoxBehaviour(a),"C");
+		registerState(new ECheckInBoxBehaviour(a),"C");
 		registerState(new TMajKnowledgeBehaviour(), "M"); 
 		
-		registerState(new ClosenessVertices((abstractAgent) a,a.getGraph(),this),"V");
-		registerLastState(new MoveToNode((abstractAgent) a,a.getGraph()),"G");
+		registerLastState(new ClosenessVertices((abstractAgent) a,a.getGraph(),this),"V");
+//		registerLastState(new MoveToNode((abstractAgent) a,a.getGraph()),"G");
 		
-//		a.addBehaviour(new TFSMBehaviour2(a));
 		
 
 		
@@ -41,14 +40,7 @@ public class TFSMBehaviour1 extends FSMBehaviour {
 		registerTransition("D","C",1);
 		registerTransition("D","S",0);
 		
-		
-//		registerTransition("G", "S", 2);
-//		registerTransition("G", "C", 3);
-//		registerDefaultTransition("C", "G");
-//		registerDefaultTransition("M", "G");
-		
-		
-		registerDefaultTransition("V","G");
+//		registerDefaultTransition("V","G");
 
 	}
 	

@@ -79,7 +79,8 @@ public class CWalkBehaviour extends GWalkBehaviour {
 	
 	
 	public void action() {
-		//Example to retrieve the current position
+		System.out.println("\n****************************** COLLECTOR "+myAgent.getLocalName()+" ******************************\n");
+
 		String myPosition=((mas.abstractAgent)this.myAgent).getCurrentPosition();
 		
 		if (myPosition!=""){
@@ -138,7 +139,7 @@ public class CWalkBehaviour extends GWalkBehaviour {
 				if(this.ouverts.isEmpty() ){
 					if(((AK_Agent)myAgent).getCpt() > 0)
 						((AK_Agent)myAgent).exploration_is_done(); //___________________!!! A REVOIR !!!___________________________
-//						System.out.println(myAgent.getLocalName()+" : Exploration DONE ("+((AK_Agent)myAgent).getCpt()+"). Restart !");
+					System.out.println(myAgent.getLocalName()+" : Maybe Exploration is COMPLETE ("+((AK_Agent)myAgent).getCpt()+"). Restart !");
 					G.clearFermes();      
 					G.addAllOuverts(myPosition);
 					((AK_Agent)myAgent).setNombreDeCollision(0);
@@ -196,14 +197,8 @@ public class CWalkBehaviour extends GWalkBehaviour {
 				
 				Set<String> detect_golem = G.isGolemAround(myPosition);
 				
-//				
-				//Si premiere collision, envoie un message d'information
 				boolean golem_is_here = false;
-//				if(nb_collision==1 ) {
-//					this.onEndValue = 0;
-//					this.finished=true;
-//
-//				}
+
 				if(nb_collision == 2 && get_msg==null){
 					this.onEndValue = 1;
 					this.finished=true;

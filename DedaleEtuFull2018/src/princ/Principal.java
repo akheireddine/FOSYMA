@@ -38,10 +38,10 @@ public class Principal {
 
 		System.out.println("Hello !");
 		//0) Create the real environment and the observed one
-//		env= new Environment(ENVtype.GRID_T,6,null);
+		env= new Environment(ENVtype.GRID_T,6,null);
 //		env = new Environment("ressources/mapInterblocage","ressources/mapInterblocage-config");
 //		env= new Environment(ENVtype.DOROGOVTSEV,10,null);
-		env=new Environment("ressources/map2017-2","ressources/map2017-config-2");
+//		env=new Environment("ressources/map2017-2","ressources/map2017-config-2");
 //		env=new Environment("ressources/file","ressources/file-config");
 
 

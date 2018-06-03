@@ -32,16 +32,12 @@ public class DFDServices {
     }
 	
 	public static boolean typeOfserviceAgent(AID sender,Agent a,String service){
-		try{
-			AID[] r = getAgentsByService(service, a);
-			if( r == null)
-				return false;
-			for(int i = 0;i< r.length;i++){
-				if(r[i].equals(sender))
-					return true;
-			}
-		}catch(Exception e){
-			System.out.println("ERROR");
+		AID[] r = getAgentsByService(service, a);
+		if( r == null)
+			return false;
+		for(int i = 0;i< r.length;i++){
+			if(r[i].equals(sender))
+				return true;
 		}
 		return false;
 

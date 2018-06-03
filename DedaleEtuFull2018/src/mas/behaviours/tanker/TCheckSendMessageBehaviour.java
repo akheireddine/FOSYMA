@@ -16,7 +16,7 @@ public class TCheckSendMessageBehaviour extends TickerBehaviour{
 //	private int onEndValue;
 	
 	public TCheckSendMessageBehaviour (final Agent myagent) {
-		super(myagent,200);
+		super(myagent,500);
 	}
 	
 	@Override

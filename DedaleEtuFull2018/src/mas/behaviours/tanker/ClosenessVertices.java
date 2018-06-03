@@ -8,7 +8,6 @@ import java.util.Set;
 import mas.agents.AK_Agent;
 import jade.core.behaviours.FSMBehaviour;
 import jade.core.behaviours.OneShotBehaviour;
-import jade.util.leap.Map;
 import tools.GraphAK;
 
 public class ClosenessVertices extends OneShotBehaviour {
@@ -22,25 +21,6 @@ public class ClosenessVertices extends OneShotBehaviour {
 		this.G = g;
 		this.fsm = fsm;
 	}
-	
-	
-//	public String PCC(String src){
-//		DijkstraShortestPath<String, DefaultEdge> dijkstraShortestPath = new DijkstraShortestPath<String, DefaultEdge>(G);
-//		int dist_min = G.vertexSet().size();
-//		String next_node = src;
-//		for(String dst: ouverts){
-//			try{
-//				List<String> shortestPath = dijkstraShortestPath.getPath(src,dst).getVertexList();
-//				if(shortestPath.size() < dist_min ){
-//					dist_min = shortestPath.size();
-//					next_node = shortestPath.get(1);
-//				}
-//			}catch(Exception e){
-//				System.out.println(myAgent.getLocalName()+": error in "+dst);
-//			}
-//		}
-//		return next_node;
-//	}
 	
 	
 	public void carrefour() {
@@ -118,7 +98,7 @@ public class ClosenessVertices extends OneShotBehaviour {
 				src = v;
 			}
 		}
-		System.out.println(" CENTER IS "+src);
+		System.out.println("\tCENTER IS "+src);
 		G.addAllPositionSilo(voisins_profondeur_n(src,rayon));
 		
 	}
@@ -128,7 +108,7 @@ public class ClosenessVertices extends OneShotBehaviour {
 	public void action() {
 //		carrefour();
 		centering();
-		System.out.println("I WILL BE MOVING BETWEEN : \n\t"+G.siloPositions());
+		System.out.println("\tI WILL BE MOVING BETWEEN : \n\t"+G.siloPositions());
 		fsm.deregisterDefaultTransition("D");
 		fsm.deregisterState("D");
 		myAgent.addBehaviour(new TFSMBehaviour2(((AK_Agent)myAgent)));

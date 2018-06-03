@@ -93,7 +93,7 @@ public abstract class GWalkBehaviour extends SimpleBehaviour {
 		DijkstraShortestPath<String, DefaultEdge> dijkstraShortestPath = new DijkstraShortestPath<String, DefaultEdge>(G);
 		String next_node = "";//G.getDictAdjacences().get(src).iterator().next();
 		int dist_min =	G.vertexSet().size();
-		String goal="";
+//		String goal="";
 		
 		for(String dst: ouverts){
 			
@@ -102,10 +102,9 @@ public abstract class GWalkBehaviour extends SimpleBehaviour {
 				if(shortestPath.size() <= dist_min ){
 					dist_min = shortestPath.size();
 					next_node = shortestPath.get(1);
-					goal = dst;
+//					goal = dst;
 				}
 			}catch(Exception e){
-//				e.getStackTrace();
 				System.out.println(myAgent.getLocalName()+": error______________________________________ "+src+" in "+dst+" \n\t"+G.vertexSet());
 			}
 		}

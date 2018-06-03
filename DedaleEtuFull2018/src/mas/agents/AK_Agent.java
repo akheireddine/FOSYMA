@@ -3,7 +3,6 @@ package mas.agents;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -24,8 +23,6 @@ public abstract class AK_Agent extends abstractAgent {
 	private int cpt_exploration = 0;
 	
 	private int nombreDeCollision = 0;
-	private Set<String> removedVerticesName=new HashSet<String>();
-	private boolean noCollisionSince= true;
 	
 	private static int cpt = 0;
 	public int id = ++cpt;
@@ -61,19 +58,11 @@ public abstract class AK_Agent extends abstractAgent {
 	}
 	
 	
-	public Set<String> getSetRemovedVertices(){
-		return this.removedVerticesName;
-	}
-	
 	public boolean isExplorationDone(){
 		return this.exploDone;
 	}
 	
-	public boolean getNoCollisionSince() {
-		return this.noCollisionSince;
-	}
 	public void exploration_is_done(){
-		this.noCollisionSince = true;
 		this.exploDone  = true;
 	}
 
@@ -96,12 +85,6 @@ public abstract class AK_Agent extends abstractAgent {
 
 
 
-	public void removeVertexCollision(String next_pos) {
-		this.removedVerticesName.add(next_pos);
-		this.G.removeVertex(next_pos);
-	}
-	
-	
 	public Object getObjectToSend(){
 		Tuple5<HashMap<String,List<Attribute>>, HashMap<String,Set<String>>,Set<String>,Set<String>,HashMap<String,Pair<Attribute,Long>>> obj = 
 				new Tuple5<HashMap<String,List<Attribute>>, HashMap<String,Set<String>>,Set<String>,Set<String>,HashMap<String,Pair<Attribute,Long>>>(G.getHashNode(),G.getDictAdjacences(),G.getOuverts(),G.getFermes(),G.getTreasures());

@@ -2,8 +2,8 @@ package mas.behaviours.collector;
 
 import mas.abstractAgent;
 import mas.agents.AK_Collector;
-import mas.behaviours.GCheckInBoxBehaviour;
 import mas.behaviours.GSendInformationAfterCollisionBehaviour;
+import mas.behaviours.explorer.ECheckInBoxBehaviour;
 import jade.core.behaviours.FSMBehaviour;
 
 public class CFSMBehaviour extends FSMBehaviour {
@@ -17,7 +17,7 @@ public class CFSMBehaviour extends FSMBehaviour {
 		super(a);
 		registerFirstState(new CWalkBehaviour((abstractAgent) a,a.getGraph()),"D");
 		registerState(new GSendInformationAfterCollisionBehaviour(), "S");
-		registerState(new GCheckInBoxBehaviour(a),"C");
+		registerState(new ECheckInBoxBehaviour(a),"C");
 		registerState(new CMajKnowledgeBehaviour(), "M"); // update of graph env
 		
 		

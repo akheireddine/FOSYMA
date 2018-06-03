@@ -34,7 +34,7 @@ public class CMajKnowledgeBehaviour extends OneShotBehaviour {
 				@SuppressWarnings("unchecked")
 				Tuple5<HashMap<String, List<Attribute>>, HashMap<String,Set<String>>,Set<String>,Set<String>,HashMap<String,Pair<Attribute,Long>>> new_information = (Tuple5<HashMap<String, List<Attribute>>, HashMap<String,Set<String>>,Set<String>,Set<String>,HashMap<String,Pair<Attribute,Long>>>) received_graph.getContentObject();
 				
-				HashMap<String, List<Attribute>> info_nodes = new_information._1();
+//				HashMap<String, List<Attribute>> info_nodes = new_information._1();
 				
 				//recuperer ma connaissance du graphe
 				
@@ -55,8 +55,6 @@ public class CMajKnowledgeBehaviour extends OneShotBehaviour {
 						
 					}
 					
-//					if(info_treasures.containsKey(node))
-//						G.maj_treasure(node,info_treasures.get(node));
 				}
 				
 				
@@ -78,17 +76,17 @@ public class CMajKnowledgeBehaviour extends OneShotBehaviour {
 					G.getFermes().add(pos_agent);
 				}
 				
-				if(DFDServices.typeOfserviceAgent(received_graph.getSender(), myAgent, "collector")){
-					
-					String myPosition = ((mas.abstractAgent)this.myAgent).getCurrentPosition();
-					System.out.println(myAgent.getLocalName()+" : face d'un SILO "+myPosition);
-					Set<String> adjacens = G.getDictAdjacences().get(myPosition);
-					G.getOuverts().addAll(adjacens);
-					String pos_agent = ((AK_Agent)myAgent).getLastMove();
-					G.getOuverts().remove(pos_agent);
-					G.getFermes().removeAll(adjacens);
-					G.getFermes().add(pos_agent);
-				}
+//				else if(DFDServices.typeOfserviceAgent(received_graph.getSender(), myAgent, "collector")){
+//					
+//					String myPosition = ((mas.abstractAgent)this.myAgent).getCurrentPosition();
+//					System.out.println(myAgent.getLocalName()+" : face d'un SILO "+myPosition);
+//					Set<String> adjacens = G.getDictAdjacences().get(myPosition);
+//					G.getOuverts().addAll(adjacens);
+//					String pos_agent = ((AK_Agent)myAgent).getLastMove();
+//					G.getOuverts().remove(pos_agent);
+//					G.getFermes().removeAll(adjacens);
+//					G.getFermes().add(pos_agent);
+//				}
 				
 				
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -96,7 +94,7 @@ public class CMajKnowledgeBehaviour extends OneShotBehaviour {
 //				this.G.updateOF(new_information._3(),new_information._4());
 				this.G.addToFermes(new_information._4());
 //				((AK_Agent)myAgent).setToread(null);
-				System.out.println(myAgent.getLocalName()+" : MAJ");
+				System.out.println(myAgent.getLocalName()+" : MAJ from "+received_graph.getSender().getLocalName());
 			} catch (UnreadableException e) {
 				e.printStackTrace();
 			}

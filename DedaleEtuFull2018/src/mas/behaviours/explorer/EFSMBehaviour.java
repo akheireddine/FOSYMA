@@ -25,7 +25,6 @@ public class EFSMBehaviour extends FSMBehaviour {
 		
 		//definition des transaction
 		registerDefaultTransition("S","C");
-//		registerDefaultTransition("S","D");
 
 		registerDefaultTransition("C","D");
 		registerDefaultTransition("M", "D");

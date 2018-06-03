@@ -23,11 +23,11 @@ public class EWalkBehaviour extends GWalkBehaviour {
 		
 		
 	public void action() {
-		//Example to retrieve the current position
+		System.out.println("\n****************************** EXPLORER "+myAgent.getLocalName()+" ******************************\n");
+
 		String myPosition=((mas.abstractAgent)this.myAgent).getCurrentPosition();
 
 		if (myPosition!=""){
-			//List of observable from the agent's current position
 			List<Couple<String,List<Attribute>>> lobs=((mas.abstractAgent)this.myAgent).observe();//myPosition
 
 			try {
@@ -54,7 +54,7 @@ public class EWalkBehaviour extends GWalkBehaviour {
 			if(this.ouverts.isEmpty() ){
 				if(((AK_Agent)myAgent).getCpt() > 0)
 					((AK_Agent)myAgent).exploration_is_done(); //___________________!!! A REVOIR !!!___________________________
-//					System.out.println(myAgent.getLocalName()+" : Exploration DONE ("+((AK_Agent)myAgent).getCpt()+"). Restart !");
+				System.out.println(myAgent.getLocalName()+" : Maybe Exploration is COMPLETE ("+((AK_Agent)myAgent).getCpt()+"). Restart !");
 				G.clearFermes();      
 				G.addAllOuverts(myPosition);
 				((AK_Agent)myAgent).setNombreDeCollision(0);
@@ -63,7 +63,6 @@ public class EWalkBehaviour extends GWalkBehaviour {
 			}
 			
 			
-
 
 			String next_pos = getNextPosition(voisins_ouverts);
 
@@ -79,24 +78,17 @@ public class EWalkBehaviour extends GWalkBehaviour {
 			}
 			else{
 				
-				
 				ouverts.remove(myPosition);
 				fermes.add(myPosition);
 				
-//				System.out.println(myAgent.getLocalName()+" : cant move to "+next_pos+" curr pos : "+myPosition); A DECOMMENTER
+				System.out.println(myAgent.getLocalName()+" : Can't move from "+myPosition+" to "+next_pos);
 				nb_collision = ((AK_Agent)myAgent).getNombreDeCollision()+1;
 				((AK_Agent)myAgent).setNombreDeCollision(nb_collision);
 				
 				Set<String> detect_golem = G.isGolemAround(myPosition);   //A
 				
-//				
-				//Si premiere collision, envoie un message d'information
 				boolean golem_is_here = false;
-//				if(nb_collision==1 ) {
-//					this.onEndValue = 0;
-//					this.finished=true;
-//
-//				}
+
 				if(nb_collision == 2 && get_msg==null){
 					this.onEndValue = 1;
 					this.finished=true;
@@ -111,12 +103,12 @@ public class EWalkBehaviour extends GWalkBehaviour {
 					golem_is_here = true;                   //A
 
 				
-				if(golem_is_here){
+				if(golem_is_here && nb_collision>2){
 					G.clearFermes();
 					G.addAllOuverts(myPosition);
 					ouverts.remove(next_pos);
 					fermes.add(next_pos);
-					System.out.println(myAgent.getLocalName()+" (G): Have to restart my exploration.");
+					System.out.println(myAgent.getLocalName()+" (G) : Have to restart my exploration.");
 
 				}
 			}

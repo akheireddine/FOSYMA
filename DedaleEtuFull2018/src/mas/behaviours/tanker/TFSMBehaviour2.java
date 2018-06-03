@@ -3,9 +3,8 @@ package mas.behaviours.tanker;
 import jade.core.behaviours.FSMBehaviour;
 import mas.abstractAgent;
 import mas.agents.AK_Agent;
-import mas.behaviours.GCheckInBoxBehaviour;
 import mas.behaviours.GSendInformationAfterCollisionBehaviour;
-import mas.behaviours.explorer.EMajKnowledgeBehaviour;
+import mas.behaviours.explorer.ECheckInBoxBehaviour;
 
 public class TFSMBehaviour2 extends FSMBehaviour {
 	private static final long serialVersionUID = -6883275941056007511L;
@@ -19,8 +18,8 @@ public class TFSMBehaviour2 extends FSMBehaviour {
 		super(a);
 		registerFirstState(new MoveToNode((abstractAgent) a,a.getGraph()),"G");
 		registerState(new GSendInformationAfterCollisionBehaviour(), "S");
-		registerState(new GCheckInBoxBehaviour(a),"C");
-		registerState(new EMajKnowledgeBehaviour(), "M"); 
+		registerState(new ECheckInBoxBehaviour(a),"C");
+		registerState(new TMajKnowledgeBehaviour(), "M"); 
 		
 		
 //		

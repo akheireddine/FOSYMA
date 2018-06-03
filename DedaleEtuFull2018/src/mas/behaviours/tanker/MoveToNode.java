@@ -2,7 +2,6 @@ package mas.behaviours.tanker;
 
 
 import java.util.List;
-import java.util.Set;
 
 import env.Attribute;
 import env.Couple;
@@ -46,6 +45,8 @@ public class MoveToNode extends GWalkBehaviour {
 
 	@Override
 	public void action() {
+		System.out.println("\n********************************** SILO **********************************\n");
+
 		String myPosition=((mas.abstractAgent)this.myAgent).getCurrentPosition();
 
 		if (myPosition!=""){
@@ -61,9 +62,6 @@ public class MoveToNode extends GWalkBehaviour {
 			
 			List<Couple<String,List<Attribute>>> lobs=((mas.abstractAgent)this.myAgent).observe();//myPosition
 
-//			if(!G.containsVertex(myPosition))
-//				G.addVertex(myPosition, lobs.get(0).getRight());
-//			
 			ouverts.remove(myPosition);
 			fermes.add(myPosition);
 
@@ -84,6 +82,7 @@ public class MoveToNode extends GWalkBehaviour {
 //				}
 				((AK_Tanker)myAgent).goal = "";
 			}
+			
 			ACLMessage get_msg = ((AK_Agent)myAgent).getMessage();
 
 			String next_pos = next_position_to_goal(myPosition);
@@ -98,12 +97,10 @@ public class MoveToNode extends GWalkBehaviour {
 			
 			else{
 				
-				
-				
 				ouverts.remove(myPosition);
 				fermes.add(myPosition);
 				
-				System.out.println(myAgent.getLocalName()+" : cant move to "+next_pos+" curr pos : "+myPosition);
+				System.out.println(myAgent.getLocalName()+" : Can't move from "+myPosition+" to "+next_pos);
 				int nb_collision = ((AK_Agent)myAgent).getNombreDeCollision()+1;
 				((AK_Agent)myAgent).setNombreDeCollision(nb_collision);
 				
@@ -111,12 +108,8 @@ public class MoveToNode extends GWalkBehaviour {
 				
 //					
 				//Si premiere collision, envoie un message d'information
-				boolean golem_is_here = false;
-//					if(nb_collision==1 ) {
-//						this.onEndValue = 0;
-//						this.finished=true;
-//
-//					}
+//				boolean golem_is_here = false;
+
 				((AK_Tanker)myAgent).goal="";
 				if(nb_collision == 2 && get_msg==null){
 					this.onEndValue = 1;
@@ -133,14 +126,14 @@ public class MoveToNode extends GWalkBehaviour {
 //					golem_is_here = true;
 
 				
-				if(golem_is_here){
-					G.clearFermes();
-					G.addAllOuverts(myPosition);
-					ouverts.remove(next_pos);
-					fermes.add(next_pos);
-					System.out.println(myAgent.getLocalName()+" (G): Have to restart my exploration.");
-
-				}
+//				if(golem_is_here){
+//					G.clearFermes();
+//					G.addAllOuverts(myPosition);
+//					ouverts.remove(next_pos);
+//					fermes.add(next_pos);
+//					System.out.println(myAgent.getLocalName()+" (G): Have to restart my exploration.");
+//
+//				}
 			}
 			((AK_Agent)myAgent).setLastMove(next_pos);
 			((AK_Agent)myAgent).setToread(null);

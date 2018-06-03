@@ -1,7 +1,6 @@
 package mas.behaviours.explorer;
 
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -35,7 +34,7 @@ public class EMajKnowledgeBehaviour extends OneShotBehaviour {
 				@SuppressWarnings("unchecked")
 				Tuple5<HashMap<String, List<Attribute>>, HashMap<String,Set<String>>,Set<String>,Set<String>,HashMap<String,Pair<Attribute,Long>>> new_information = (Tuple5<HashMap<String, List<Attribute>>, HashMap<String,Set<String>>,Set<String>,Set<String>,HashMap<String,Pair<Attribute,Long>>>) received_graph.getContentObject();
 				
-				HashMap<String, List<Attribute>> info_nodes = new_information._1();
+//				HashMap<String, List<Attribute>> info_nodes = new_information._1();
 				
 				//recuperer ma connaissance du graphe
 				
@@ -97,7 +96,7 @@ public class EMajKnowledgeBehaviour extends OneShotBehaviour {
 //				this.G.updateOF(new_information._3(),new_information._4());
 				this.G.addToFermes(new_information._4());
 //				((AK_Agent)myAgent).setToread(null);
-//				System.out.println(myAgent.getLocalName()+" : MAJ");
+				System.out.println(myAgent.getLocalName()+" : MAJ from "+received_graph.getSender().getLocalName());
 			} catch (UnreadableException e) {
 				e.printStackTrace();
 			}

@@ -1,4 +1,4 @@
-package mas.behaviours.collector;
+package unused.behaviours;
 
 import mas.agents.AK_Agent;
 import mas.agents.AK_Collector;

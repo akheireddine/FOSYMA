@@ -23,7 +23,6 @@ public class GraphAK extends SimpleGraph<String,DefaultEdge> {
 	private HashMap<String,Pair<Attribute,Long>>  treasures = new HashMap<String,Pair<Attribute,Long>>();
 	private Set<String> ouverts;
 	private Set<String> fermes;
-	private String Silo_position="";
 	private List<String> ens_position_silo= new ArrayList<String>();
 
 
@@ -33,14 +32,7 @@ public class GraphAK extends SimpleGraph<String,DefaultEdge> {
 		this.ouverts = new HashSet<String>();
 	}
 	
-	
-	public void openVertices(Set<String> f) {
-		for(String n : f) {
-			this.fermes.remove(n);
-			this.ouverts.add(n);
-		}
-	}
-	
+
 	
 	public int getDegreeOfNode(String node_name){
 		return this.degreeOf(node_name);
@@ -63,20 +55,6 @@ public class GraphAK extends SimpleGraph<String,DefaultEdge> {
 	}
 	
 	
-	
-	public void updateOF(Set<String> o, Set<String> f){
-		this.fermes.addAll(f);
-		for(String n : o){
-			if(!this.fermes.contains(n))
-				this.ouverts.add(n);
-		}
-		this.ouverts.removeAll(this.fermes);
-	}
-	
-	
-	
-	
-
 	public List<Attribute> getAttrOfNode(String myPosition) {
 		if( nodes.containsKey(myPosition))
 			return nodes.get(myPosition);
@@ -128,15 +106,7 @@ public class GraphAK extends SimpleGraph<String,DefaultEdge> {
 //		return super.addVertex(name);
 //	}
 	
-	public void updateTreasure(String node) {
-		Attribute a = this.containsTreasur(node,"");
-		if(a!=null){
-			Pair<Attribute,Long> v = new Pair<Attribute,Long>(a,System.currentTimeMillis());
-			this.treasures.replace(node,v);
-		}
-		else
-			this.treasures.replace(node, new Pair<Attribute,Long>(null,System.currentTimeMillis()));
-	}
+
 
 	public void addAllOuverts(String myPosition) {
 		for(String node:this.nodes.keySet()){
@@ -169,12 +139,22 @@ public class GraphAK extends SimpleGraph<String,DefaultEdge> {
 		return super.addEdge(src, dst);
 	}
 	
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	public void addToFermes(Set<String> closeSet) {
 		for(String i : closeSet) {
 			this.ouverts.remove(i);
 			this.fermes.add(i);
 		}
+	}
+	
+	public void updateOF(Set<String> o, Set<String> f){
+		this.fermes.addAll(f);
+		for(String n : o){
+			if(!this.fermes.contains(n))
+				this.ouverts.add(n);
+		}
+		this.ouverts.removeAll(this.fermes);
 	}
 
 	
@@ -189,7 +169,7 @@ public class GraphAK extends SimpleGraph<String,DefaultEdge> {
 //		
 //	}
 	
-	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	public void removeVertice(String n){
 		this.removeVertex(n);
@@ -204,7 +184,7 @@ public class GraphAK extends SimpleGraph<String,DefaultEdge> {
 		this.dictAdjacences.remove(n);
 	}
 
-	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	public Set<String> isGolemAround(String src) {
 		Set<String> detected = new HashSet<String>();
@@ -230,7 +210,7 @@ public class GraphAK extends SimpleGraph<String,DefaultEdge> {
 	}
 	
 	
-	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	public Attribute containsTreasur(String position,String type) {
 		List<Attribute> obs = this.nodes.get(position);
@@ -256,6 +236,15 @@ public class GraphAK extends SimpleGraph<String,DefaultEdge> {
 	}
 	
 	
+	public void updateTreasure(String node) {
+		Attribute a = this.containsTreasur(node,"");
+		if(a!=null){
+			Pair<Attribute,Long> v = new Pair<Attribute,Long>(a,System.currentTimeMillis());
+			this.treasures.replace(node,v);
+		}
+		else
+			this.treasures.replace(node, new Pair<Attribute,Long>(null,System.currentTimeMillis()));
+	}
 	
 	public String isType(Attribute a){
 		switch(a){
@@ -337,11 +326,8 @@ public class GraphAK extends SimpleGraph<String,DefaultEdge> {
 	}
 	
 	
-	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	public boolean isSiloPositionKnown() {
-		return !this.ens_position_silo.isEmpty();
-	}
 	
 	public String changer_de_noeud_silo(int i ) {
 		return this.ens_position_silo.get(i);
@@ -361,7 +347,6 @@ public class GraphAK extends SimpleGraph<String,DefaultEdge> {
 			this.addPossiblePositionSilo(a);
 		}
 	}
-	
 	
 	
 

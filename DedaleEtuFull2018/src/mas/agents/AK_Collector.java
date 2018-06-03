@@ -42,7 +42,7 @@ public class AK_Collector extends AK_Agent{
 
 		//Add the behaviours
 		addBehaviour(new CFSMBehaviour(this));
-		System.out.println("the agent "+this.getLocalName()+ " is started TYPE : "+this.getMyTreasureType());
+		System.out.println("the agent "+this.getLocalName()+ " is started. TYPE : "+this.getMyTreasureType());
 
 	}
 	
