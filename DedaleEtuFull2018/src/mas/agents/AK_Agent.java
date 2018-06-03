@@ -86,8 +86,8 @@ public abstract class AK_Agent extends abstractAgent {
 
 
 	public Object getObjectToSend(){
-		Tuple5<HashMap<String,List<Attribute>>, HashMap<String,Set<String>>,Set<String>,Set<String>,HashMap<String,Pair<Attribute,Long>>> obj = 
-				new Tuple5<HashMap<String,List<Attribute>>, HashMap<String,Set<String>>,Set<String>,Set<String>,HashMap<String,Pair<Attribute,Long>>>(G.getHashNode(),G.getDictAdjacences(),G.getOuverts(),G.getFermes(),G.getTreasures());
+		Tuple5<HashMap<String,List<Attribute>>, HashMap<String,Set<String>>,Set<String>,Set<String>,HashMap<String, List<Pair<Attribute, Long>>>> obj = 
+				new Tuple5<HashMap<String,List<Attribute>>, HashMap<String,Set<String>>,Set<String>,Set<String>,HashMap<String, List<Pair<Attribute, Long>>>>(G.getHashNode(),G.getDictAdjacences(),G.getOuverts(),G.getFermes(),G.getTreasures());
 		return obj;
 	}
 	

@@ -1,5 +1,6 @@
 package mas.behaviours.collector;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -24,6 +25,15 @@ public class CWalkBehaviour extends GWalkBehaviour {
 		super(g,g.getFermes(),g.getOuverts(),myagent);
 	}
 
+	private Set<String> getAdjacents(List<Couple<String,List<Attribute>>> lobs){
+		Set<String> adjacents = new HashSet<String>();
+		String key = lobs.remove(0).getLeft();
+//		System.out.println(key);
+		for(Couple<String,List<Attribute>> couple_adj:lobs){
+			adjacents.add(couple_adj.getLeft());
+		}
+		return adjacents;
+	}
 
 		
 		
@@ -43,24 +53,23 @@ public class CWalkBehaviour extends GWalkBehaviour {
 	
 	
 	public boolean throwMyTreasur() {
+		if (((mas.abstractAgent)this.myAgent).getBackPackFreeSpace() == 0)
+			return false;
 		AID[] sellerAgents = DFDServices.getAgentsByService("silo",myAgent);
+		// UN seul element
 		if(sellerAgents != null)
 			for(AID agt : sellerAgents) {
 				return ((mas.abstractAgent)myAgent).emptyMyBackPack(agt.getLocalName());
 			}
+		
 		return false;
 	}
 	
 	public String centering(){
 		Set<String> nodes = new HashSet<String>(G.getOuverts());
 		nodes.addAll(G.getFermes());
-//		for (String node :  G.getDictAdjacences().keySet())
-//			nodes.addAll(G.getDictAdjacences().get(node));
-//		
-		
-//		Set<String> nodes = G.getHashNode().keySet();
-		String src = "";// nodes.iterator().next();
-		int max = 0; //G.degreeOf(src);
+		String src = "";
+		int max = 0; 
 		for(String v : nodes){
 			if(G.degreeOf(v) > max){
 				max = G.degreeOf(v);
@@ -76,7 +85,16 @@ public class CWalkBehaviour extends GWalkBehaviour {
 		
 		return src;
 	}
-	
+	private boolean pick_treasure_of_my_type(List<Attribute> liste){
+		int quantite_picked = 0;
+		for (Attribute a : liste){
+			if (a.getName().equals(((mas.abstractAgent)myAgent).getMyTreasureType())){
+				quantite_picked += ((mas.abstractAgent)this.myAgent).pick();
+			}
+		}
+		System.out.println("Picked : "+ quantite_picked);
+		return quantite_picked != 0;
+	}
 	
 	public void action() {
 		System.out.println("\n****************************** COLLECTOR "+myAgent.getLocalName()+"("+((mas.abstractAgent)myAgent).getMyTreasureType()+") ******************************\n");
@@ -85,24 +103,27 @@ public class CWalkBehaviour extends GWalkBehaviour {
 		
 		if (myPosition!=""){
 			List<Couple<String,List<Attribute>>> lobs=((mas.abstractAgent)this.myAgent).observe();//myPosition
+			System.out.println(lobs);//TREASURE AND DIAMONDS 3/06
 			try {
 //					System.in.read();
 				Thread.sleep(princ.Principal.SPEED_AGENT);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-			
-			
-			
-//			((AK_Agent)myAgent).setLastMove(myPosition);      //Mis là Manu
-			
 			ouverts.remove(myPosition);
 			fermes.add(myPosition);
 			
-			
-			
+			//AJOUTE 03/06
 			List<Couple<String, List<Attribute>>> adjacents = lobs;
-			List<String> adj_names = m_a_j_graphe(adjacents);
+			if (pick_treasure_of_my_type(adjacents.get(0).getRight())) {
+				((AK_Collector)myAgent).setPicked(true);
+				adjacents = ((mas.abstractAgent)this.myAgent).observe(); //MAJ APRES PICKED
+			}
+			else 
+				((AK_Collector)myAgent).setPicked(false);
+			//F AJOUTE 03/06
+			
+			List<String> adj_names = m_a_j_graphe(adjacents);	
 			
 			String next_pos = "";
 			int nb_collision=0;
@@ -111,46 +132,47 @@ public class CWalkBehaviour extends GWalkBehaviour {
 			
 			////////////////////////////////////////////////////////////////////////////////////////////////////////
 			
-			if(this.isThereAnyTreasur(myPosition)){
-				adjacents =((mas.abstractAgent)this.myAgent).observe();
-				adj_names = m_a_j_graphe(adjacents);
-//				G.updateTreasure(node);
-//				G.updateNode(myPosition, lobs.ge); 
-				System.out.println(myAgent.getLocalName()+" : j'ai trouve un tresor, picked it!");
-			}
+//			if(this.isThereAnyTreasur(myPosition)){        // REMOVED 03/06
+//				adjacents =((mas.abstractAgent)this.myAgent).observe();
+//				adj_names = m_a_j_graphe(adjacents);
+////				G.updateTreasure(node);
+////				G.updateNode(myPosition, lobs.ge); 
+//				System.out.println(myAgent.getLocalName()+" : j'ai trouve un tresor, picked it!");
+//			}
 			
 			((AK_Collector)myAgent).goal= G.chooseTreasureToPick(myPosition, ((mas.abstractAgent)myAgent).getMyTreasureType(), ((mas.abstractAgent)this.myAgent).getBackPackFreeSpace());
+			System.out.println("I'll pick at : " +((AK_Collector)myAgent).goal+ "." );
 			
 			
-			
-			if(( (((AK_Collector)myAgent).goal.equals("") && ((AK_Collector)myAgent).iPicked()) )){
-				((AK_Collector)myAgent).goal = this.centering();
+			//if(( (((AK_Collector)myAgent).goal.equals("") && ((AK_Collector)myAgent).iPicked()) )){ REMPLACE PAR
+			if( ((AK_Collector)myAgent).goal.equals("") && ((mas.abstractAgent)this.myAgent).getBackPackFreeSpace() != 0){ //Si J'ai plus de but et que mon sac est non vide
+				((AK_Collector)myAgent).goal = this.centering();     //calcule position du silo
 			}
-//			if(((AK_Collector)myAgent).goal.equals(myPosition))  //A
-//				((AK_Collector)myAgent).goal="";
+			
+			
+			if(((AK_Collector)myAgent).goal.equals(myPosition))  //POUR UN COMPORTEMENT EXPLORATEUR UNE FOIS ARRIVE AU BUT
+				((AK_Collector)myAgent).goal="";
 				
 			
 
 
 			
 			if(((AK_Collector)myAgent).goal.equals("") ){
-			
-	
+				//COMPORTEMENT EXPLORATEUR
 				List<String> voisins_ouverts = get_open_neighbors(adj_names);
 	
 				if(this.ouverts.isEmpty() ){
 					if(((AK_Agent)myAgent).getCpt() > 0)
 						((AK_Agent)myAgent).exploration_is_done(); //___________________!!! A REVOIR !!!___________________________
 					System.out.println(myAgent.getLocalName()+" : Maybe Exploration is COMPLETE ("+((AK_Agent)myAgent).getCpt()+"). Restart !");
-					G.clearFermes();      
-					G.addAllOuverts(myPosition);
+					G.addAllOuverts(myPosition);    //INVERSER ORDRE
+					G.clearFermes();      //INVERSER ORDRE
+					
 					((AK_Agent)myAgent).setNombreDeCollision(0);
 					((AK_Agent)myAgent).RAZCpt();
-					voisins_ouverts = get_open_neighbors(adj_names);
+					
+					//voisins_ouverts = get_open_neighbors(adj_names); DEJA FAIT
 				}
-				
-	
-	
 				next_pos = getNextPosition(voisins_ouverts);
 				nb_collision = ((AK_Agent)myAgent).getNombreDeCollision();
 				
@@ -161,13 +183,9 @@ public class CWalkBehaviour extends GWalkBehaviour {
 				next_pos = chemin_vers_goal(myPosition,((AK_Collector)myAgent).goal);
 			}
 			
-			
-			
-			
-			
 			if(throwMyTreasur()){
 				System.out.println(myAgent.getLocalName()+" : i throwed it");
-				((AK_Collector)myAgent).setPicked(false);
+				//((AK_Collector)myAgent).setPicked(false);
 				((AK_Collector)myAgent).goal="";
 			}
 			

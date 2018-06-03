@@ -21,7 +21,7 @@ public class GraphAK extends SimpleGraph<String,DefaultEdge> {
 
 	private HashMap<String, List<Attribute>> nodes = new HashMap<String, List<Attribute>>();
 	private HashMap<String,Set<String>> dictAdjacences = new HashMap<String,Set<String>>();
-	private HashMap<String,Pair<Attribute,Long>>  treasures = new HashMap<String,Pair<Attribute,Long>>();
+	private HashMap<String, List<Pair<Attribute, Long>>>  treasures = new HashMap<String,List<Pair<Attribute,Long>>>();
 	private Set<String> ouverts;
 	private Set<String> fermes;
 	private List<String> ens_position_silo= new ArrayList<String>();
@@ -110,7 +110,8 @@ public class GraphAK extends SimpleGraph<String,DefaultEdge> {
 
 
 	public void addAllOuverts(String myPosition) {
-		for(String node:this.nodes.keySet()){
+		//for(String node:this.nodes.keySet()){
+		for (String node : this.fermes) {     //node == ferme
 			if(!node.equals(myPosition))
 				this.ouverts.add(node);
 		}
@@ -232,20 +233,25 @@ public class GraphAK extends SimpleGraph<String,DefaultEdge> {
 	
 	
 	
-	public HashMap<String,Pair<Attribute,Long>> getTreasures(){
+	public HashMap<String, List<Pair<Attribute, Long>>> getTreasures(){
 		return this.treasures;
 	}
 	
 	
-	public void updateTreasure(String node) {
-		Attribute a = this.containsTreasur(node,"");
-		if(a!=null){
-			Pair<Attribute,Long> v = new Pair<Attribute,Long>(a,System.currentTimeMillis());
-			this.treasures.replace(node,v);
-		}
-		else
-			this.treasures.replace(node, new Pair<Attribute,Long>(null,System.currentTimeMillis()));
-	}
+//	public void updateTreasure(List<Attribute> list) {
+//		for (Attribute a : list){
+//			Pair<Attribute,Long> v = new Pair<Attribute,Long>(a,System.currentTimeMillis());
+//			this.treasures.put(arg0, arg1)
+//			
+//		}
+//		Attribute a = this.containsTreasur(list,"");
+//		if(a!=null){
+//			
+//			.replace(list,v);
+//		}
+//		else
+//			this.treasures.replace(list, new Pair<Attribute,Long>(null,System.currentTimeMillis()));
+//	}
 	
 	public String isType(Attribute a){
 		switch(a){
@@ -260,29 +266,18 @@ public class GraphAK extends SimpleGraph<String,DefaultEdge> {
 	
 	
 	
-	public void maj_treasure(String v,Pair<Attribute,Long> t){
-		if(this.treasures.containsKey(v)){
-			Pair<Attribute, Long> u = this.treasures.get(v);
-			if(t.getSecond() > u.getSecond())
-				this.treasures.put(v, t);
-			
-			return;
-		}
-		this.treasures.put(v, t);
-//		String type = isType(t.getFirst());
-//		
-//		if(this.treasures.containsKey(v) && type !=null){
-//			Pair<Attribute, Long> tn  = this.treasures.get(v);
-//			if(tn.getSecond() < t.getSecond() || !type.equals(tn.getFirst().getName())){
-//				this.treasures.replace(v, t);
-//				List<Attribute> l = new ArrayList<Attribute>();
-//				l.add(t.getFirst());
-//				updateNode(v,l);
-//			}
+//	public void maj_treasure(String v,Pair<Attribute,Long> t){
+//		if(this.treasures.containsKey(v)){
+//			Pair<Attribute, Long> u = this.treasures.get(v);
+//			if(t.getSecond() > u.getSecond())
+//				this.treasures.put(v, t);
+//			
+//			return;
 //		}
-		
-	}
-	
+//		this.treasures.put(v, t);
+//		
+//	}
+//	
 	
 	
 //	public String chooseAnotherTreasure(String position,String type,int cap, String goal_inaccessible) {
@@ -342,47 +337,47 @@ public class GraphAK extends SimpleGraph<String,DefaultEdge> {
 //	
 	
 	
-	public String chooseTreasureToPick(String position,String type, int cap){
-		String goal = "";
-		int min = this.nodes.size();
-		
-		for(String n_t : this.treasures.keySet()){
-			Pair<Attribute,Long> treasur  = this.treasures.get(n_t);
-			if(isType(treasur.getFirst()).equals(type)){
-				if(cap >= (int)(treasur.getFirst().getValue())){
-					DijkstraShortestPath<String, DefaultEdge> shortestpath = new DijkstraShortestPath<String, DefaultEdge>(this);
-					int dist_path = shortestpath.getPath(position,n_t).getVertexList().size();
-					if(min >= dist_path){
-						goal = n_t;
-						min = dist_path;
-					}
-				}
-			}
-		}
-		
-		
-		
-		
-		if(goal.equals("") && this.treasures.size() > 0){
-			int min_taille = (int)(this.treasures.get(this.treasures.keySet().iterator().next()).getFirst().getValue());
-			for(String n_t : this.treasures.keySet()){
-				Pair<Attribute,Long> treasur  = this.treasures.get(n_t);
-				if(isType(treasur.getFirst()).equals(type)){
-					if((int)(treasur.getFirst().getValue()) <  min_taille){
-						DijkstraShortestPath<String, DefaultEdge> shortestpath = new DijkstraShortestPath<String, DefaultEdge>(this);
-						int dist_path = shortestpath.getPath(position,n_t).getVertexList().size();
-						if (min >= dist_path){
-							min_taille = (int)(treasur.getFirst().getValue());
-							goal = n_t;
-						}
-					}
-				}
-			}
-		}
-		
-		return goal;
-	}
-	
+//	public String chooseTreasureToPick(String position,String type, int cap){
+//		String goal = "";
+//		int min = this.nodes.size();
+//		
+//		for(String n_t : this.treasures.keySet()){
+//			Pair<Attribute,Long> treasur  = this.treasures.get(n_t);
+//			if(isType(treasur.getFirst()).equals(type)){
+//				if(cap >= (int)(treasur.getFirst().getValue())){
+//					DijkstraShortestPath<String, DefaultEdge> shortestpath = new DijkstraShortestPath<String, DefaultEdge>(this);
+//					int dist_path = shortestpath.getPath(position,n_t).getVertexList().size();
+//					if(min >= dist_path){
+//						goal = n_t;
+//						min = dist_path;
+//					}
+//				}
+//			}
+//		}
+//		
+//		
+//		
+//		
+//		if(goal.equals("") && this.treasures.size() > 0){
+//			int min_taille = (int)(this.treasures.get(this.treasures.keySet().iterator().next()).getFirst().getValue());
+//			for(String n_t : this.treasures.keySet()){
+//				Pair<Attribute,Long> treasur  = this.treasures.get(n_t);
+//				if(isType(treasur.getFirst()).equals(type)){
+//					if((int)(treasur.getFirst().getValue()) <  min_taille){
+//						DijkstraShortestPath<String, DefaultEdge> shortestpath = new DijkstraShortestPath<String, DefaultEdge>(this);
+//						int dist_path = shortestpath.getPath(position,n_t).getVertexList().size();
+//						if (min >= dist_path){
+//							min_taille = (int)(treasur.getFirst().getValue());
+//							goal = n_t;
+//						}
+//					}
+//				}
+//			}
+//		}
+//		
+//		return goal;
+//	}
+//	
 	
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	
@@ -404,6 +399,85 @@ public class GraphAK extends SimpleGraph<String,DefaultEdge> {
 		for(String a: p) {
 			this.addPossiblePositionSilo(a);
 		}
+	}
+
+
+
+	public void updateTreasure(String myPosition, List<Attribute> list) {
+		ArrayList<Pair<Attribute,Long>> listedesTresorsatMyPosition = new ArrayList<>();
+		long time =  System.currentTimeMillis();
+		for (Attribute a : list){
+			Pair<Attribute,Long> v = new Pair<Attribute,Long>(a,time);
+			listedesTresorsatMyPosition.add(v);
+		}
+		this.treasures.put(myPosition, listedesTresorsatMyPosition);
+		
+	}
+
+
+
+	public String chooseTreasureToPick(String myPosition,
+			String myTreasureType, int backPackFreeSpace) {
+		String goal = "";
+		int min = this.nodes.size();    //plus long chemin dans le graphe
+		for(String n_t : this.treasures.keySet()){
+			List<Pair<Attribute, Long>> Ltreasur  = this.treasures.get(n_t);
+			for (Pair<Attribute, Long> treasur: Ltreasur){
+				if(treasur.getFirst().getName().equals(myTreasureType)){
+					if(backPackFreeSpace >= (int)(treasur.getFirst().getValue())){        // Je peux tout prendre d'un coup
+						DijkstraShortestPath<String, DefaultEdge> shortestpath = new DijkstraShortestPath<String, DefaultEdge>(this);
+						int dist_path = shortestpath.getPath(myPosition,n_t).getVertexList().size();
+						if(min >= dist_path){
+							goal = n_t;
+							min = dist_path;
+						}
+					}
+				}
+			}
+		}
+		//Pas de tresor que je puisse prendre en un coup
+		if(goal.equals("") && this.treasures.size() > 0){
+			int min_taille = Integer.MAX_VALUE;//(int)(this.treasures.get(this.treasures.keySet().iterator().next()).getFirst().getValue());
+			for(String n_t : this.treasures.keySet()){
+				List<Pair<Attribute, Long>> Ltreasur  = this.treasures.get(n_t);
+				for (Pair<Attribute, Long> treasur: Ltreasur){
+					if(treasur.getFirst().getName().equals(myTreasureType)){
+						if((int)(treasur.getFirst().getValue()) <  min_taille){
+							DijkstraShortestPath<String, DefaultEdge> shortestpath = new DijkstraShortestPath<String, DefaultEdge>(this);
+							int dist_path = shortestpath.getPath(myPosition,n_t).getVertexList().size();
+							if (min >= dist_path){
+								min_taille = (int)(treasur.getFirst().getValue());
+								goal = n_t;
+							}
+						}
+					}
+				}
+			}
+		}
+		
+		return goal;
+	}
+
+
+
+	public void maj_treasure(String n_t, List<Pair<Attribute,Long>> list) {
+		
+		if(this.treasures.containsKey(n_t)){
+			List<Pair<Attribute, Long>> liste_des_tresors_at_n_t = this.treasures.get(n_t);
+			if (liste_des_tresors_at_n_t.size() == 0)
+				return;
+			long time_observation = liste_des_tresors_at_n_t.get(0).getSecond();
+			for(Pair<Attribute, Long> pair : list){
+				if (pair.getSecond() > time_observation) { //PLUS RECENT
+					this.treasures.put(n_t, list); 
+					return;
+				}else{ //PLUS ANCIEN
+					return;
+				}
+			}
+		}
+		this.treasures.put(n_t, list); //JE PRENDS TEL QUEL 			
+		
 	}
 	
 	

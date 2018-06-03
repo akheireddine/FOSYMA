@@ -57,27 +57,18 @@ public abstract class GWalkBehaviour extends SimpleBehaviour {
 		String myPosition = curr_observation.getLeft();
 		
 		G.getHashNode().put(myPosition, curr_observation.getRight());   //MAJ NODE              NE CONTIENT PAS TOUT APRES 21H
-		G.updateTreasure(myPosition);
+		
+		G.updateTreasure(myPosition, curr_observation.getRight());     // A LA PLACE FAIRE
 		
 		
 		G.addVertex(myPosition);
-//		if(G.containsVertex(myPosition))
-//			G.updateNode(myPosition, );
-//		else
-//			G.addVertex(myPosition,curr_observation.getRight());
+
 		
 		for(Couple<String, List<Attribute>> adjacent: adjacents){
 			String adj_name = adjacent.getLeft();
 			G.addVertex(adj_name);
 			G.addEdge(myPosition, adj_name);
 			ladj_node.add(adj_name);
-			
-//			if(G.containsVertex(adj_name))
-//				G.updateNode(adj_name, adjacent.getRight());
-//			else
-//				G.addVertex(adj_name,adjacent.getRight());
-			
-			
 		}
 		G.getDictAdjacences().put(myPosition, new HashSet<String>(ladj_node));       //MAJ DICT_ADJ
 		return ladj_node;

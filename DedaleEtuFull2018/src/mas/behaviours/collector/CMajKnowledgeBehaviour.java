@@ -32,14 +32,14 @@ public class CMajKnowledgeBehaviour extends OneShotBehaviour {
 
 			try {
 				@SuppressWarnings("unchecked")
-				Tuple5<HashMap<String, List<Attribute>>, HashMap<String,Set<String>>,Set<String>,Set<String>,HashMap<String,Pair<Attribute,Long>>> new_information = (Tuple5<HashMap<String, List<Attribute>>, HashMap<String,Set<String>>,Set<String>,Set<String>,HashMap<String,Pair<Attribute,Long>>>) received_graph.getContentObject();
+				Tuple5<HashMap<String, List<Attribute>>, HashMap<String,Set<String>>,Set<String>,Set<String>,HashMap<String,List<Pair<Attribute,Long>>>> new_information = (Tuple5<HashMap<String, List<Attribute>>, HashMap<String,Set<String>>,Set<String>,Set<String>,HashMap<String,List<Pair<Attribute,Long>>>>) received_graph.getContentObject();
 				
 //				HashMap<String, List<Attribute>> info_nodes = new_information._1();
 				
 				//recuperer ma connaissance du graphe
 				
 				HashMap<String,Set<String>> adjacenes_received = new_information._2();
-				HashMap<String,Pair<Attribute,Long>> info_treasures = new_information._5();
+				HashMap<String,List<Pair<Attribute,Long>>> info_treasures = new_information._5();
 				
 				for(String node : adjacenes_received.keySet()){
 					if(!G.getDictAdjacences().containsKey(node)){

@@ -29,7 +29,7 @@ public class EWalkBehaviour extends GWalkBehaviour {
 
 		if (myPosition!=""){
 			List<Couple<String,List<Attribute>>> lobs=((mas.abstractAgent)this.myAgent).observe();//myPosition
-
+			System.out.println(lobs);//TREASURE AND DIAMONDS 3/06
 			try {
 //					System.in.read();
 				Thread.sleep(princ.Principal.SPEED_AGENT);
@@ -55,8 +55,8 @@ public class EWalkBehaviour extends GWalkBehaviour {
 				if(((AK_Agent)myAgent).getCpt() > 0)
 					((AK_Agent)myAgent).exploration_is_done(); //___________________!!! A REVOIR !!!___________________________
 				System.out.println(myAgent.getLocalName()+" : Maybe Exploration is COMPLETE ("+((AK_Agent)myAgent).getCpt()+"). Restart !");
-				G.clearFermes();      
-				G.addAllOuverts(myPosition);
+				G.addAllOuverts(myPosition);    //INVERSER ORDRE
+				G.clearFermes();      //INVERSER ORDRE
 				((AK_Agent)myAgent).setNombreDeCollision(0);
 				((AK_Agent)myAgent).RAZCpt();
 				voisins_ouverts = get_open_neighbors(adj_names);
