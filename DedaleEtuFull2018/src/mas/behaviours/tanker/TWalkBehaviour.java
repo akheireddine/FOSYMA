@@ -30,7 +30,7 @@ public class TWalkBehaviour extends GWalkBehaviour {
 
 			try {
 //					System.in.read();
-				Thread.sleep(100);
+				Thread.sleep(princ.Principal.SPEED_AGENT);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -105,7 +105,7 @@ public class TWalkBehaviour extends GWalkBehaviour {
 					golem_is_here = true;
 
 				
-				if(golem_is_here){
+				if(golem_is_here && nb_collision > 2){
 					G.clearFermes();
 					G.addAllOuverts(myPosition);
 					ouverts.remove(next_pos);

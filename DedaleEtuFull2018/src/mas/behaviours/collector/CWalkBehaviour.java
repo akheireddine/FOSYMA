@@ -79,7 +79,7 @@ public class CWalkBehaviour extends GWalkBehaviour {
 	
 	
 	public void action() {
-		System.out.println("\n****************************** COLLECTOR "+myAgent.getLocalName()+" ******************************\n");
+		System.out.println("\n****************************** COLLECTOR "+myAgent.getLocalName()+"("+((mas.abstractAgent)myAgent).getMyTreasureType()+") ******************************\n");
 
 		String myPosition=((mas.abstractAgent)this.myAgent).getCurrentPosition();
 		
@@ -87,7 +87,7 @@ public class CWalkBehaviour extends GWalkBehaviour {
 			List<Couple<String,List<Attribute>>> lobs=((mas.abstractAgent)this.myAgent).observe();//myPosition
 			try {
 //					System.in.read();
-				Thread.sleep(100);
+				Thread.sleep(princ.Principal.SPEED_AGENT);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -123,9 +123,11 @@ public class CWalkBehaviour extends GWalkBehaviour {
 			
 			
 			
-			if(( (((AK_Collector)myAgent).goal.equals("") && ((AK_Collector)myAgent).iPicked()) )   || ((AK_Collector)myAgent).goal.equals(myPosition)){
+			if(( (((AK_Collector)myAgent).goal.equals("") && ((AK_Collector)myAgent).iPicked()) )){
 				((AK_Collector)myAgent).goal = this.centering();
 			}
+//			if(((AK_Collector)myAgent).goal.equals(myPosition))  //A
+//				((AK_Collector)myAgent).goal="";
 				
 			
 
@@ -147,7 +149,6 @@ public class CWalkBehaviour extends GWalkBehaviour {
 					voisins_ouverts = get_open_neighbors(adj_names);
 				}
 				
-				
 	
 	
 				next_pos = getNextPosition(voisins_ouverts);
@@ -156,7 +157,7 @@ public class CWalkBehaviour extends GWalkBehaviour {
 			}
 		//#################################################################################################################
 			else{
-				System.out.println(myAgent.getLocalName() +  " : EN AVANT VERS __________________________________________ : " + ((AK_Collector)myAgent).goal);
+				System.out.println(myAgent.getLocalName() +  " : EN AVANT VERS _______________________ : " + ((AK_Collector)myAgent).goal+" DEPUIS "+myPosition);
 				next_pos = chemin_vers_goal(myPosition,((AK_Collector)myAgent).goal);
 			}
 			
@@ -169,8 +170,6 @@ public class CWalkBehaviour extends GWalkBehaviour {
 				((AK_Collector)myAgent).setPicked(false);
 				((AK_Collector)myAgent).goal="";
 			}
-			
-			
 			
 			
 			
@@ -191,7 +190,7 @@ public class CWalkBehaviour extends GWalkBehaviour {
 				ouverts.remove(myPosition);
 				fermes.add(myPosition);
 				
-				System.out.println(myAgent.getLocalName()+" : cant move to "+next_pos+" curr pos : "+myPosition);
+				System.out.println(myAgent.getLocalName()+" : Can't move from "+myPosition+" to "+next_pos);
 				nb_collision = ((AK_Agent)myAgent).getNombreDeCollision()+1;
 				((AK_Agent)myAgent).setNombreDeCollision(nb_collision);
 				
@@ -213,7 +212,7 @@ public class CWalkBehaviour extends GWalkBehaviour {
 					golem_is_here = true;
 
 				
-				if(golem_is_here){
+				if(golem_is_here && nb_collision > 2){
 					G.clearFermes();
 					G.addAllOuverts(myPosition);
 					ouverts.remove(next_pos);
@@ -221,6 +220,10 @@ public class CWalkBehaviour extends GWalkBehaviour {
 					System.out.println(myAgent.getLocalName()+" (G): Have to restart my exploration.");
 
 				}
+				
+//				if(nb_collision > 3) {        //A
+//					((AK_Collector)myAgent).goal = G.chooseAnotherTreasure(myPosition,((mas.abstractAgent)myAgent).getMyTreasureType(), ((mas.abstractAgent)this.myAgent).getBackPackFreeSpace(),((AK_Collector)myAgent).goal);
+//				}
 			}
 			((AK_Agent)myAgent).setLastMove(next_pos);       //DEPLACE D'ICI
 			((AK_Agent)myAgent).setToread(null);

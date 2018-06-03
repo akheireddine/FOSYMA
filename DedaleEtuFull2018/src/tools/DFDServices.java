@@ -8,7 +8,6 @@ import jade.domain.FIPAAgentManagement.DFAgentDescription;
 import jade.domain.FIPAAgentManagement.ServiceDescription;
 
 public class DFDServices {
-
 	
 	public static AID[] getAgentsByService( String service,Agent agent ){
         DFAgentDescription dfd = new DFAgentDescription();

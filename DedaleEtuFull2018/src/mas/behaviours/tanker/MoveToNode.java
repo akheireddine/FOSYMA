@@ -53,7 +53,7 @@ public class MoveToNode extends GWalkBehaviour {
 			
 			try {
 //				System.in.read();
-				Thread.sleep(200);
+				Thread.sleep(princ.Principal.SPEED_AGENT+50);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -74,13 +74,11 @@ public class MoveToNode extends GWalkBehaviour {
 			String goal_agent = ((AK_Tanker)myAgent).goal;
 		
 			if(myPosition.equals(goal_agent)) {
-//				try {
-//	//				System.in.read();
-//					Thread.sleep(2000);
-//				} catch (Exception e) {
-//					e.printStackTrace();
-//				}
+//####################################### NEW ###################################
+				this.finished=true;
+				this.onEndValue=1;
 				((AK_Tanker)myAgent).goal = "";
+				return;
 			}
 			
 			ACLMessage get_msg = ((AK_Agent)myAgent).getMessage();
@@ -110,7 +108,9 @@ public class MoveToNode extends GWalkBehaviour {
 				//Si premiere collision, envoie un message d'information
 //				boolean golem_is_here = false;
 
-				((AK_Tanker)myAgent).goal="";
+				((AK_Tanker)myAgent).goal=next_position_to_goal(myPosition);
+				
+				
 				if(nb_collision == 2 && get_msg==null){
 					this.onEndValue = 1;
 					this.finished=true;

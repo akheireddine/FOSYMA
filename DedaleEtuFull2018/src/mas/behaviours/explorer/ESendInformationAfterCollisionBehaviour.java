@@ -2,15 +2,12 @@ package mas.behaviours.explorer;
 
 import java.io.IOException;
 import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Set;
 
 import mas.agents.AK_Agent;
 import tools.DFDServices;
 import jade.core.AID;
 import jade.core.behaviours.OneShotBehaviour;
 import jade.lang.acl.ACLMessage;
-import jade.util.leap.Iterator;
 
 public class ESendInformationAfterCollisionBehaviour extends OneShotBehaviour {
 
@@ -54,11 +51,7 @@ public class ESendInformationAfterCollisionBehaviour extends OneShotBehaviour {
 			}
 			
 			((mas.abstractAgent)this.myAgent).sendMessage(msg);
-			Set<String> receivers = new HashSet<String>();
-			Iterator i = msg.getAllIntendedReceiver();
-			while(i.hasNext())
-				receivers.add((String)i.next());
-			System.out.println(myAgent.getLocalName()+" : INFORM AGENT "+receivers+"\n\tFermes : "+((AK_Agent)myAgent).getGraph().getFermes()+"\n"
+			System.out.println(myAgent.getLocalName()+" : INFORM AGENT \n\tFermes : "+((AK_Agent)myAgent).getGraph().getFermes()+"\n"
 					+ "\tOuverts : "+((AK_Agent)myAgent).getGraph().getOuverts());
 	}
 

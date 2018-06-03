@@ -54,9 +54,6 @@ public class EMajKnowledgeBehaviour extends OneShotBehaviour {
 							}
 						
 					}
-					
-//					if(info_treasures.containsKey(node))
-//						G.maj_treasure(node,info_treasures.get(node));
 				}
 				
 				
@@ -66,6 +63,11 @@ public class EMajKnowledgeBehaviour extends OneShotBehaviour {
 				}
 				
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+				
+				this.G.addToFermes(new_information._4());
+
+				
+				
 				if(DFDServices.typeOfserviceAgent(received_graph.getSender(), myAgent, "silo")){
 					
 					String myPosition = ((mas.abstractAgent)this.myAgent).getCurrentPosition();
@@ -94,7 +96,6 @@ public class EMajKnowledgeBehaviour extends OneShotBehaviour {
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 				
 //				this.G.updateOF(new_information._3(),new_information._4());
-				this.G.addToFermes(new_information._4());
 //				((AK_Agent)myAgent).setToread(null);
 				System.out.println(myAgent.getLocalName()+" : MAJ from "+received_graph.getSender().getLocalName());
 			} catch (UnreadableException e) {

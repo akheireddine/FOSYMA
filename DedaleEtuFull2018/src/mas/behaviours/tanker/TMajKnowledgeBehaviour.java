@@ -68,6 +68,10 @@ public class TMajKnowledgeBehaviour extends OneShotBehaviour {
 				
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 				
+				this.G.updateOF(new_information._3(),new_information._4());
+
+				
+				
 				if(DFDServices.typeOfserviceAgent(received_graph.getSender(), myAgent, "collector")){
 					String myPosition = ((mas.abstractAgent)this.myAgent).getCurrentPosition();
 					System.out.println(myAgent.getLocalName()+" : face d'un COLLECTOR"+myPosition);
@@ -81,12 +85,24 @@ public class TMajKnowledgeBehaviour extends OneShotBehaviour {
 					G.getOuverts().remove(myPosition);
 				}
 				
+//				if(DFDServices.typeOfserviceAgent(received_graph.getSender(), myAgent, "explorer")){
+//					String myPosition = ((mas.abstractAgent)this.myAgent).getCurrentPosition();
+//					System.out.println(myAgent.getLocalName()+" : face d'un COLLECTOR"+myPosition);
+//					Set<String> adjacens = G.getDictAdjacences().get(myPosition);
+//					G.getOuverts().addAll(adjacens);
+//					String pos_agent = ((AK_Agent)myAgent).getLastMove();
+//					G.getOuverts().remove(pos_agent);
+//					G.getFermes().add(pos_agent);
+//					G.getFermes().removeAll(adjacens);
+//					G.getFermes().add(myPosition);
+//					G.getOuverts().remove(myPosition);
+//				}
+				
 				
 				
 				
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 				
-				this.G.updateOF(new_information._3(),new_information._4());
 //				this.G.addToFermes(new_information._4());
 //				((AK_Agent)myAgent).setToread(null);
 				System.out.println(myAgent.getLocalName()+" : MAJ from "+received_graph.getSender().getLocalName());

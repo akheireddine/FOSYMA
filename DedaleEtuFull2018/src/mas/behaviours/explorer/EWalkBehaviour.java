@@ -32,7 +32,7 @@ public class EWalkBehaviour extends GWalkBehaviour {
 
 			try {
 //					System.in.read();
-				Thread.sleep(100);
+				Thread.sleep(princ.Principal.SPEED_AGENT);
 			} catch (Exception e) {
 				e.printStackTrace();
 			} 

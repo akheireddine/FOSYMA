@@ -13,6 +13,7 @@ import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.graph.SimpleGraph;
 
 import env.Attribute;
+import jade.util.leap.Iterator;
 
 public class GraphAK extends SimpleGraph<String,DefaultEdge> {
 
@@ -282,6 +283,63 @@ public class GraphAK extends SimpleGraph<String,DefaultEdge> {
 		
 	}
 	
+	
+	
+//	public String chooseAnotherTreasure(String position,String type,int cap, String goal_inaccessible) {
+//		String goal = "";
+//		int min = this.nodes.size();
+//		
+//		for(String n_t : this.treasures.keySet()){
+//			if(n_t.equals(goal_inaccessible))
+//				continue;
+//			Pair<Attribute,Long> treasur  = this.treasures.get(n_t);
+//			if(isType(treasur.getFirst()).equals(type)){
+//				if(cap >= (int)(treasur.getFirst().getValue())){
+//					DijkstraShortestPath<String, DefaultEdge> shortestpath = new DijkstraShortestPath<String, DefaultEdge>(this);
+//					int dist_path = shortestpath.getPath(position,n_t).getVertexList().size();
+//					if(min >= dist_path){
+//						goal = n_t;
+//						min = dist_path;
+//					}
+//				}
+//			}
+//		}
+//		
+//		
+//		
+//		
+//		if(goal.equals("") && this.treasures.size() > 0){
+//			int min_taille =0;
+//			Iterator i = (Iterator) this.treasures.keySet().iterator();
+//			while(i.hasNext()) {
+//				String obj = (String) i.next();
+//				if(!obj.equals(goal_inaccessible)) {
+//					min_taille = (int) this.treasures.get(obj).getFirst().getValue();
+//				}
+//			}
+//			if(min_taille == 0)
+//				return goal;
+////			int min_taille = (int)(this.treasures.get(this.treasures.keySet().iterator().next()).getFirst().getValue());
+//			for(String n_t : this.treasures.keySet()){
+//				if(n_t.equals(goal_inaccessible))
+//					continue;
+//				Pair<Attribute,Long> treasur  = this.treasures.get(n_t);
+//				if(isType(treasur.getFirst()).equals(type)){
+//					if((int)(treasur.getFirst().getValue()) <  min_taille){
+//						DijkstraShortestPath<String, DefaultEdge> shortestpath = new DijkstraShortestPath<String, DefaultEdge>(this);
+//						int dist_path = shortestpath.getPath(position,n_t).getVertexList().size();
+//						if (min >= dist_path){
+//							min_taille = (int)(treasur.getFirst().getValue());
+//							goal = n_t;
+//						}
+//					}
+//				}
+//			}
+//		}
+//		
+//		return goal;
+//	}
+//	
 	
 	
 	public String chooseTreasureToPick(String position,String type, int cap){
